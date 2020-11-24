@@ -18,6 +18,48 @@ class SubjectController extends ApiBaseController
         $this->repository = $repository;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/subjects?name={name}&perPage={perPage}&page={page}",
+     *      description="Get subjects",
+     *      tags={"Subject"},
+     *      @OA\Parameter(in="query",name="name",@OA\Schema(type="string")),
+     *      @OA\Parameter(in="query",name="perPage",@OA\Schema(type="string")),
+     *      @OA\Parameter(in="query",name="page",@OA\Schema(type="string")),
+     *      @OA\Response(
+     *          response="200",
+     *          description="response subjects success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      "data": {
+     *                          {
+     *                           "id": 1,
+     *                           "name": "vstacqyjU9",
+     *                           "description": "pFwFsBuiRc",
+     *                           "is_active": 1,
+     *                           "created_at": null,
+     *                           "updated_at": null
+     *                           },
+     *                       },
+     *                       "current_page":1,
+     *                       "first_page_url": "http://localhost:2222/api/subjects?page=1",
+     *                       "from": 1,
+     *                       "last_page": 1,
+     *                       "last_page_url": "http://localhost:2222/api/subjects?page=1",
+     *                       "next_page_url": null,
+     *                       "path": "http://localhost:2222/api/subjects",
+     *                       "per_page": 15,
+     *                       "prev_page_url": null,
+     *                       "to": 10,
+     *                       "total": 10
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function index(Request $request)
     {
         $subjects = $this->repository->getListSubject($request);
@@ -29,10 +71,39 @@ class SubjectController extends ApiBaseController
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *      path="/api/subjects",
+     *      description="Store subject",
+     *      tags={"Subject"},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="subject",
+     *                  type="object",
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="description", type="string"),
+     *                  @OA\Property(property="is_active", type="boolean"),
+     *              ),
+     *              @OA\Property(
+     *                  property="course_id",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="integer"
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Store subject success"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
      */
     public function store(Request $request)
     {
@@ -46,10 +117,41 @@ class SubjectController extends ApiBaseController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\get(
+     *     path="/api/subjects/{id}",
+     *     description="show subject detail",
+     *     tags={"Subject"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="subject id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="response subject success",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      "id": 10,
+     *                      "name": "rxe8KR5xqc",
+     *                      "description": "RzmagvNtXV",
+     *                      "is_active": 1,
+     *                      "created_at": null,
+     *                      "updated_at": null
+     *                  }
+     *              }
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
      */
     public function show($id)
     {
@@ -62,11 +164,37 @@ class SubjectController extends ApiBaseController
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *      path="/api/subjects",
+     *      description="Update subject",
+     *      tags={"Subject"},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="subject",
+     *                  type="object",
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="description", type="string"),
+     *                  @OA\Property(property="is_active", type="boolean"),
+     *              ),
+     *              @OA\Property(
+     *                  property="course_id",
+     *                  type="array",
+     *                  @OA\Items(type="integer")
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Update subject success"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -80,10 +208,22 @@ class SubjectController extends ApiBaseController
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/subjects/{id}",
+     *     description="delete subject",
+     *     tags={"Subject"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="subject id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="delete subject success"
+     *     ),
+     * )
      */
     public function destroy($id)
     {
@@ -96,6 +236,38 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess("DELETE SUBJECT SUCCESS");
     }
 
+    /**
+     * @OA\get(
+     *     path="/api/subjects/count/{id}",
+     *     description="show amount users, courses, tasks of subject",
+     *     tags={"Subject"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="subject id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="response subject success",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      4, 6, 5
+     *                  }
+     *              }
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Invalid id"
+     *     ),
+     * )
+     */
     public function countTaskCourseSubjectById($id)
     {
         $subjects = $this->repository->countTaskCourseSubjectById($id);
@@ -106,6 +278,46 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess($subjects['data']);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/subjects/courses/{id}",
+     *      description="get course in subject",
+     *      tags={"Subject"},
+     *      @OA\Parameter(
+     *         name="id",
+     *         description="subject id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="response success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                       {
+     *                          "id": 3,
+     *                          "name": "fPhXEcJx1v",
+     *                          "description": "Oqwsjx927x",
+     *                          "is_active": 0,
+     *                          "category_id": 9,
+     *                          "created_at": null,
+     *                          "updated_at": null,
+     *                          "pivot": {
+     *                              "subject_id": 1,
+     *                              "course_id": 3
+     *                          }
+     *                       },
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function ListCourseBySubjetID($id)
     {
         $subjects = $this->repository->ListCourseBySubjetID($id);
@@ -116,6 +328,42 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess($subjects['data']);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/courses/list",
+     *      description="get all course",
+     *      tags={"Subject"},
+     *      @OA\Parameter(
+     *         name="id",
+     *         description="subject id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="response success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                       {
+     *                           "id": 1,
+     *                           "name": "sr7Mlx8itY",
+     *                           "description": "Wd00fJflFQ",
+     *                           "is_active": 0,
+     *                           "category_id": 4,
+     *                           "created_at": "2020-12-12",
+     *                           "updated_at": "2020-12-12"
+     *                       },
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function listCourses()
     {
         $courses = $this->repository->listCourses();
@@ -126,6 +374,29 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess($courses['data']);
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/subjects/is-active/{id}",
+     *      description="update is_active subject",
+     *      tags={"Subject"},
+     *      @OA\Parameter(
+     *         name="id",
+     *         description="subject id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="update is_acive success",
+     *      ),
+     *     @OA\Response(
+     *          response=422
+     *     )
+     * )
+     */
     public function updateActive($id)
     {
         $subject = $this->repository->updateActive($id);
@@ -136,6 +407,32 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess("UPDATE SUBJECT SUCCESS");
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/subjects/all",
+     *      description="Get list subject",
+     *      tags={"Subject"},
+     *      @OA\Response(
+     *          response="200",
+     *          description="Response success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      {
+     *                          "id": 1,
+     *                          "name": "vstacqyjU9",
+     *                          "description": "pFwFsBuiRc",
+     *                          "is_active": 1,
+     *                          "created_at": "2020-12-12",
+     *                          "updated_at": "2020-12-12"
+     *                       },
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function getAllSubject()
     {
         $subjects = $this->repository->getAllSubject();

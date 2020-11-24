@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class TaskController extends ApiBaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     private $taskRepository;
 
     public function __construct(TaskRepositoryInterface $taskRepository)
@@ -20,30 +15,101 @@ class TaskController extends ApiBaseController
         $this->taskRepository = $taskRepository;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/tasks?name={name}&perPage={perPage}&page={page}",
+     *      description="Get task",
+     *      tags={"Task"},
+     *      @OA\Parameter(name="name",@OA\Schema(type="string")),
+     *      @OA\Parameter(name="perPage",@OA\Schema(type="string")),
+     *      @OA\Parameter(name="page",@OA\Schema(type="string")),
+     *      @OA\Response(
+     *          response="200",
+     *          description="response tasks success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      "data": {
+     *                          "id":"1",
+     *                          "name":"task1",
+     *                          "description": "dCXatgvWk2",
+     *                          "content": "rPeYC62M5k",
+     *                           "deadline": "2020-10-10",
+     *                           "is_active": 1,
+     *                           "created_at": "2020-10-10",
+     *                           "updated_at": "2020-10-10",
+     *                       },
+     *                       "current_page":1,
+     *                       "first_page_url": "http://localhost:2222/api/tasks?page=1",
+     *                       "from": 1,
+     *                       "last_page": 1,
+     *                       "last_page_url": "http://localhost:2222/api/tasks?page=1",
+     *                       "next_page_url": null,
+     *                       "path": "http://localhost:2222/api/tasks",
+     *                       "per_page": 15,
+     *                       "prev_page_url": null,
+     *                       "to": 10,
+     *                       "total": 10
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function index(Request $request)
     {
         $tasks = $this->taskRepository->getTasks($request);
         if (!$tasks['success']) {
             return $this->sendError(500, "ERROR", "500");
         }
+
         return $this->sendSuccess($tasks['data']);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *      path="/api/tasks",
+     *      description="Store task",
+     *      tags={"Task"},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="task",
+     *                  type="object",
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="description", type="string"),
+     *                  @OA\Property(property="content", type="string"),
+     *                  @OA\Property(property="deadline", type="string", format="date"),
+     *                  @OA\Property(property="is_active", type="boolean"),
+     *              ),
+     *              @OA\Property(
+     *                  property="subject_id",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="integer"
+     *                  )
+     *              ),
+     *              @OA\Property(
+     *                  property="user_id",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="integer"
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Store task success"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
      */
     public function store(Request $request)
     {
@@ -60,10 +126,28 @@ class TaskController extends ApiBaseController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @OA\get(
+     *     path="/api/tasks/{id}",
+     *     description="show task detail",
+     *     tags={"Task"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="task id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="response task success"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
      */
     public function show($id)
     {
@@ -76,22 +160,57 @@ class TaskController extends ApiBaseController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *      path="/api/tasks/{id}",
+     *      description="Update task",
+     *      tags={"Task"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="task id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="task",
+     *                  type="object",
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="description", type="string"),
+     *                  @OA\Property(property="content", type="string"),
+     *                  @OA\Property(property="deadline", type="string", format="date"),
+     *                  @OA\Property(property="is_active", type="boolean"),
+     *              ),
+     *              @OA\Property(
+     *                  property="subject_id",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="integer"
+     *                  )
+     *              ),
+     *              @OA\Property(
+     *                  property="user_id",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="integer"
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Update task success"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -107,10 +226,24 @@ class TaskController extends ApiBaseController
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/tasks/{id}",
+     *     description="delete task",
+     *     tags={"Task"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="task id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="delete task success"
+     *     ),
+     * )
      */
     public function destroy($id)
     {
@@ -122,6 +255,43 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess(null, 'Xóa thành công');
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/tasks/subjects/{id}",
+     *      description="Get subjects in task",
+     *      tags={"Task"},
+     *      @OA\Parameter(
+     *         name="id",
+     *         description="task id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="response success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                       "id": 3,
+     *                       "name": "Yytfgr9MMY",
+     *                       "description": "rfzJwaZg77",
+     *                       "is_active": 0,
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "pivot": {
+     *                          "task_id": 1,
+     *                          "subject_id": 3
+     *                       }
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function getSubjectOfTask($id)
     {
         $task = $this->taskRepository->getSubjectOfTask($id);
@@ -132,6 +302,47 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess($task['data']);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/tasks/users/{id}",
+     *      description="get users in task",
+     *      tags={"Task"},
+     *      @OA\Parameter(
+     *         name="id",
+     *         description="task id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="response success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      {
+     *                       "id": 2,
+     *                       "user_id": 3,
+     *                       "task_id": 1,
+     *                       "status": 0,
+     *                       "report": "w",
+     *                       "date_submit": "2020-10-11",
+     *                       "comment": "g",
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "username": "xVFSxy1JsA",
+     *                       "deadline": "2020-10-10",
+     *                       "name": "QW0QFHxZD4"
+     *                      }
+     *                  },
+     *             },
+     *          ),
+     *      ),
+     * )
+     */
     public function getUserTask($id)
     {
         $task = $this->taskRepository->getUserTask($id);
@@ -142,6 +353,38 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess($task['data']);
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/tasks/users/{id}",
+     *      description="update comment user_task",
+     *      tags={"Task"},
+     *      @OA\Parameter(
+     *         name="id",
+     *         description="user_task id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="comment", type="string"),
+     *              @OA\Property(property="status", type="boolean")
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Update comment success"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Missing or invalid data"
+     *     ),
+     * )
+     */
     public function updateComment(Request $request, $id)
     {
         $data['comment'] = $request['comment'];
@@ -153,14 +396,5 @@ class TaskController extends ApiBaseController
 
         return $this->sendSuccess(null, 'Thêm mới thành công');
     }
-
-    public function getUsersByTaskId($id)
-    {
-        $task = $this->taskRepository->getUsersByTaskId($id);
-        if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
-        }
-
-        return $this->sendSuccess($task['data']);
-    }
 }
+
