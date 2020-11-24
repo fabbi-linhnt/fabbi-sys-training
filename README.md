@@ -1,5 +1,14 @@
 # Fabbi Sys Training
 
+### Rule
+
+```
+- format branch name: fe/issue_{id isssue}, be/issue_{id isssue}
+- commit message: #1: fix abc
+    #1 là mã issue
+    fix abc là tóm tắt nội dung thực hiện
+```
+
 ### Git Flow
 
 ```bash
