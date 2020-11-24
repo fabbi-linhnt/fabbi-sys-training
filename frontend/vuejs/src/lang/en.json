@@ -1,0 +1,220 @@
+{
+  "login_screen": {
+    "label": {
+      "sign_in": "Sign In"
+    }
+  },
+  "task_screen": {
+    "label": {
+      "task_name": "Title",
+      "task_content": "Content",
+      "task_description": "Description",
+      "task_deadline": "Deadline",
+      "task_isActive": "Status",
+      "task_user": "List user todo",
+      "task_index": "index",
+      "task_active": "active",
+      "task_inactive": "inactive",
+      "task_delete": "delete",
+      "task_update": "update",
+      "task_detail": "detail",
+      "update_title": "Update task",
+      "create_title": "Create task",
+      "create_task": "Create task",
+      "search_task": "Search task",
+      "custom_paginate": "Pick option record",
+      "back_home": "Back",
+      "detail_task": "Detail task",
+      "pick_subject": "pick subject",
+      "subject_placeholder": "search, add subject",
+      "list_user": "list user"
+    },
+    "message": {
+      "task_msgDelete": "delete ok",
+      "task_msgUpdate": "update success",
+      "task_msgCreate": "create success"
+    },
+    "button": {
+      "search_btn": "Search",
+      "create_btn": "Create",
+      "update_btn": "Update"
+    },
+    "task": {
+      "task_name": "Title",
+      "task_content": "Content",
+      "task_description": "Description",
+      "task_deadline": "Deadline"
+    }
+  },
+  "list_subjects": {
+    "label": {
+      "name": "Name Subject",
+      "description": "Description",
+      "time": "Time",
+      "is_active": "IsActive",
+      "action": "Action",
+      "course": "Courses",
+      "active": "Active",
+      "unActive": "UnActive",
+      "nameCourse": "Name Course",
+      "countCourse": "This Subject belongs to",
+      "countTask": "This Subject has",
+      "task": "Tasks",
+      "student": "Students",
+      "finish": "Finished",
+      "detailSubject": "Detail Subject",
+      "courses": "Courses",
+      "nameSubject": "This Subject's name is: ",
+      "deleteConfirm": "Do you want to delete this subject?",
+      "selectRecords": "Select the number of records to return"
+    },
+    "title": {
+      "list_subjects": "List Subjects",
+      "add_new_subject": "Add New Subject",
+      "addSubject": "Add Subject",
+      "editSubject": "Edit Subject"
+    },
+    "button": {
+      "search": "Search",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "detail": "Detail",
+      "update": "Update",
+      "add": "Add"
+    }
+  },
+  "categories":{
+    "title" : {
+      "list_category": "LIST CATEGORY",
+      "add_new_category": "Add New Category"
+    },
+    "label" : {
+      "name_category" : "Name Category",
+      "action_category" : "Action"
+    },
+    "button" : {
+      "button_delete" : "Delete",
+      "button_update" : "Update",
+      "update_btn": "Update",
+      "add_user_btn": "Add user"
+    }
+  },
+  "user_screen": {
+    "title": {
+      "user_screen": "ADD USER"
+    },
+    "label": {
+      "name": "Name",
+      "upload_image": "Upload Image",
+      "birth_day": "Birth day",
+      "phone_number": "Phone number",
+      "address": "Address",
+      "email": "Email",
+      "password": "Password",
+      "course": "Course"
+    },
+    "button": {
+      "submit": "Submit"
+    }
+  },
+  "course_screen": {
+    "title": {
+      "list_course": "List Course"
+    },
+    "label": {
+      "name": "Name course",
+      "description": "Description",
+      "is_active": "IsActive",
+      "activate": "Activate",
+      "actions": "Actions",
+      "course": "Courses",
+      "name_course": "Add Course",
+      "active": "Active",
+      "inactive": "Inactive",
+      "record": "Record",
+      "category": "Category"
+    },
+    "button": {
+      "submit": "Submit",
+      "reset": "Reset",
+      "add_course": "Add Course",
+      "delete": "Delete",
+      "detail": "Detail",
+      "update": "Update",
+      "search": "Search"
+    },
+    "message": {
+      "are_you_sure": "AreYouSure",
+      "search_by_name": "Search by name",
+      "enter_name_course": "Enter Name Course",
+      "enter_description": "Enter Description",
+      "enter_category": "Enter Category",
+      "pick_a_value": "Pick a value"
+    }
+  },
+  "report_screen": {
+    "label": {
+      "list_report": "List users todo",
+      "done": "Done",
+      "todo": "Todo",
+      "title": "List of submissions",
+      "username": "Full name",
+      "report": "Report",
+      "pass": "Pass",
+      "redo": "Redo",
+      "comment": "Comment",
+      "date_submit": "Date_submit"
+    },
+    "message": {
+      "comment_success": "Add comment success",
+      "comment_failed": "Add comment failed"
+    }
+  },
+  "user_detail": {
+    "title": {
+      "user_detail": "User Detail"
+    },
+    "label": {
+      "name": "Name",
+      "course_participated": "Course Participated",
+      "course_completed": "Course Completed",
+      "number_of_subject_participated": "Number of Subject Participated",
+      "number_of_task_participated": "Number of Task Participated",
+      "number_of_subject_completed": "Number of Subject Completed",
+      "number_of_task_completed": "Number of Task Completed"
+    }
+  },
+  "list_users": {
+    "title": {
+      "list_user": "List User"
+    },
+    "label": {
+      "custom_paginate": "Pick option",
+      "search_task": "Search",
+      "add": "Add",
+      "search": "Search",
+      "address": "Address",
+      "no": "Stt",
+      "name": "Name",
+      "phone_number": "Phone Number",
+      "gmail": "Email",
+      "action": "Action"
+    },
+    "button": {
+      "search_btn": "Search",
+      "delete": "Delete",
+      "show": "Show",
+      "update": "Update"
+    },
+    "message": {
+      "task_msgDelete": "Deleted Successfully",
+      "task_msgUpdate": "Updated Successfully",
+      "task_msgCreate": "Added Successfully"
+    }
+  },
+  "common": {
+    "label": {
+      "index": "index"
+    }
+  }
+}

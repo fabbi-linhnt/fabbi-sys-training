@@ -1,0 +1,15 @@
+FROM node:10.7
+
+ENV APP_ROOT /app
+
+RUN mkdir ${APP_ROOT}
+WORKDIR ${APP_ROOT}
+ADD . ${APP_ROOT}
+
+# copy project files and folders to the current working directory (i.e. 'app' folder)
+COPY ./frontend/nuxtjs .
+
+RUN npm install
+RUN npm run build
+
+ENV HOST 0.0.0.0
