@@ -1,16 +1,25 @@
 <template>
   <div class="main-content">
-    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8"></base-header>
+    <base-header
+      type="gradient-success"
+      class="pb-6 pb-8 pt-5 pt-md-8"
+    ></base-header>
     <div class="content">
       <h3 class="title">{{ $t("report_screen.label.title") }}</h3>
       <p>{{ $t("task_screen.label.task_name") }}: {{ user_task[0].name }}</p>
-      <p>{{ $t("task_screen.label.task_deadline") }}: {{ user_task[0].deadline }}</p>
+      <p>
+        {{ $t("task_screen.label.task_deadline") }}: {{ user_task[0].deadline }}
+      </p>
       <ul class="nav nav-pills switch-btn">
         <li class="nav-item" @click="switchTable(true)">
-          <button :class="['btn nav-link ', { active: status }]">{{ $t("report_screen.label.done") }}</button>
+          <button :class="['btn nav-link ', { active: status }]">
+            {{ $t("report_screen.label.done") }}
+          </button>
         </li>
         <li class="nav-item" @click="switchTable(false)">
-          <button :class="['btn nav-link', { active: !status }]">{{ $t("report_screen.label.todo") }}</button>
+          <button :class="['btn nav-link', { active: !status }]">
+            {{ $t("report_screen.label.todo") }}
+          </button>
         </li>
       </ul>
       <div class="overflow-auto">
@@ -49,25 +58,35 @@
       <form action="">
         <label>{{ $t("report_screen.label.username") }}:</label> {{ username }}
         <h5>{{ $t("report_screen.label.comment") }}:</h5>
-        <textarea v-model="submitComment.comment" class="form-control"></textarea>
+        <textarea
+          v-model="submitComment.comment"
+          class="form-control"
+        ></textarea>
       </form>
     </b-modal>
   </div>
 </template>
+
 <script>
-import {DEFAULT_LATE, DEFAULT_ONTIME, DEFAULT_OPTION, DEFAULT_PERPAGE} from "../../definition/constants";
+import {
+  DEFAULT_LATE,
+  DEFAULT_ONTIME,
+  DEFAULT_OPTION,
+  DEFAULT_PERPAGE,
+} from "@/definition/constants";
+require("@/sass/modules/list-report.css");
 
 export default {
   name: "ListReport",
   data() {
     return {
-      DEFAULT_LATE : DEFAULT_LATE,
+      DEFAULT_LATE: DEFAULT_LATE,
       DEFAULT_ONTIME: DEFAULT_ONTIME,
       user_task: [
         {
-          name: '',
-          deadline: ''
-        }
+          name: "",
+          deadline: "",
+        },
       ],
       status: true,
       options: DEFAULT_OPTION,
@@ -75,51 +94,58 @@ export default {
         page: 1,
         perPage: DEFAULT_PERPAGE,
         total: 0,
-        name: '',
+        name: "",
       },
       fields: [
-        {key: 'index', label: this.$i18n.t("task_screen.label.task_index")},
-        {key: 'username', label: this.$i18n.t("report_screen.label.username"), sortable: true, sortDirection: 'desc'},
-        {key: 'report', label: this.$i18n.t("report_screen.label.report")},
-        {key: 'date_submit', label: this.$i18n.t("report_screen.label.date_submit")},
-        {key: 'comment', label: 'comment'},
-        {key: 'actions', label: 'Actions', status: true}
+        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
+        {
+          key: "username",
+          label: this.$i18n.t("report_screen.label.username"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        { key: "report", label: this.$i18n.t("report_screen.label.report") },
+        {
+          key: "date_submit",
+          label: this.$i18n.t("report_screen.label.date_submit"),
+        },
+        { key: "comment", label: "comment" },
+        { key: "actions", label: "Actions", status: true },
       ],
       customFields: [],
       submitComment: {
         id: null,
         comment: null,
-        status: null
+        status: null,
       },
-      username: null
-    }
+      username: null,
+    };
   },
-  props: [
-    'id'
-  ],
+  props: ["id"],
   created() {
     this.getUserTask();
   },
   methods: {
     async getUserTask() {
-      await this.$store.dispatch('user_task/getUserTask', this.id)
-        .then(res => {
+      await this.$store
+        .dispatch("user_task/GET_USER_TASK", this.id)
+        .then((res) => {
           if (this.status) {
-            this.customFields = this.fields.filter(field => !field.status)
-            this.user_task = res.filter(item => {
+            this.customFields = this.fields.filter((field) => !field.status);
+            this.user_task = res.filter((item) => {
               if (item.status === DEFAULT_LATE) {
                 return item;
               }
             });
           } else {
             this.customFields = this.fields;
-            this.user_task = res.filter(item => {
+            this.user_task = res.filter((item) => {
               if (item.status === DEFAULT_ONTIME) {
                 return item;
               }
-            })
+            });
           }
-        })
+        });
     },
     switchTable(status) {
       this.status = status;
@@ -131,21 +157,28 @@ export default {
     },
     submitTaskDone(status) {
       this.submitComment.status = status;
-      this.$store.dispatch('user_task/storeComment', this.submitComment)
+      this.$store
+        .dispatch("user_task/STORE_COMMENT", this.submitComment)
         .then(() => {
-          this.submitComment.comment = '';
+          this.submitComment.comment = "";
           this.getUserTask();
-          this.makeToast(this.$i18n.t("report_screen.message.comment_success"), 'success');
+          this.makeToast(
+            this.$i18n.t("report_screen.message.comment_success"),
+            "success"
+          );
         })
         .catch(() => {
-          this.makeToast(this.$i18n.t("report_screen.message.comment_failed"), 'danger')
-        })
+          this.makeToast(
+            this.$i18n.t("report_screen.message.comment_failed"),
+            "danger"
+          );
+        });
     },
     rowClass(item, type) {
-      if (!item || type !== 'row') return;
-      if (!item.date_submit) return 'table-danger';
+      if (!item || type !== "row") return;
+      if (!item.date_submit) return "table-danger";
       if (this.checkTime(item.date_submit, item.deadline)) {
-        return 'table-danger';
+        return "table-danger";
       }
     },
     checkTime(date_submit, deadline) {
@@ -162,23 +195,9 @@ export default {
     makeToast(message, variant) {
       this.$bvToast.toast(message, {
         variant: variant,
-        solid: true
-      })
-    }
+        solid: true,
+      });
+    },
   },
-}
+};
 </script>
-
-<style scoped>
-.content {
-  padding: 50px;
-}
-
-.title {
-  text-align: center;
-}
-
-.switch-btn {
-  margin: 10px;
-}
-</style>

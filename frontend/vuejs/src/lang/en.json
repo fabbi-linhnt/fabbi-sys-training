@@ -27,7 +27,8 @@
       "detail_task": "Detail task",
       "pick_subject": "pick subject",
       "subject_placeholder": "search, add subject",
-      "list_user": "list user"
+      "list_user": "list user",
+      "action": "Actions"
     },
     "message": {
       "task_msgDelete": "delete ok",
@@ -83,18 +84,18 @@
       "add": "Add"
     }
   },
-  "categories":{
-    "title" : {
+  "categories": {
+    "title": {
       "list_category": "LIST CATEGORY",
       "add_new_category": "Add New Category"
     },
-    "label" : {
-      "name_category" : "Name Category",
-      "action_category" : "Action"
+    "label": {
+      "name_category": "Name Category",
+      "action_category": "Action"
     },
-    "button" : {
-      "button_delete" : "Delete",
-      "button_update" : "Update",
+    "button": {
+      "button_delete": "Delete",
+      "button_update": "Update",
       "update_btn": "Update",
       "add_user_btn": "Add user"
     }

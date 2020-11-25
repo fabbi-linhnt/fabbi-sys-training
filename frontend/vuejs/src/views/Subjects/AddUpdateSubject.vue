@@ -19,14 +19,13 @@
                 </div>
               </div>
             </div>
-
             <form>
               <div class="form-group" id="subject-name">
                 <label for="exampleInputEmail1">{{
                   $t("list_subjects.label.name")
                 }}</label>
                 <input
-                  v-model="Subject.name"
+                  v-model="subject.name"
                   id="name"
                   class="form-control"
                   aria-describedby="emailHelp"
@@ -37,7 +36,7 @@
                   $t("list_subjects.label.description")
                 }}</label>
                 <textarea
-                  v-model="Subject.description"
+                  v-model="subject.description"
                   id="description"
                   class="form-control"
                   name=""
@@ -45,15 +44,15 @@
                   rows="10"
                 ></textarea>
               </div>
-              <label class="radio" for="exampleInputPassword1">{{
-                $t("list_subjects.label.is_active")
-              }}</label>
+              <label class="radio" for="exampleInputPassword1">
+                {{ $t("list_subjects.label.is_active") }}
+              </label>
               <div class="radio">
                 <label
                   ><input
-                    v-if="Subject.is_active == false"
+                    v-if="subject.is_active == false"
                     type="radio"
-                    id="an"
+                    id="unActive"
                     name="exampleRadios"
                     value=""
                     checked
@@ -61,17 +60,18 @@
                   <input
                     v-else
                     type="radio"
-                    id="an"
+                    id="unActive"
                     name="exampleRadios"
                     value=""
-                  />{{ $t("list_subjects.label.unActive") }}</label>
+                  />{{ $t("list_subjects.label.unActive") }}
+                </label>
               </div>
               <div class="radio">
                 <label
                   ><input
-                    v-if="Subject.is_active"
+                    v-if="subject.is_active"
                     type="radio"
-                    id="hien"
+                    id="active"
                     name="exampleRadios"
                     value=""
                     checked
@@ -79,15 +79,16 @@
                   <input
                     v-else
                     type="radio"
-                    id="hien"
+                    id="active"
                     name="exampleRadios"
                     value=""
-                  />{{ $t("list_subjects.label.active") }}</label>
+                  />{{ $t("list_subjects.label.active") }}
+                </label>
               </div>
               <div class="form-group" id="multiselect-course">
-                <label for="exampleInputPassword1">{{
-                  $t("list_subjects.label.course")
-                }}</label>
+                <label for="exampleInputPassword1">
+                  {{ $t("list_subjects.label.course") }}
+                </label>
                 <multiselect
                   v-model="value"
                   :options="courseData"
@@ -124,9 +125,9 @@
               <router-link
                 id="cancel"
                 class="btn btn-success"
-                :to="{ name: 'Subjects' }"
-                >{{ $t("list_subjects.button.cancel") }}</router-link
-              >
+                :to="{ name: 'subjects.list' }"
+                >{{ $t("list_subjects.button.cancel") }}
+              </router-link>
             </form>
           </div>
         </div>
@@ -137,7 +138,8 @@
 
 <script>
 import Multiselect from "vue-multiselect";
-import ProjectsTable from "@/components/HeaderCard";
+import ProjectsTable from "@/layout/HeaderCard";
+require("@/sass/modules/add-update-subject.css");
 
 export default {
   components: {
@@ -146,7 +148,7 @@ export default {
   },
   data() {
     return {
-      Subject: {
+      subject: {
         name: "",
         description: "",
         is_active: "",
@@ -164,41 +166,40 @@ export default {
       this.listCourse();
     }
   },
-
   methods: {
     async getData() {
-      await this.$store.dispatch("subject/course").then((res) => {
+      await this.$store.dispatch("course/GET_COURSES").then((res) => {
         this.courseData = res.data;
       });
     },
     async getSubject() {
       await this.$store
-        .dispatch("subject/getSubjectById", this.id)
+        .dispatch("subject/GET_SUBJECT_BY_ID", this.id)
         .then((response) => {
-          this.Subject.name = response.data.name;
-          this.Subject.description = response.data.description;
-          this.Subject.is_active = response.data.is_active;
+          this.subject.name = response.data.name;
+          this.subject.description = response.data.description;
+          this.subject.is_active = response.data.is_active;
         });
     },
     async update() {
       for (let index = 0; index < this.value.length; index++) {
-        this.Subject.course_id[index] = this.value[index].id;
+        this.subject.course_id[index] = this.value[index].id;
       }
-      this.Subject.is_active = document.getElementById("an").checked;
-      await this.$store.dispatch("subject/updateData", {
-        subjects: this.Subject,
+      this.subject.is_active = document.getElementById("active").checked;
+      await this.$store.dispatch("subject/UPDATE_SUBJECT", {
+        subjects: this.subject,
         id: this.id,
       });
     },
     async add() {
-      this.Subject.is_active = document.getElementById("an").checked;
+      this.subject.is_active = document.getElementById("active").checked;
       for (let index = 0; index < this.value.length; index++) {
-        this.Subject.course_id[index] = this.value[index].id;
+        this.subject.course_id[index] = this.value[index].id;
       }
-      await this.$store.dispatch("subject/addData", this.Subject);
+      await this.$store.dispatch("subject/STORE_SUBJECT", this.subject);
     },
     async listCourse() {
-      await this.$store.dispatch("subject/listCourse", this.id).then((res) => {
+      await this.$store.dispatch("subject/GET_COURSES_BY_SUBJECT_ID", this.id).then((res) => {
         this.value = res.data;
       });
     },
@@ -207,36 +208,3 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style> 
-
-<style>
-.radio {
-  margin-left: 10%;
-}
-#add-subject {
-  float: right;
-  margin-right: 10%;
-}
-#update-subject {
-  float: right;
-  margin-right: 10%;
-}
-#cancel {
-  float: right;
-  background-color: red;
-  margin-right: 5%;
-}
-#multiselect-course {
-  margin-left: 10%;
-  margin-right: 10%;
-}
-#subject-name {
-  margin-left: 10%;
-  margin-right: 10%;
-}
-#subject-description {
-  margin-left: 10%;
-  margin-right: 10%;
-}
-</style>
-
-

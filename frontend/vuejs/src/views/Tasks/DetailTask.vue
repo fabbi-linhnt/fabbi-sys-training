@@ -42,7 +42,7 @@
           </template>
         </b-table>
       </div>
-      <router-link class="btn btn-primary" to="/tasks">
+      <router-link class="btn btn-primary" :to="{ name : 'tasks.list' }">
         <i class="fas fa-undo-alt"> </i>
         {{ $t("task_screen.label.back_home") }}
       </router-link>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+require("@/sass/modules/detail-task.css");
+
 export default {
   name: "DetailTask",
   data() {
@@ -81,19 +83,19 @@ export default {
   },
   methods: {
     async getTask() {
-      await this.$store.dispatch("task/getTaskById", this.id)
+      await this.$store.dispatch("task/GET_TASK_BY_ID", this.id)
         .then(response => {
           this.task = response;
         })
     },
     async getUsersOfTask() {
-      await this.$store.dispatch("task/getUsersOfTask", this.id)
+      await this.$store.dispatch("task/GET_USERS_OF_TASK", this.id)
         .then(response => {
           this.users = response.data
         })
     },
     async getSubjectOfTask() {
-      await this.$store.dispatch("task/getSubjectOfTask", this.id)
+      await this.$store.dispatch("task/GET_SUBJECTS_OF_TASK", this.id)
         .then(response => {
           this.subjects = response;
         })
@@ -101,16 +103,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.content {
-  width: 1000px;
-  margin: 10px auto;
-  padding: 50px;
-  box-shadow: 0 0 4px #665252;
-}
-
-.task-content {
-  padding: 10px;
-}
-</style>

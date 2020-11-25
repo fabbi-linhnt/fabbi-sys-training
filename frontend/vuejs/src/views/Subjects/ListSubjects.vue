@@ -16,11 +16,10 @@
                   <router-link
                     id="add"
                     class="btn btn-success"
-                    :to="{ name: 'AddSubjects' }"
-                    >{{
-                      $t("list_subjects.title.add_new_subject")
-                    }}</router-link
+                    :to="{ name: 'subject.create' }"
                   >
+                    {{ $t("list_subjects.title.add_new_subject") }}
+                  </router-link>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">{{
@@ -47,12 +46,12 @@
                     type="primary"
                     size="sm"
                     @click="searchSubject()"
-                    >{{ $t("list_subjects.button.search") }}</base-button
                   >
+                    {{ $t("list_subjects.button.search") }}
+                  </base-button>
                 </div>
               </div>
             </div>
-
             <div>
               <table class="table">
                 <thead>
@@ -77,14 +76,14 @@
                       <base-button
                         @click="change(sub.id)"
                         icon="ni ni-check-bold"
-                        id = "icon-active"
+                        id="icon-active"
                       ></base-button>
                     </td>
                     <td v-else>
                       <base-button
                         @click="change(sub.id)"
                         icon="ni ni-fat-remove"
-                        id = "icon-unactive"
+                        id="icon-unactive"
                       ></base-button>
                     </td>
                     <b-button
@@ -101,20 +100,21 @@
                       class="btn btn-primary"
                       @click="detail(sub.id)"
                       >{{ $t("list_subjects.button.detail") }}
-                      </b-button>
+                    </b-button>
                     <router-link
                       id="update"
                       class="btn btn-success"
                       :to="{
-                        name: 'EditSubjects',
+                        name: 'subject.edit',
                         params: { id: sub.id },
                       }"
-                      >{{ $t("list_subjects.button.update") }}
-                      </router-link>
+                    >
+                      {{ $t("list_subjects.button.update") }}
+                    </router-link>
                   </tr>
                 </tbody>
               </table>
-              <div class="overflow-auto" id = "paginate">
+              <div class="overflow-auto" id="paginate">
                 <b-pagination
                   v-model="paginate.page"
                   :total-rows="paginate.total"
@@ -123,7 +123,6 @@
                   @change="changePage"
                 ></b-pagination>
               </div>
-
               <b-modal
                 id="modal-detail-subject"
                 centered
@@ -131,7 +130,7 @@
               >
                 <p class="my-4">
                   {{ $t("list_subjects.label.nameSubject") }}
-                  {{ Subject.name }}
+                  {{ subject.name }}
                 </p>
                 <p class="my-4">
                   {{ $t("list_subjects.label.countCourse") }}
@@ -160,14 +159,17 @@
     </div>
   </div>
 </template>
+
 <script>
 import {
   DEFAULT_PAGE,
   DEFAULT_PERPAGE,
   DEFAULT_OPTION,
 } from "@/definition/constants";
-import ProjectsTable from "@/components/HeaderCard";
+import ProjectsTable from "@/layout/HeaderCard";
 import Multiselect from "vue-multiselect";
+require("@/sass/modules/list-subject.css");
+
 export default {
   components: {
     ProjectsTable,
@@ -182,7 +184,7 @@ export default {
         total: "",
         name: "",
       },
-      Subject: {
+      subject: {
         name: "",
         description: "",
         is_active: "",
@@ -206,7 +208,7 @@ export default {
     },
     async getData() {
       await this.$store
-        .dispatch("subject/getData", { params: this.paginate })
+        .dispatch("subject/GET_SUBJECTS", { params: this.paginate })
         .then((response) => {
           this.tableData = response.data.data;
           this.paginate.perPage = response.data.per_page;
@@ -215,7 +217,7 @@ export default {
     },
     async deleteSubject(id) {
       if (confirm(this.$i18n.t("list_subjects.label.deleteConfirm"))) {
-        await this.$store.dispatch("subject/deleteData", id).then(() => {
+        await this.$store.dispatch("subject/DESTROY_SUBJECT", id).then(() => {
           this.getData();
         });
       }
@@ -227,56 +229,27 @@ export default {
 
     async detail(id) {
       await this.$store
-        .dispatch("subject/countCourseTaskUsers", id)
+        .dispatch("subject/COUNT_COURSES_TASKS_USERS", id)
         .then((response) => {
           this.count.countCourse = response.data[1];
           this.count.countTask = response.data[0];
           this.count.countUser = response.data[2];
         });
       await this.$store
-        .dispatch("subject/getSubjectById", id)
+        .dispatch("subject/GET_SUBJECT_BY_ID", id)
         .then((response) => {
-          this.Subject = response.data;
+          this.subject = response.data;
         });
     },
     customPaginate() {
       this.getData();
     },
     async change(id) {
-      await this.$store.dispatch("subject/updateActive", id);
+      await this.$store.dispatch("subject/UPDATE_ACTIVE", id);
       this.getData();
     },
   },
 };
 </script>
-
-<style>
-#delete {
-  background-color: red;
-  margin-top: 2%;
-}
-#detail {
-  background-color: blue;
-  color: white;
-  margin-top: 2%;
-}
-#add {
-  background-color: blue;
-}
-#update {
-  background-color: green;
-  margin-top: 2%;
-}
-#paginate {
-  float: right;
-  margin-right: 10%;
-}
-#icon-active {
-  background-color: white;
-}
-#icon-unactive {
-  background-color: yellow;
-}
-</style>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

@@ -13,18 +13,11 @@
             path: '/dashboard'
           }"
         />
-
-        <sidebar-item :link="{name: 'Icons', icon: 'ni ni-planet text-blue', path: '/icons'}"/>
-        <sidebar-item :link="{name: 'Maps', icon: 'ni ni-pin-3 text-orange', path: '/maps'}"/>
-        <sidebar-item :link="{name: 'User Profile', icon: 'ni ni-single-02 text-yellow', path: '/profile'}"/>
-        <sidebar-item :link="{name: 'Tables', icon: 'ni ni-bullet-list-67 text-red', path: '/tables'}"/>
-        <sidebar-item :link="{name: 'Login', icon: 'ni ni-key-25 text-info', path: '/login'}"/>
-        <sidebar-item :link="{name: 'Register', icon: 'ni ni-circle-08 text-pink', path: '/register'}"/>
-        <sidebar-item :link="{name: 'Course', icon: 'ni ni-circle-08 text-pink', path: '/course'}"/>
-        <sidebar-item :link="{name: 'listTask', icon: 'ni ni-circle-08 text-pink', path: '/tasks'}"/>
-        <sidebar-item :link="{name: 'ListSubjects', icon: 'ni ni-circle-08 text-pink', path: '/listSubjects'}"/>
-        <sidebar-item :link="{name: 'user.list', icon: 'ni ni-circle-08 text-pink', path: '/users/list'}"/>
-        <sidebar-item :link="{name: 'Category', icon: 'ni ni-circle-08 text-pink', path: '/listCategories'}"/>
+        <sidebar-item :link="{name: 'Course', icon: 'ni ni-circle-08 text-pink', path: '/courses/list'}"/>
+        <sidebar-item :link="{name: 'Task', icon: 'ni ni-circle-08 text-pink', path: '/tasks/list'}"/>
+        <sidebar-item :link="{name: 'Subject', icon: 'ni ni-circle-08 text-pink', path: '/subjects/list'}"/>
+        <sidebar-item :link="{name: 'User', icon: 'ni ni-circle-08 text-pink', path: '/users/list'}"/>
+        <sidebar-item :link="{name: 'Category', icon: 'ni ni-circle-08 text-pink', path: '/categories/list'}"/>
       </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">

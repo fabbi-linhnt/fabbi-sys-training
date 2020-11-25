@@ -1,0 +1,9 @@
+.content {
+    padding: 50px;
+}
+
+.custom-paginate {
+    float: right;
+    margin-right: 50px;
+    width: 200px;
+}
