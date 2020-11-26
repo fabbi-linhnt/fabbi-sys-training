@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,19 +24,26 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function addUser(array $data)
     {
+        DB::beginTransaction();
         try {
            $user = $this->user->create($data);
            $userData = $this->user->find($user->id);
-           $courseId = $data['course'];
+           $courseId = $data['course_id'];
            $userData->courses()->attach($courseId, ['status' => 'Create']);
+           
+           DB::commit();
 
            return [
-               'success' => true
+               'success' => true,
+               'message' => 'Add User Successfull'
            ];
         }
         catch(\Exception $e) {
+            DB::rollBack();
+
             return [
-                'success' => false
+                'success' => false,
+                'message' => $e->getMessage()
             ];
         }
     }

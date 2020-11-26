@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Api\ApiBaseController;
+use App\Http\Requests\UserRequest;
+use App\Models\User;
 
 class UserController extends ApiBaseController
 {
@@ -45,26 +47,30 @@ class UserController extends ApiBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $inputData = $request->only(
-            'name',
-            'birthday',
-            'phone',
-            'address',
-            'email',
-            'password',
-            'course',
-            'img_path'
-        );
+        try {
+            $inputData = $request->only(
+                'name',
+                'birthday',
+                'phone',
+                'address',
+                'email',
+                'password',
+                'course_id',
+                'img_path'
+            );
+            $inputData['password'] = bcrypt($inputData['password']);
+            $data = $this->repository->addUser($inputData);
+            if (!$data['success']) {
+                return $this->sendError(500, $data['message']);
+            }
 
-        $inputData['password'] = bcrypt($inputData['password']);
-        $data = $this->repository->addUser($inputData);
-        if ($data['success']) {
-            return $this->sendError(500, "Error", "Failed");
+            return $this->sendSuccess(null, $data['message']);
+        } catch (\Exception $e) {
+            return $this->sendError(500, $e->getMessage());
         }
 
-        return $this->sendSuccess('Add User Success');
     }
 
     /**
