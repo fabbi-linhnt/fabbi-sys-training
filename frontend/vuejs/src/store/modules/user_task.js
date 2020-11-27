@@ -1,23 +1,33 @@
 import apiCaller from '../../utils/api';
 
 export const state = {
-  user_task: null
+  userTask: null,
+  storeComment: null,
+};
+
+export const getters = {
+  userTask: state => state.userTask,
+  storeComment: state => state.storeComment
 };
 
 export const mutations = {
-  setTasks(state, user_task) {
-    state.user_task = user_task;
+  setUserTask(state, userTask) {
+    state.userTask = userTask;
   },
+  setStoreComment(state, storeComment) {
+    state.storeComment = storeComment;
+  }
 }
 
 export const actions = {
-  getUserTask({}, id) {
+  GET_USER_TASK({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/user-task/' + id,
         '',
         response => {
-          resolve(response.data.data)
+          commit('setUserTask', response.data);
+          resolve(response.data.data);
         },
         err => {
           reject(err.response.data);
@@ -25,16 +35,17 @@ export const actions = {
       )
     });
   },
-  storeComment({}, submitComment) {
+  STORE_COMMENT({ commit }, submitComment) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
         '/api/user-task/' + submitComment['id'],
         submitComment,
         response => {
-          resolve(response.data)
+          commit('setStoreCommit', response.data);
+          resolve(response.data);
         },
-        err => {
-          reject(err.data)
+        (err) => {
+          reject(err.data);
         }
       )
     })

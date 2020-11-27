@@ -28,11 +28,14 @@
         v-for="child in node.children"
         :key="child.id"
         :node="child"
+        @reload="$emit('reload')"
       />
     </template>
   </div>
 </template>
+
 <script>
+require("@/sass/modules/tree-brower.css");
 export default {
   name: "tree-brower",
   props: {
@@ -56,21 +59,9 @@ export default {
     },
     async deleteCategory(id) {
       if (confirm(this.$i18n.t("list_subjects.label.deleteConfirm")));
-      await this.$store.dispatch("category/deleteData", id);
-      window.location.reload();
+      await this.$store.dispatch("category/DESTROY_CATEGORY", id);
+      this.$emit("reload");
     },
   },
 };
 </script>
-
-<style>
-.action button {
-  float: right;
-}
-#delete-category {
-  background-color: red;
-}
-#children {
-  margin-left: 10%;
-}
-</style>

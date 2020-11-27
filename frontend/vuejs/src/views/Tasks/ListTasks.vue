@@ -23,7 +23,9 @@
         <button class="btn">{{ $t("task_screen.button.search_btn") }}</button>
       </form>
       <div class="custom-paginate">
-        <label class="typo__label">{{ $t("task_screen.label.custom_paginate") }}</label>
+        <label class="typo__label">
+          {{ $t("task_screen.label.custom_paginate") }}
+        </label>
         <multiselect
           v-model="paginate.perPage"
           :options="options"
@@ -35,41 +37,41 @@
         </multiselect>
       </div>
       <div style="clear: both"></div>
-      <br/>
+      <br />
       <b-table show-empty small stacked="md" :items="tasks" :fields="fields">
         <template #cell(index)="row">
           {{ ++row.index }}
         </template>
         <template v-slot:cell(is_active)="row">
           <p>
-            {{ row.item.is_active == 1 ? $t("task_screen.label.task_active") : $t("task_screen.label.task_inactive") }}
+            {{
+              row.item.is_active == 1
+                ? $t("task_screen.label.task_active")
+                : $t("task_screen.label.task_inactive")
+            }}
           </p>
         </template>
         <template v-slot:cell(actions)="row">
-          <b-button class="btn btn-danger" @click="onDeleteTask(row.item.id)"
-          >
+          <b-button class="btn btn-danger" @click="onDeleteTask(row.item.id)">
             {{ $t("task_screen.label.task_delete") }}
-          </b-button
-          >
+          </b-button>
           <router-link
             class="btn btn-success"
-            :to="{ name: 'task.update', params: { id: row.item.id }}"
+            :to="{ name: 'task.edit', params: { id: row.item.id } }"
           >
             {{ $t("task_screen.label.task_update") }}
-          </router-link
-          >
+          </router-link>
           <router-link
             class="btn btn-primary"
-            :to="{ name: 'task.detail', params: { id: row.item.id }}"
+            :to="{ name: 'task.detail', params: { id: row.item.id } }"
           >
             {{ $t("task_screen.label.task_detail") }}
-          </router-link
-          >
+          </router-link>
         </template>
         <template v-slot:cell(user_task)="row">
           <router-link
             class="btn btn-primary"
-            :to="{ name: 'report.list', params: { id: row.item.id}}"
+            :to="{ name: 'reports.list', params: { id: row.item.id } }"
           >
             {{ $t("report_screen.label.list_report") }}
           </router-link>
@@ -89,8 +91,8 @@
 </template>
 
 <script>
-
-import {DEFAULT_OPTION, DEFAULT_PERPAGE} from "../../definition/constants";
+import { DEFAULT_OPTION, DEFAULT_PERPAGE } from "@/definition/constants";
+require("@/sass/modules/list-task.css");
 
 export default {
   name: "Tasks",
@@ -102,29 +104,45 @@ export default {
         page: 1,
         perPage: DEFAULT_PERPAGE,
         total: 0,
-        name: '',
+        name: "",
       },
       fields: [
-        {key: 'index', label: this.$i18n.t("task_screen.label.task_index")},
-        {key: 'name', label: this.$i18n.t("task_screen.label.task_name"), sortable: true, sortDirection: 'desc'},
+        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
         {
-          key: 'description',
+          key: "name",
+          label: this.$i18n.t("task_screen.label.task_name"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "description",
           label: this.$i18n.t("task_screen.label.task_description"),
           sortable: true,
-          sortDirection: 'desc'
+          sortDirection: "desc",
         },
-        {key: 'content', label: this.$i18n.t("task_screen.label.task_content"), sortable: true, sortDirection: 'desc'},
         {
-          key: 'deadline',
+          key: "content",
+          label: this.$i18n.t("task_screen.label.task_content"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "deadline",
           label: this.$i18n.t("task_screen.label.task_deadline"),
           sortable: true,
-          sortDirection: 'desc'
+          sortDirection: "desc",
         },
-        {key: 'is_active', label: this.$i18n.t("task_screen.label.task_isActive")},
-        {key: 'user_task', label: this.$i18n.t("task_screen.label.task_user")},
-        {key: 'actions', label: 'Actions'}
+        {
+          key: "is_active",
+          label: this.$i18n.t("task_screen.label.task_isActive"),
+        },
+        {
+          key: "user_task",
+          label: this.$i18n.t("task_screen.label.task_user"),
+        },
+        { key: "actions", label: this.$i18n.t("task_screen.label.action") },
       ],
-    }
+    };
   },
   created() {
     this.getData();
@@ -138,46 +156,40 @@ export default {
       if (this.paginate.name) {
         this.paginate.page = 1;
       }
-      this.$store.dispatch("task/getTasks", {params: this.paginate})
-        .then(response => {
+      this.$store
+        .dispatch("task/GET_TASKS", { params: this.paginate })
+        .then((response) => {
           this.tasks = response.data;
           this.paginate.perPage = response.per_page;
           this.paginate.total = response.total;
-        })
+        });
     },
     makeToast(message, variant) {
       this.$bvToast.toast(message, {
         variant: variant,
-        solid: true
-      })
+        solid: true,
+      });
     },
     async onDeleteTask(id) {
-      if (!confirm('Xóa?')) {
+      if (!confirm("Xóa?")) {
         return;
       }
-      await this.$store.dispatch("task/destroy", id)
+      await this.$store
+        .dispatch("task/DESTROY_TASK", id)
         .then(() => {
           this.getData();
-          this.makeToast(this.$i18n.t("task_screen.message.task_msgDelete"), 'success');
+          this.makeToast(
+            this.$i18n.t("task_screen.message.task_msgDelete"),
+            "success"
+          );
         })
-        .catch(() => {
-        })
+        .catch(() => {});
     },
     customPaginate() {
       this.getData();
-    }
+    },
   },
-}
+};
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style scoped>
-.content {
-  padding: 50px;
-}
 
-.custom-paginate {
-  float: right;
-  margin-right: 50px;
-  width: 200px;
-}
-</style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

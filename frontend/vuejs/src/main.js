@@ -28,31 +28,31 @@ Vue.component('multiselect', Multiselect)
 Vue.use(Multiselect);
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresVisitor)) {
-        if (authToken.getToken()) {
-            next({
-                path: '/'
-            });
-        } else {
-            next();
-        }
-    } else if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!authToken.getToken()) {
-            next({
-                path: '/login'
-            });
-        } else {
-            store.dispatch('auth/getAuth')
-                .then(() => {
-                    next();
-                })
-                .catch(() => {
-                    next('/login');
-                });
-        }
+  if (to.matched.some(record => record.meta.requiresVisitor)) {
+    if (authToken.getToken()) {
+      next({
+        path: '/'
+      });
     } else {
-        next();
+      next();
     }
+  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!authToken.getToken()) {
+      next({
+        path: '/login'
+      });
+    } else {
+      store.dispatch('auth/getAuth')
+        .then(() => {
+          next();
+        })
+        .catch(() => {
+          next('/login');
+        });
+    }
+  } else {
+    next();
+  }
 });
 
 new Vue({

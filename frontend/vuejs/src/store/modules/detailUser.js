@@ -9,15 +9,12 @@ export const getters = {
 };
 
 export const mutations = {
-  getInfoData(state,data)
-  {
-    if(!data.error)
-    {
+  getInfoData(state, data) {
+    if (!data.error) {
       state.Object = data.data;
     }
-    else
-    {
-      state.Object = error;
+    else {
+      state.Object = data.error;
     }
   }
 };
@@ -27,14 +24,15 @@ export const actions = {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         `api/user/getInfo/` + params.params.id,
-        null,
+        '',
         res => {
-          commit("getInfoData",res.data);
+          commit("getInfoData", res.data);
+          resolve(res.data)
         },
         err => {
           reject(err);
         }
       );
     });
-}
+  }
 };

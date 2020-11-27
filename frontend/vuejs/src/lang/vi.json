@@ -6,7 +6,7 @@
   },
   "task_screen": {
     "label": {
-      "task_name": "Tên task",
+      "task_name": "Tên bài tập",
       "task_content": "Đề bài",
       "task_description": "Mô tả",
       "task_deadline": "Hạn",
@@ -18,16 +18,17 @@
       "task_delete": "xóa",
       "task_update": "cập nhật",
       "task_detail": "chi tiết",
-      "update_title": "Cập nhật task",
-      "create_title": "Thêm mới task",
+      "update_title": "Cập nhật bài tập",
+      "create_title": "Thêm mới bài tập",
       "create_task": "Thêm mới",
       "search_task": "Tìm kiếm theo tên",
       "custom_paginate": "Chọn số bản ghi",
       "back_home": "Quay về",
       "detail_task": "Chi tiết bài tập",
-      "pick_subject": "Chọn subject",
-      "subject_placeholder": "Tìm kiếm, thêm subject",
-      "list_user": "Danh sách user"
+      "pick_subject": "Chọn môn học",
+      "subject_placeholder": "Tìm kiếm, thêm môn học",
+      "list_user": "Danh sách người dùng",
+      "action": "Hành động"
     },
     "message": {
       "task_msgDelete": "Xóa thành công",
@@ -38,7 +39,7 @@
       "search_btn": "Tìm kiếm",
       "create_btn": "Thêm mới",
       "update_btn": "Cập nhật",
-      "add_user_btn": "Thêm user"
+      "add_user_btn": "Thêm người dùng"
     }
   },
   "list_subjects": {
@@ -210,4 +211,3 @@
     }
   }
 }
-

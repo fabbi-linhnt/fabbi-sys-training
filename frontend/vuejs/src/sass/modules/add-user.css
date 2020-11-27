@@ -1,0 +1,7 @@
+.container .button, header {
+    text-align: center;
+}
+
+.content .container {
+    width: 600px;
+}
