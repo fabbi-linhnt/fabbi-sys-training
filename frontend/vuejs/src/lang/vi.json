@@ -129,7 +129,7 @@
     },
     "button": {
       "submit": "Lưu",
-      "reset": "Làm mới",
+      "cancel": "Hủy",
       "add_course": "Thêm mới khóa học ",
       "delete": "Xóa",
       "detail": "Chi tiết",
@@ -142,7 +142,9 @@
       "enter_name_course": "Điền tên khóa học",
       "enter_description": "Điền mô tả khóa học",
       "enter_category": "Chọn thể loại",
-      "pick_a_value": "Chọn giá trị"
+      "pick_a_value": "Chọn giá trị",
+      "choose_a_file_or_drop_it_here": "Chọn tệp ảnh hoặc thả tệp ảnh vào đây",
+      "please_select_an_option": "Chọn thực trạng"
     }
   },
   "report_screen": {
