@@ -1,10 +1,11 @@
-.radio {
+.radio, #check-active {
     margin-left: 10%;
 }
 
-#add-subject, #update-subject {
+#update-add-subject {
     float: right;
     margin-right: 10%;
+    background-color: blue;
 }
 
 #cancel {
@@ -13,7 +14,43 @@
     margin-right: 5%;
 }
 
-#multiselect-course, #subject-name, #subject-description {
+#multiselect-course, #subject-name, #subject-description, #card {
     margin-left: 10%;
     margin-right: 10%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.span-error {
+    color: red;
+}
+
+.span-error-course-task {
+    color: red;
+    margin-left: 10%;
+}
+
+.tag-input {
+    box-sizing: border-box;
+    padding: 0 1vh;
+}
+
+.tag-input__tag {
+    float: left;
+    margin-right: 1%;
+    background-color: green;
+    margin-top: 1vh;
+    line-height: 3vh;
+    padding: 0 1vh;
+    border-radius: 1vh;
+    color: white;
+}
+
+.tag-input__tag > span {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+.button_search {
+    width: 50vh;
 }
