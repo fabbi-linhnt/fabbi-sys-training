@@ -137,7 +137,7 @@
     },
     "button": {
       "submit": "Submit",
-      "reset": "Reset",
+      "cancel": "Cancel",
       "add_course": "Add Course",
       "delete": "Delete",
       "detail": "Detail",
@@ -150,7 +150,9 @@
       "enter_name_course": "Enter Name Course",
       "enter_description": "Enter Description",
       "enter_category": "Enter Category",
-      "pick_a_value": "Pick a value"
+      "pick_a_value": "Pick a value",
+      "choose_a_file_or_drop_it_here": "Choose a file or drop it here",
+      "please_select_an_option": "Please select an option"
     }
   },
   "report_screen": {

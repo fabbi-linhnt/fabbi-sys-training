@@ -14,11 +14,14 @@ import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Multiselect from 'vue-multiselect';
-import Vuetify from 'vuetify'
+import Vuetify from 'vuetify';
+import firebase from 'firebase';
+import { ValidationObserver, ValidationProvider  } from "vee-validate";
+import { loadVeeValidate } from './utils/custom-veevalidate';
 
-
-
-
+loadVeeValidate();
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
@@ -26,6 +29,7 @@ Vue.use(ArgonDashboard);
 Vue.use(VueIziToast);
 Vue.component('multiselect', Multiselect)
 Vue.use(Multiselect);
+Vue.use(firebase);
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresVisitor)) {
@@ -54,7 +58,17 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
+var firebaseConfig = {
+  apiKey: "AIzaSyDrdz2moBxeyJE8xcIxpZ7JZTOmWRsIBt0",
+  authDomain: "fabbi-training.firebaseapp.com",
+  databaseURL: "https://fabbi-training.firebaseio.com",
+  projectId: "fabbi-training",
+  storageBucket: "fabbi-training.appspot.com",
+  messagingSenderId: "647417507541",
+  appId: "1:647417507541:web:89b5bbc34dcfd7982e3c5c",
+  measurementId: "G-77ZTHVZ6GN"
+};
+firebase.initializeApp(firebaseConfig);
 new Vue({
   router,
   store,
