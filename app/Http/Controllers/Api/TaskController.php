@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tasks\TasksStoreRequest;
+use App\Http\Requests\Tasks\TasksUpdateRequest;
 use App\Repositories\Task\TaskRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -45,7 +47,7 @@ class TaskController extends ApiBaseController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TasksStoreRequest $request)
     {
         $data['task'] = $request['task'];
         $data['subject_id'] = $request['subject_id'];
@@ -93,7 +95,7 @@ class TaskController extends ApiBaseController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TasksUpdateRequest $request, $id)
     {
         $data['task'] = $request['task'];
         $data['subject_id'] = $request['subject_id'];
