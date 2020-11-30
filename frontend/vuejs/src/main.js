@@ -15,9 +15,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Multiselect from 'vue-multiselect';
 import Vuetify from 'vuetify';
-import firebase from 'firebase';
+import Firebase from 'firebase';
 import { ValidationObserver, ValidationProvider  } from "vee-validate";
 import { loadVeeValidate } from './utils/custom-veevalidate';
+import Treeselect from '@riophae/vue-treeselect';
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 loadVeeValidate();
 Vue.component('ValidationProvider', ValidationProvider);
@@ -28,8 +30,10 @@ Vue.use(VueAxios, axios);
 Vue.use(ArgonDashboard);
 Vue.use(VueIziToast);
 Vue.component('multiselect', Multiselect)
+Vue.component('Treeselect', Treeselect)
 Vue.use(Multiselect);
-Vue.use(firebase);
+Vue.use(Firebase);
+
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresVisitor)) {
@@ -68,7 +72,7 @@ var firebaseConfig = {
   appId: "1:647417507541:web:89b5bbc34dcfd7982e3c5c",
   measurementId: "G-77ZTHVZ6GN"
 };
-firebase.initializeApp(firebaseConfig);
+Firebase.initializeApp(firebaseConfig);
 new Vue({
   router,
   store,
