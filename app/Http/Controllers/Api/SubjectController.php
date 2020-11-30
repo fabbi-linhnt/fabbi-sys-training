@@ -31,7 +31,7 @@ class SubjectController extends ApiBaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,7 +48,7 @@ class SubjectController extends ApiBaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -64,8 +64,8 @@ class SubjectController extends ApiBaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -82,7 +82,7 @@ class SubjectController extends ApiBaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -96,9 +96,9 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess("DELETE SUBJECT SUCCESS");
     }
 
-    public function countTaskCourseSubjectById($id)
+    public function countTaskCourseById($id)
     {
-        $subjects = $this->repository->countTaskCourseSubjectById($id);
+        $subjects = $this->repository->countTaskCourseById($id);
         if (!$subjects['success']) {
             return $this->sendError(500, "ERROR", "500");
         }
@@ -106,9 +106,9 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess($subjects['data']);
     }
 
-    public function ListCourseBySubjetID($id)
+    public function listCourseBySubjectId($id)
     {
-        $subjects = $this->repository->ListCourseBySubjetID($id);
+        $subjects = $this->repository->listCourseBySubjectId($id);
         if (!$subjects['success']) {
             return $this->sendError(500, "ERROR", "500");
         }
@@ -116,17 +116,7 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess($subjects['data']);
     }
 
-    public function listCourses()
-    {
-        $courses = $this->repository->listCourses();
-        if (!$courses['success']) {
-            return $this->sendError(500, "ERROR", "500");
-        }
-
-        return $this->sendSuccess($courses['data']);
-    }
-
-    public function updateActive($id)
+    public function edit($id)
     {
         $subject = $this->repository->updateActive($id);
         if (!$subject['success']) {
@@ -135,14 +125,5 @@ class SubjectController extends ApiBaseController
 
         return $this->sendSuccess("UPDATE SUBJECT SUCCESS");
     }
-
-    public function getAllSubject()
-    {
-        $subjects = $this->repository->getAllSubject();
-        if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
-        }
-
-        return $this->sendSuccess($subjects['data']);
-    }
 }
+

@@ -104,7 +104,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
         ];
     }
 
-    public function getSubjectOfTask($id)
+    public function getSubjectsByTaskId($id)
     {
         try {
             $task = $this->model->findOrFail($id)->subjects;

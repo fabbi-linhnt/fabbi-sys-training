@@ -10,9 +10,11 @@ class UserController extends ApiBaseController
 {
     protected $repository;
 
-    public function __construct(UserRepositoryInterface $repository){
+    public function __construct(UserRepositoryInterface $repository)
+    {
         $this->repository = $repository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,13 +22,13 @@ class UserController extends ApiBaseController
      */
     public function index(Request $request)
     {
-      $inputData = $request->only('search', 'perPage');
-      $data = $this->repository->getListUser($inputData);
-      if (!$data['success']) {
-          return $this->sendError(500, "Error", "Failed");
-      }
+        $inputData = $request->only('search', 'perPage');
+        $data = $this->repository->getListUser($inputData);
+        if (!$data['success']) {
+            return $this->sendError(500, "Error", "Failed");
+        }
 
-      return $this->sendSuccess($data['listUser']);
+        return $this->sendSuccess($data['listUser']);
     }
 
     /**
@@ -42,7 +44,7 @@ class UserController extends ApiBaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -70,18 +72,23 @@ class UserController extends ApiBaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $data = $this->repository->getUserInfoById($id);
+        if (!$data['success']) {
+            return $this->sendError(500, "Error", "Failed");
+        }
+
+        return $this->sendSuccess($data['result']);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -92,8 +99,8 @@ class UserController extends ApiBaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -111,8 +118,7 @@ class UserController extends ApiBaseController
 
         $inputData['password'] = bcrypt($inputData['password']);
         $user = $this->repository->updateUserById($inputData, $id);
-        if (!$user['success'])
-        {
+        if (!$user['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
 
@@ -122,14 +128,13 @@ class UserController extends ApiBaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $data = $this->repository->deleteUserById($id);
-        if (!$data['success'])
-        {
+        if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
 
@@ -139,8 +144,7 @@ class UserController extends ApiBaseController
     public function countSubject($id)
     {
         $data = $this->repository->countSubjectById($id);
-        if(!$data['success'])
-        {
+        if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
 
@@ -150,8 +154,7 @@ class UserController extends ApiBaseController
     public function countTask($id)
     {
         $data = $this->repository->countTaskById($id);
-        if(!$data['success'])
-        {
+        if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
 
@@ -161,8 +164,7 @@ class UserController extends ApiBaseController
     public function userName($id)
     {
         $data = $this->repository->getUserNameById($id);
-        if(!$data['success'])
-        {
+        if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
 
@@ -171,12 +173,6 @@ class UserController extends ApiBaseController
 
     public function getUserInfo($id)
     {
-      $data = $this->repository->getUserInfoById($id);
-      if(!$data['success'])
-      {
-          return $this->sendError(500, "Error", "Failed");
-      }
 
-      return $this->sendSuccess($data['result']);
     }
 }

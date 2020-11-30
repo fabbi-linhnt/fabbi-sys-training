@@ -9,78 +9,88 @@ use App\Models\Category;
 
 class CategoryController extends ApiBaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct(CategoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    public function index(Request $request)
-    {
-        //
-        $subjects = $this->repository->listCategory($request);
-        if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
-        }
-
-        return $this->sendSuccess($subjects['data']);
-    }
-
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/categories",
+     *     tags={"Category"},
+     *     description="Returns list categories",
+     *     @OA\Response(
+     *          response="200",
+     *          description="response categories success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              examples={
+     *                  "data": {
+     *                      "id": 1,
+     *                       "name": "RTtBs1ara1",
+     *                       "parent_id": 0,
+     *                       "created_at": null,
+     *                       "updated_at": null,
+     *                       "level": 0,
+     *                       "children": {
+     *                           {
+     *                           "id": 5,
+     *                           "name": "Evb05fVF9K",
+     *                           "parent_id": 1,
+     *                           "created_at": null,
+     *                           "updated_at": null,
+     *                           "level": 1,
+     *                           "children": {}
+     *                           },
+     *                          {
+     *                           "id": 6,
+     *                           "name": "Evb05fVF9K",
+     *                           "parent_id": 1,
+     *                           "created_at": null,
+     *                           "updated_at": null,
+     *                           "level": 1,
+     *                           "children": {}
+     *                           },
+     *                      },
+     *                  },
+     *             },
+     *          ),
+     *     ),
+     * )
      */
-    public function store(Request $request)
+    public function index()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    }
-
-    public function category()
-    {
-        $categories =  $this->repository->categories();
+        $categories = $this->repository->categories();
         if (!$categories['success']) {
             return $this->sendError(500, "ERROR", "500");
         }
 
         return $this->sendSuccess($categories['data']);
     }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/categories/{id}",
+     *     description="delete category",
+     *     tags={"Category"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="category id",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="delete category success"
+     *     ),
+     * )
      */
     public function destroy($id)
     {
-        $categories =  $this->repository->deleteCategory($id);
+        $categories = $this->repository->deleteCategory($id);
         if (!$categories['success']) {
             return $this->sendError(500, "ERROR", "500");
         }
