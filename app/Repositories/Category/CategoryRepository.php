@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Repositories\Categories;
+namespace App\Repositories\Category;
 
 use App\Models\Category;
 
 use App\Repositories\BaseRepository;
-use App\Repositories\Categories\CategoryInterface;
+use App\Repositories\Category\CategoryInterface;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Class EquipmentRepository
  * @package App\Repositories\Equipment
  */
-class CategoryRepo extends BaseRepository implements CategoryInterface
+class CategoryRepository extends BaseRepository implements CategoryInterface
 {
 
   public function __construct(Category $category)

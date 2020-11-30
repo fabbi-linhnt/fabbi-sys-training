@@ -14,8 +14,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            \App\Repositories\Subjects\SubjectInterface::class,
-            \App\Repositories\Subjects\SubjectRepon::class,
+            \App\Repositories\Subject\SubjectInterface::class,
+            \App\Repositories\Subject\SubjectRepository::class
         );
         $this->app->singleton(
             \App\Repositories\Task\TaskRepositoryInterface::class,
@@ -24,11 +24,11 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             \App\Repositories\User\UserRepositoryInterface::class,
-            \App\Repositories\User\UserRepository::class,
+            \App\Repositories\User\UserRepository::class
         );
         $this->app->singleton(
-            \App\Repositories\Categories\CategoryInterface::class,
-            \App\Repositories\Categories\CategoryRepo::class
+            \App\Repositories\Category\CategoryInterface::class,
+            \App\Repositories\Category\CategoryRepository::class
         );
     }
 
@@ -39,6 +39,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton(\App\Repositories\Courses\CourseInterface::class, \App\Repositories\Courses\CourseRepository::class);
+        $this->app->singleton(\App\Repositories\Course\CourseInterface::class, \App\Repositories\Course\CourseRepository::class);
     }
 }
