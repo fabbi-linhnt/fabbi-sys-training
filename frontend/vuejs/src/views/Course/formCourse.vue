@@ -6,7 +6,10 @@
     <div class="container-fluid mt-4">
       <ValidationObserver v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(onSubmit)">
-          <ValidationProvider :name="$t('course_screen.label.name')" rules="required|min:3|max:20" v-slot="{ errors }" >
+          <ValidationProvider
+            :name="$t('course_screen.label.name')"
+            rules="required|min:3|max:20"
+            v-slot="{ errors }">
             <b-form-group
               id="input-group-1"
               :label="$t('course_screen.label.name')"
@@ -20,7 +23,10 @@
               <span class="err">{{ errors[0] }}</span>
             </b-form-group>
           </ValidationProvider>
-          <ValidationProvider  :name="$t('course_screen.label.description')" rules="required|min:5|max:50" v-slot="{ errors }">
+          <ValidationProvider
+            :name="$t('course_screen.label.description')"
+            rules="required|min:5|max:50"
+            v-slot="{ errors }">
             <b-form-group id="input-group-2"
                           :label="$t('course_screen.label.description')"
                           label-for="input-2">
@@ -49,17 +55,16 @@
             <b-form-group id="input-group-4"
                           :label="$t('course_screen.label.category')"
                           label-for="input-4">
-              <multiselect
+              <Treeselect
+                :multiple="false"
                 v-model="course.category_id"
                 :options="categories"
-                :searchable="false"
-                label="name"
-                :close-on-select="true"
-                :show-labels="false" :placeholder="$t('course_screen.message.enter_category')"></multiselect>
+                :placeholder="$t('course_screen.message.please_select_an_option')">
+              </Treeselect>
               <span class="err">{{ errors[0] }}</span>
             </b-form-group>
           </ValidationProvider>
-          <b-form-group>
+          <b-form-group :label="$t('course_screen.label.image')">
             <div>
               <!-- Styled -->
               <b-form-file
@@ -69,13 +74,16 @@
                 @change="previewImage"
               ></b-form-file>
               <div class="mt-3" v-if="picture">
-                <b-img id="imgCourse" :src="picture"> </b-img>
+                <b-img id="imgCourse" :src="picture"></b-img>
               </div>
-
             </div>
           </b-form-group>
           <b-button type="submit" variant="primary"> {{ $t("course_screen.button.submit") }}</b-button>
-          <b-button type="reset"  :to="{ name: 'courses.list' }" variant="danger"> {{ $t("course_screen.button.cancel") }}</b-button>
+          <b-button type="reset"
+                    :to="{ name: 'courses.list' }"
+                    variant="danger">
+            {{ $t("course_screen.button.cancel") }}
+          </b-button>
         </b-form>
       </ValidationObserver>
     </div>
@@ -83,7 +91,8 @@
 </template>
 
 <script>
-import firebase from 'firebase';
+import Firebase from 'firebase';
+
 require("@/sass/modules/form-course.css");
 export default {
   props: ["id"],
@@ -93,17 +102,17 @@ export default {
         name: "",
         description: "",
         is_active: "",
-        category_id: "",
+        category_id: null,
       },
       activate: [
-        { text: this.$i18n.t("course_screen.message.please_select_an_option"), value: "", disabled: true },
-        { text: "Activate", value: "1" },
-        { text: "Inactivate", value: "0" },
+        {text: this.$i18n.t("course_screen.message.please_select_an_option"), value: "", disabled: true},
+        {text: "Activate", value: "1"},
+        {text: "Inactivate", value: "0"},
       ],
       categories: [],
       imageData: null,
       picture: null,
-      uploadValue: 0
+      uploadValue: 0,
     };
   },
   created() {
@@ -120,14 +129,14 @@ export default {
         await this.$store
           .dispatch("course/UPDATE_COURSE", this.course)
           .then(() => {
-            this.$router.push({ name: "courses.list" });
+            this.$router.push({name:"courses.list"});
           });
       } else {
         this.course.category_id = this.course.category_id.id;
         await this.$store
           .dispatch("course/STORE_COURSE", this.course)
           .then(() => {
-            this.$router.push({ name: "courses.list" });
+            this.$router.push({name:"courses.list"});
           });
       }
     },
@@ -153,7 +162,7 @@ export default {
       this.picture = null;
       this.imageData = event.target.files[0];
       this.picture = null;
-      const storageRef = firebase.storage().ref();
+      const storageRef = Firebase.storage().ref();
       const imgRef = storageRef.child(`imagesCourse/${this.imageData.name}`)
       imgRef.put(this.imageData).then(s => {
         imgRef.getDownloadURL().then(url => {

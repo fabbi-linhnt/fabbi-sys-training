@@ -124,7 +124,7 @@ export const actions = {
   GET_DATA_CATEGORIES({ commit }) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/category',
+        '/api/categories',
         '',
         response => {
           commit('setDataCategories', response.data.data);

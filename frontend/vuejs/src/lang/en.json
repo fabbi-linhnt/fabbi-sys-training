@@ -133,7 +133,8 @@
       "active": "Active",
       "inactive": "Inactive",
       "record": "Record",
-      "category": "Category"
+      "category": "Category",
+      "image": "Image"
     },
     "button": {
       "submit": "Submit",

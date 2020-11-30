@@ -6,6 +6,7 @@ use App\Models\Category;
 
 use App\Repositories\BaseRepository;
 use App\Repositories\Categories\CategoryInterface;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class EquipmentRepository
@@ -34,7 +35,7 @@ class CategoryRepo extends BaseRepository implements CategoryInterface
 
   public function categories()
   {
-    $categories =  $this->model->all();
+    $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
     $data =  $this->createCategories($categories, 0);
     return [
       'success' => true,

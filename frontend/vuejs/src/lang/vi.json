@@ -125,7 +125,8 @@
       "active": "Hiện ",
       "inactive": "Ẩn",
       "record": "Số bản ghi",
-      "category": "Thể loại"
+      "category": "Thể loại",
+      "image": "Ảnh"
     },
     "button": {
       "submit": "Lưu",
@@ -144,7 +145,7 @@
       "enter_category": "Chọn thể loại",
       "pick_a_value": "Chọn giá trị",
       "choose_a_file_or_drop_it_here": "Chọn tệp ảnh hoặc thả tệp ảnh vào đây",
-      "please_select_an_option": "Chọn thực trạng"
+      "please_select_an_option": "Chọn thể loại"
     }
   },
   "report_screen": {
