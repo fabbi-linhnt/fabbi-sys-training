@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\Subjects\SubjectInterface;
+use App\Repositories\Subject\SubjectInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

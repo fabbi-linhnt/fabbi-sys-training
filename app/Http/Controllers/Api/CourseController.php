@@ -7,7 +7,7 @@ use App\Http\Requests\CourseRequest;
 use App\Http\Requests\Courses\CourseStoreRequest;
 use App\Http\Requests\Courses\CourseUpdateRequest;
 use App\Models\Course;
-use App\Repositories\Courses\CourseInterface;
+use App\Repositories\Course\CourseInterface;
 use Illuminate\Http\Request;
 
 class CourseController extends ApiBaseController

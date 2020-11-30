@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Repositories\Courses;
+namespace App\Repositories\Course;
 
 
 interface CourseInterface

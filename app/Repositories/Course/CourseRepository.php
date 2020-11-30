@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Repositories\Courses;
+namespace App\Repositories\Course;
 
 use App\Models\Course;
 use App\Repositories\BaseRepository;
