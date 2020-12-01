@@ -9,15 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "ext-mysql_xdevapi": "*",
         "ext-pdo": "*",
+        "bensampo/laravel-enum": "^3.1",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.24",
         "laravel/tinker": "^2.0",
         "myclabs/php-enum": "^1.7",
-        "tymon/jwt-auth": "^1.0",
-      "ext-mysql_xdevapi": "*"
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

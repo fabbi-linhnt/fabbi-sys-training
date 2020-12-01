@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Enums\ResponseStatus;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +52,28 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ValidationException)
+        {
+            return response()->json(
+                $this->getJsonMessage($exception),
+                $this->getExceptionHTTPStatusCode($exception)
+            );
+        }
+
         return parent::render($request, $exception);
+    }
+
+    private function getJsonMessage($e)
+    {
+        return [
+            'code' => ResponseStatus::INTERNAL_SERVER_ERROR,
+            'message' => $e->getMessage(),
+            'errors' => $e->errors()
+        ];
+    }
+
+    private function getExceptionHTTPStatusCode($e)
+    {
+        return method_exists($e, 'getStatusCode') ? $e->getStatusCode() : ResponseStatus::INTERNAL_SERVER_ERROR;
     }
 }

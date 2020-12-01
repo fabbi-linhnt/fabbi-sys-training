@@ -32,7 +32,7 @@ class ApiBaseController extends Controller
      * @param $logLevel
      * @return JsonResponse
      */
-    protected function sendError($code, $message, $status, $logLevel = LogLevel::ERROR): JsonResponse
+    protected function sendError($code, $message, $logLevel = LogLevel::ERROR): JsonResponse
     {
         // Log context
         $context = $this->getContext($code);
@@ -56,7 +56,7 @@ class ApiBaseController extends Controller
             ],
         ];
 
-        return response()->json($response, $status);
+        return response()->json($response);
     }
 
     /**
