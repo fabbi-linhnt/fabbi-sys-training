@@ -28,7 +28,8 @@
       "pick_subject": "pick subject",
       "subject_placeholder": "search, add subject",
       "list_user": "list user",
-      "action": "Actions"
+      "action": "Actions",
+      "list_subject": "List Subject"
     },
     "message": {
       "task_msgDelete": "delete ok",
@@ -38,7 +39,9 @@
     "button": {
       "search_btn": "Search",
       "create_btn": "Create",
-      "update_btn": "Update"
+      "update_btn": "Update",
+      "add_user_btn": "Add User",
+      "add_subject_btn": "Add Subject"
     },
     "task": {
       "task_name": "Title",
@@ -112,7 +115,8 @@
       "address": "Address",
       "email": "Email",
       "password": "Password",
-      "course": "Course"
+      "course": "Course",
+      "action": "Action"
     },
     "button": {
       "submit": "Submit"
@@ -134,7 +138,7 @@
       "inactive": "Inactive",
       "record": "Record",
       "category": "Category",
-      "image": "Image"
+      "image": "image"
     },
     "button": {
       "submit": "Submit",
@@ -220,5 +224,9 @@
     "label": {
       "index": "index"
     }
+  },
+  "message": {
+    "caution" : "Caution",
+    "you_forgot_important_data" : "You forgot important data"
   }
 }

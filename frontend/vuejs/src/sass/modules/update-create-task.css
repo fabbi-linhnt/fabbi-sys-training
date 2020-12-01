@@ -35,3 +35,14 @@
     cursor: pointer;
     opacity: 0.75;
 }
+#modal_action_subject{
+  color: red;
+}
+#modal_action_subject_search{
+  width: 350px;
+  float: right;
+}
+.err{
+  color: red;
+}
+

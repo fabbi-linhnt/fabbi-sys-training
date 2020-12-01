@@ -33,7 +33,7 @@
           <b-button
             :to="{ name: 'course.create' }"
             class="my-1"
-            size="sm"
+            size="md"
             variant="primary"
           >
             {{ $t("course_screen.button.add_course") }}
@@ -142,7 +142,7 @@ export default {
         perPage: DEFAULT_PERPAGE,
         total: "0",
         name: "",
-        Page: "1",
+        page: "1",
       },
       course: null,
     };
@@ -152,9 +152,6 @@ export default {
   },
   methods: {
     async getData() {
-      if (this.paginate.name) {
-        this.paginate.page = 1;
-      }
       await this.$store
         .dispatch("course/GET_COURSES", { params: this.paginate })
         .then((res) => {

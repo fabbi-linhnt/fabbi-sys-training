@@ -1,7 +1,8 @@
-.container .button, header {
-    text-align: center;
+.button {
+   text-align: center;
+}
+.err{
+  color: red;
 }
 
-.content .container {
-    width: 600px;
-}
+
