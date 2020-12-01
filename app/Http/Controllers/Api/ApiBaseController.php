@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\LogLevel;
+use App\Enums\ResponseStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class ApiBaseController extends Controller
             'message' => $message,
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, ResponseStatus::OK);
     }
 
     /**
