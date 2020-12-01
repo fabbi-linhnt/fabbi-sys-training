@@ -7,6 +7,7 @@ use App\Http\Requests\Users\UserUpdateRequest;
 use Illuminate\Http\Request;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Api\ApiBaseController;
+use App\Http\Requests\UserRequest;
 
 class UserController extends ApiBaseController
 {
@@ -67,8 +68,6 @@ class UserController extends ApiBaseController
         if ($data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
-
-        return $this->sendSuccess('Add User Success');
     }
 
     /**
@@ -118,8 +117,6 @@ class UserController extends ApiBaseController
         if (!$user['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
-
-        return $this->sendSuccess("UPDATE USER SUCCESS");
     }
 
     /**
@@ -134,8 +131,6 @@ class UserController extends ApiBaseController
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
-
-        return $this->sendSuccess("DELETE USER SUCCESS");
     }
 
     public function countSubject($id)

@@ -28,7 +28,7 @@ export const actions = {
   ADD_USER: ({ commit } ,data) => {
     return new Promise((resolve, reject) => {
       apiCaller.postRequest(
-        `api/user`,
+        `api/users/`,
         data.params,
         res => {
           commit('setStoreUser', res.data);
@@ -43,7 +43,7 @@ export const actions = {
   GET_USER: ({ commit } ,params) => {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        `api/user`,
+        `api/users/`,
         params,
         res => {
           commit('setListUsers', res.data);
@@ -58,7 +58,7 @@ export const actions = {
   DELETE_USER: ({ commit }, id) => {
     return new Promise((resolve, reject) => {
       apiCaller.deleteRequest(
-        '/api/user/' + id,
+        '/api/users/' + id,
         '',
         res => {
           commit('setDeleteUser', res.data);

@@ -23,19 +23,26 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function addUser(array $data)
     {
+        DB::beginTransaction();
         try {
            $user = $this->user->create($data);
            $userData = $this->user->find($user->id);
-           $courseId = $data['course'];
+           $courseId = $data['course_id'];
            $userData->courses()->attach($courseId, ['status' => 'Create']);
 
+           DB::commit();
+
            return [
-               'success' => true
+               'success' => true,
+               'message' => 'Add User Successfull'
            ];
         }
         catch(\Exception $e) {
+            DB::rollBack();
+
             return [
-                'success' => false
+                'success' => false,
+                'message' => $e->getMessage()
             ];
         }
     }
@@ -147,47 +154,51 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function deleteUserById($id)
     {
-        try
-        {
-           $userData = $this->user->findOrFail($id);
-           $userData->subjects()->detach();
-           $userData->courses()->detach();
-           $userData->tasks()->detach();
-           $userData->delete();
+        try {
+            $userData = $this->user->findOrFail($id);
+            $userData->subjects()->detach();
+            $userData->courses()->detach();
+            $userData->tasks()->detach();
+            $userData->delete();
 
-           return [
-               'success' => true
-           ];
+            return [
+                'success' => true,
+                'message' => 'Deleted User Successfull'
+            ];
         }
-        catch(\Exception $e)
-        {
-           return [
-               'success' => false,
-               'message' => $e->getMessage()
-           ];
+        catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
         }
     }
 
     public function updateUserById($data,$id)
     {
-       try
-       {
-          $userData = $this->user->findOrFail($id);
-          $userData->update($data);
-          $course_id = $data['course'];
-          $userData->courses()->detach();
-          $userData->courses()->attach($course_id, ['status' => 'Update']);
+        DB::beginTransaction();
+        try {
+            $userData = $this->user->findOrFail($id);
+            $userData->update($data);
+            $course_id = $data['course_id'];
+            $userData->courses()->detach();
+            $userData->courses()->attach($course_id, ['status' => 'Update']);
 
-          return [
-              'success' => true
-          ];
-       }
-       catch(\Exception $e)
-       {
-          return [
-              'success' => false,
-              'message' => $e->getMessage()
-          ];
-       }
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => 'Updated User Successfull'
+            ];
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 }
