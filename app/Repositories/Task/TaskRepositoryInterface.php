@@ -9,7 +9,7 @@ interface TaskRepositoryInterface
     public function showTask($id);
     public function deleteTask($id);
     public function updateTask($request, $id);
-    public function getSubjectOfTask($id);
+    public function getSubjectsByTaskId($id);
     public function getUserTask($id);
     public function updateComment($data, $id);
     public function getUsersByTaskId($id);

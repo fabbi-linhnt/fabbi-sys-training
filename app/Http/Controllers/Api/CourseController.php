@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CourseRequest;
 use App\Http\Requests\Courses\CourseStoreRequest;
 use App\Http\Requests\Courses\CourseUpdateRequest;
-use App\Models\Course;
 use App\Repositories\Course\CourseInterface;
 use Illuminate\Http\Request;
 
 class CourseController extends ApiBaseController
 {
-    protected $CourseRepo;
+    protected $courseRepository;
 
-    public function __construct(
-        CourseInterface $courseRepository,
-        Course $course)
+    public function __construct(CourseInterface $courseRepository)
     {
-        $this->CourseRepo = $courseRepository;
+        $this->courseRepository = $courseRepository;
     }
 
     public function index(Request $request)
     {
-        $courseList = $this->CourseRepo->getListCourse($request);
+        $courseList = $this->courseRepository->getListCourse($request);
         if (!$courseList['success']) {
             return $this->sendError(500, 'ERROR', 500);
         }
@@ -34,7 +29,7 @@ class CourseController extends ApiBaseController
     public function store(CourseStoreRequest $request)
     {
         $fillable = $request->only(['name', 'description', 'is_active', 'category_id']);
-        $addCourse = $this->CourseRepo->createCourse($fillable);
+        $addCourse = $this->courseRepository->createCourse($fillable);
         if (!$addCourse) {
             return $this->sendError(500, 'ERROR', 500);
         }
@@ -45,7 +40,7 @@ class CourseController extends ApiBaseController
     public function update(CourseUpdateRequest $request, $id)
     {
         $fillable = $request->only(['name', 'description', 'is_active', 'category_id']);
-        $editCourse = $this->CourseRepo->updateCourse($fillable, $id);
+        $editCourse = $this->courseRepository->updateCourse($fillable, $id);
         if (!$editCourse) {
             return $this->sendError(500, 'ERROR', 500);
         }
@@ -55,12 +50,12 @@ class CourseController extends ApiBaseController
 
     public function destroy($id)
     {
-        return $this->CourseRepo->deleteCourse($id);
+        return $this->courseRepository->deleteCourse($id);
     }
 
     public function show($id)
     {
-        $course = $this->CourseRepo->getCourseById($id);
+        $course = $this->courseRepository->getCourseById($id);
         if (!$course) {
             return $this->sendError(500, 'ERROR', 500);
         }
@@ -70,7 +65,7 @@ class CourseController extends ApiBaseController
 
     public function getCategory()
     {
-        $category = $this->CourseRepo->getCategory();
+        $category = $this->courseRepository->getCategory();
         if (!$category) {
             return $this->sendError(500, 'ERROR', 500);
         }
@@ -80,7 +75,7 @@ class CourseController extends ApiBaseController
 
     public function listCategoryByCourseId($id)
     {
-        $category = $this->CourseRepo->listCategoryByCourseId($id);
+        $category = $this->courseRepository->listCategoryByCourseId($id);
         if (!$category) {
             return $this->sendError(500, 'ERROR', 500);
         }
