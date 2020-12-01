@@ -27,4 +27,10 @@ final class ResponseMessage extends Enum
         'ASSIGN_SUCCESS' => 'Assign User to Subject Successfully',
         'ASSIGN_ERROR' => "Don't have any course activated corressponding with subject"
     ];
+
+    const COURSE = [
+        'ASSIGN_SUCCESS' => 'Assign user to course success',
+        'ASSIGN_ERROR' => 'User has another course',
+        'FINISH_COURSE' => 'User has finished the course'
+    ];
 }

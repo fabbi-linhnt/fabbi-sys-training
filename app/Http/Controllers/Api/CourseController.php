@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ResponseStatus;
+use App\Enums\ResponseStatusCode;
 use App\Http\Requests\Courses\CourseStoreRequest;
 use App\Http\Requests\Courses\CourseUpdateRequest;
 use App\Repositories\Course\CourseInterface;
@@ -9,7 +11,7 @@ use Illuminate\Http\Request;
 
 class CourseController extends ApiBaseController
 {
-    protected $courseRepository;
+    private $courseRepository;
 
     public function __construct(CourseInterface $courseRepository)
     {
@@ -81,5 +83,20 @@ class CourseController extends ApiBaseController
         }
 
         return $this->sendSuccess($category['data']);
+    }
+
+    public function assignUserToCourse(Request $request, $id)
+    {
+        $userId = $request->only('userId');
+        $course = $this->courseRepository->assignUserToCourse($userId, $id);
+        if (!$course['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                $course['message'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($course['message']);
     }
 }
