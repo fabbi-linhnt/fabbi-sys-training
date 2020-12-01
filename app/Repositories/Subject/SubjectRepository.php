@@ -120,7 +120,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
         }
     }
 
-    public function ListCourseBySubjetID($id)
+    public function ListCourseBySubjectId($id)
     {
         try {
             $subject = $this->model->findOrFail($id);
@@ -137,15 +137,6 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
         }
     }
 
-    public function listCourses()
-    {
-        $course = Course::all();
-        return [
-            'data' => $course,
-            'success' => true,
-        ];
-    }
-
     public function updateActive($id)
     {
         try {
@@ -159,22 +150,6 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             return [
                 'success' => false,
                 'message' => $e->getMessage()
-            ];
-        }
-    }
-
-    public function getAllSubject()
-    {
-        try {
-            $subjects = $this->model->all();
-            return [
-                'success' => true,
-                'data' => $subjects
-            ];
-        } catch (\Exception $exception) {
-            return [
-                'success' => false,
-                'message' => $exception->getMessage()
             ];
         }
     }

@@ -8,62 +8,58 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Category\CategoryInterface;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Class EquipmentRepository
- * @package App\Repositories\Equipment
- */
 class CategoryRepository extends BaseRepository implements CategoryInterface
 {
 
-  public function __construct(Category $category)
-  {
-    $this->model = $category;
-  }
-
-  public function createCategories($categories, $parent_id = 0, $level = 0)
-  {
-    $result = [];
-    foreach ($categories as $item) {
-      if ($item['parent_id'] == $parent_id) {
-        $item['level'] = $level;
-        $item['children'] = $this->createCategories($categories, $item['id'], $level + 1);
-        $result[] = $item;
-      }
+    public function __construct(Category $category)
+    {
+        $this->model = $category;
     }
-    return $result;
-  }
 
-  public function categories()
-  {
-    $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
-    $data =  $this->createCategories($categories, 0);
-    return [
-      'success' => true,
-      'data' => $data,
-    ];
-  }
-
-  public function deleteCategory($id)
-  {
-    try {
-      $category = $this->model->findOrFail($id);
-      $categoryChildren = $this->model->where('parent_id', $id)->get();
-      if ($categoryChildren != null) {
-        foreach ($categoryChildren as $categories) {
-          $categories->parent_id = $category->parent_id;
-          $categories->update();
+    public function createCategories($categories, $parent_id = 0, $level = 0)
+    {
+        $result = [];
+        foreach ($categories as $item) {
+            if ($item['parent_id'] == $parent_id) {
+                $item['level'] = $level;
+                $item['children'] = $this->createCategories($categories, $item['id'], $level + 1);
+                $result[] = $item;
+            }
         }
-      }
-      $category->delete();
-
-      return [
-        'success' => true
-      ];
-    } catch (\Exception $e) {
-      return [
-        'success' => false,
-        'message' => $e->getMessage()
-      ];
+        return $result;
     }
-  }
+
+    public function categories()
+    {
+        $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
+        $data = $this->createCategories($categories, 0);
+        return [
+            'success' => true,
+            'data' => $data,
+        ];
+    }
+
+    public function deleteCategory($id)
+    {
+        try {
+            $category = $this->model->findOrFail($id);
+            $categoryChildren = $this->model->where('parent_id', $id)->get();
+            if ($categoryChildren != null) {
+                foreach ($categoryChildren as $categories) {
+                    $categories->parent_id = $category->parent_id;
+                    $categories->update();
+                }
+            }
+            $category->delete();
+
+            return [
+                'success' => true
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
 }

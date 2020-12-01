@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Tasks\TasksStoreRequest;
 use App\Http\Requests\Tasks\TasksUpdateRequest;
 use App\Repositories\Task\TaskRepositoryInterface;
@@ -10,11 +9,6 @@ use Illuminate\Http\Request;
 
 class TaskController extends ApiBaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     private $taskRepository;
 
     public function __construct(TaskRepositoryInterface $taskRepository)
@@ -31,22 +25,6 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess($tasks['data']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(TasksStoreRequest $request)
     {
         $data['task'] = $request['task'];
@@ -61,12 +39,6 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess(null, 'Thêm mới thành công');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $task = $this->taskRepository->showTask($id);
@@ -77,24 +49,6 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess($task['data']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(TasksUpdateRequest $request, $id)
     {
         $data['task'] = $request['task'];
@@ -108,12 +62,6 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess(null, "Cập nhật thành công");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $task = $this->taskRepository->deleteTask($id);
@@ -124,7 +72,7 @@ class TaskController extends ApiBaseController
         return $this->sendSuccess(null, 'Xóa thành công');
     }
 
-    public function getSubjectOfTask($id)
+    public function getSubjectsByTaskId($id)
     {
         $task = $this->taskRepository->getSubjectOfTask($id);
         if (!$task['success']) {

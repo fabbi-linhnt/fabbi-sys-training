@@ -10,45 +10,23 @@ use App\Http\Controllers\Api\ApiBaseController;
 
 class UserController extends ApiBaseController
 {
-    protected $repository;
+    protected $userRepository;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $inputData = $request->only('search', 'perPage');
-        $data = $this->repository->getListUser($inputData);
+        $data = $this->userRepository->getListUser($inputData);
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
-
         return $this->sendSuccess($data['listUser']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(UserStoreRequest $request)
     {
         $inputData = $request->only(
@@ -63,7 +41,7 @@ class UserController extends ApiBaseController
         );
 
         $inputData['password'] = bcrypt($inputData['password']);
-        $data = $this->repository->addUser($inputData);
+        $data = $this->userRepository->addUser($inputData);
         if ($data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
@@ -71,35 +49,6 @@ class UserController extends ApiBaseController
         return $this->sendSuccess('Add User Success');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(UserUpdateRequest $request, $id)
     {
         $inputData = $request->only(
@@ -114,7 +63,7 @@ class UserController extends ApiBaseController
         );
 
         $inputData['password'] = bcrypt($inputData['password']);
-        $user = $this->repository->updateUserById($inputData, $id);
+        $user = $this->userRepository->updateUserById($inputData, $id);
         if (!$user['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
@@ -122,15 +71,9 @@ class UserController extends ApiBaseController
         return $this->sendSuccess("UPDATE USER SUCCESS");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $data = $this->repository->deleteUserById($id);
+        $data = $this->userRepository->deleteUserById($id);
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
@@ -140,7 +83,7 @@ class UserController extends ApiBaseController
 
     public function countSubject($id)
     {
-        $data = $this->repository->countSubjectById($id);
+        $data = $this->userRepository->countSubjectById($id);
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
@@ -150,7 +93,7 @@ class UserController extends ApiBaseController
 
     public function countTask($id)
     {
-        $data = $this->repository->countTaskById($id);
+        $data = $this->userRepository->countTaskById($id);
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
@@ -160,7 +103,7 @@ class UserController extends ApiBaseController
 
     public function userName($id)
     {
-        $data = $this->repository->getUserNameById($id);
+        $data = $this->userRepository->getUserNameById($id);
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
@@ -170,7 +113,7 @@ class UserController extends ApiBaseController
 
     public function getUserInfo($id)
     {
-        $data = $this->repository->getUserInfoById($id);
+        $data = $this->userRepository->getUserInfoById($id);
         if (!$data['success']) {
             return $this->sendError(500, "Error", "Failed");
         }
