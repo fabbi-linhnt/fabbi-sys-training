@@ -48,7 +48,7 @@ export const actions = {
   GET_COURSES({ commit }, param) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/course',
+        '/api/courses',
         param,
         response => {
           commit('setListCourses', response.data.data);
@@ -63,7 +63,7 @@ export const actions = {
   DESTROY_COURSE({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.deleteRequest(
-        '/api/course/' + id,
+        '/api/courses/' + id,
         '',
         response => {
           commit('setDeleteCourse', id);
@@ -79,7 +79,7 @@ export const actions = {
   STORE_COURSE({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.postRequest(
-        '/api/course',
+        '/api/courses',
         params,
         response => {
           commit('setStoreCourse', response.data);
@@ -94,7 +94,7 @@ export const actions = {
   UPDATE_COURSE({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
-        '/api/course/' + params.id,
+        '/api/courses/' + params.id,
         params,
         response => {
           commit('setUpdateCourse', response);
@@ -109,7 +109,7 @@ export const actions = {
   GET_ID_COURSE({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/course/' + id,
+        '/api/courses/' + id,
         '',
         response => {
           commit('setCourseById', response.data)

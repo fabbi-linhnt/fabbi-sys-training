@@ -66,7 +66,6 @@
           </ValidationProvider>
           <b-form-group :label="$t('course_screen.label.image')">
             <div>
-              <!-- Styled -->
               <b-form-file
                 v-model="picture"
                 :state="Boolean(picture)"

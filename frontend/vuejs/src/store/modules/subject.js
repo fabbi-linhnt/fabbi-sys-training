@@ -29,7 +29,7 @@ export const mutations = {
   setDeleteSubject(state, deleteSubject) {
     state.deleteSubject = deleteSubject;
   },
-  setStoreSubjecy(state, storeSubject) {
+  setStoreSubject(state, storeSubject) {
     state.storeSubject = storeSubject;
   },
   setUpdateSubject(state, updateSubject) {

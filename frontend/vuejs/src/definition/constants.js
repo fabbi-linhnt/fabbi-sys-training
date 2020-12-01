@@ -5,3 +5,4 @@ export const DEFAULT_OPTION = [5, 10, 15, 20];
 export const DEFAULT_ONTIME = 1;
 export const DEFAULT_LATE = 0;
 export const DEFAULT_PERPAGE_USER = 15;
+export const DEFAULT_PERPAGE_SUBJECT = 15;

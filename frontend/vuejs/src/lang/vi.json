@@ -28,7 +28,8 @@
       "pick_subject": "Chọn môn học",
       "subject_placeholder": "Tìm kiếm, thêm môn học",
       "list_user": "Danh sách người dùng",
-      "action": "Hành động"
+      "action": "Hành động",
+      "list_subject": "Danh sách môn học"
     },
     "message": {
       "task_msgDelete": "Xóa thành công",
@@ -39,7 +40,8 @@
       "search_btn": "Tìm kiếm",
       "create_btn": "Thêm mới",
       "update_btn": "Cập nhật",
-      "add_user_btn": "Thêm người dùng"
+      "add_user_btn": "Thêm người dùng",
+      "add_subject_btn": "Thêm môn học"
     }
   },
   "list_subjects": {
@@ -105,7 +107,8 @@
       "address": "Địa chỉ",
       "email": "Email",
       "password": "Mật khẩu",
-      "course": "Khóa học"
+      "course": "Khóa học",
+      "action": "Hành động"
     },
     "button": {
       "submit": "Gửi"
@@ -212,5 +215,9 @@
     "label": {
       "index": "STT"
     }
+  },
+  "message": {
+    "caution" : "Cảnh báo",
+    "you_forgot_important_data" : "Bạn cần thêm môn học hoặc người dùng"
   }
 }
