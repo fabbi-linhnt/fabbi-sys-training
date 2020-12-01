@@ -30,7 +30,7 @@ class TasksStoreRequest extends FormRequest
             'task.deadline' => 'required|date',
             'task.is_active' => 'required|boolean',
             'subject_id' => 'required|array',
-            'subject_id.*' => 'exists:subjects, id',
+            'subject_id.*' => 'exists:subjects,id',
             'user_id' => 'required|array',
             'user_id.*' => 'exists:users, id'
         ];
