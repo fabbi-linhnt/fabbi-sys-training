@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ResponseStatusCode;
 use App\Enums\ResponseStatus;
+use App\Enums\ResponseMessage;
 use App\Http\Requests\Users\UserStoreRequest;
 use App\Http\Requests\Users\UserUpdateRequest;
 use Illuminate\Http\Request;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Api\ApiBaseController;
+use Facade\FlareClient\Http\Response;
 
 class UserController extends ApiBaseController
 {
@@ -23,7 +26,11 @@ class UserController extends ApiBaseController
         $inputData = $request->only('search', 'perPage');
         $data = $this->userRepository->getListUser($inputData);
         if (!$data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['GET_LIST_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
         return $this->sendSuccess($data['listUser']);
     }
@@ -44,7 +51,11 @@ class UserController extends ApiBaseController
         $inputData['password'] = bcrypt($inputData['password']);
         $data = $this->userRepository->addUser($inputData);
         if ($data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['ADD_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess('Add User Success');
@@ -66,7 +77,11 @@ class UserController extends ApiBaseController
         $inputData['password'] = bcrypt($inputData['password']);
         $user = $this->userRepository->updateUserById($inputData, $id);
         if (!$user['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['UPDATE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess("UPDATE USER SUCCESS");
@@ -76,7 +91,11 @@ class UserController extends ApiBaseController
     {
         $data = $this->userRepository->deleteUserById($id);
         if (!$data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['DELETE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess("DELETE USER SUCCESS");
@@ -86,7 +105,11 @@ class UserController extends ApiBaseController
     {
         $data = $this->userRepository->countSubjectById($id);
         if (!$data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['COUNT_SUBJECT_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($data['result']);
@@ -96,7 +119,11 @@ class UserController extends ApiBaseController
     {
         $data = $this->userRepository->countTaskById($id);
         if (!$data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['COUNT_TASK_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($data['result']);
@@ -106,7 +133,11 @@ class UserController extends ApiBaseController
     {
         $data = $this->userRepository->getUserNameById($id);
         if (!$data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['GET_USER_NAME_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($data['result']);
@@ -116,7 +147,11 @@ class UserController extends ApiBaseController
     {
         $data = $this->userRepository->getUserInfoById($id);
         if (!$data['success']) {
-            return $this->sendError(ResponseStatus::INTERNAL_SERVER_ERROR, "Error", "Failed");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['GET_USER_INFO_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($data['result']);
