@@ -3,9 +3,11 @@
 
 namespace App\Repositories\Course;
 
+use App\Enums\ResponseMessage;
 use App\Models\Course;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use mysql_xdevapi\Exception;
 
 class CourseRepository extends BaseRepository implements CourseInterface
@@ -110,5 +112,48 @@ class CourseRepository extends BaseRepository implements CourseInterface
                 'message' => $e->getMessage()
             ];
         }
+    }
+
+    public function assignUserToCourse($userId, $courseId)
+    {
+        DB::beginTransaction();
+        try {
+            $course = $this->model->findOrFail($courseId);
+            $checkUserActive = DB::table('user_course')
+                ->where('user_id', $userId)
+                ->where('status', config('config.user_course.active'))
+                ->count();
+            $checkCourseOfUser = DB::table('user_course')
+                ->where('user_id', $userId)
+                ->where('course_id', $courseId)
+                ->count();
+            if ($checkUserActive >= config('configcourse.have_active_user')) {
+                return [
+                    'success' => false,
+                    'message' => ResponseMessage::COURSE['ASSIGN_ERROR']
+                ];
+            } elseif ($checkCourseOfUser >= config('configcourse.finish_course')) {
+                return [
+                    'success' => false,
+                    'message' => ResponseMessage::COURSE['FINISH_COURSE']
+                ];
+            } else {
+                $course->users()->attach($userId, ['status' => config('config.user_course.active')]);
+
+                DB::commit();
+            }
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            return [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => ResponseMessage::COURSE['ASSIGN_SUCCESS']
+        ];
     }
 }
