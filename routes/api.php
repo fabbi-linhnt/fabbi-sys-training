@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::resource('/', 'TaskController');
         Route::get('/subjects/{id}', 'TaskController@getSubjectsByTaskId')->name('subjects.list');
         Route::get('/users/{id}', 'TaskController@getUsersByTaskId')->name('users.id');
+        Route::post('/{id}/assign-user-to-task', 'TaskController@assignUserToTask')->name('tasks.assignUser');
     });
     Route::group(['prefix' => 'reports', 'as' => 'reports'], function () {
         Route::put('/comment/{id}', 'TaskController@updateComment')->name('comment');
