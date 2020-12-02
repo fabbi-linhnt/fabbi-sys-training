@@ -13,5 +13,6 @@ interface TaskRepositoryInterface
     public function getUserTask($id);
     public function updateComment($data, $id);
     public function getUsersByTaskId($id);
+    public function assignUserToTaskById($userId, $id);
 }
 

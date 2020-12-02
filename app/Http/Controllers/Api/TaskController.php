@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ResponseMessage;
+use App\Enums\ResponseStatus;
+use App\Enums\ResponseStatusCode;
 use App\Http\Requests\Tasks\TasksStoreRequest;
 use App\Http\Requests\Tasks\TasksUpdateRequest;
 use App\Repositories\Task\TaskRepositoryInterface;
@@ -112,5 +115,20 @@ class TaskController extends ApiBaseController
         }
 
         return $this->sendSuccess($task['data']);
+    }
+
+    public function assignUserToTask(Request $request, $id)
+    {
+        $userId = $request->only('user_id');
+        $task = $this->taskRepository->assignUserToTaskById($userId, $id);
+        if (!$task['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                $task['message'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($task['message']);
     }
 }
