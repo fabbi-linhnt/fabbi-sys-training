@@ -2,12 +2,13 @@
 
 namespace App\Repositories\Subject;
 
+use App\Enums\ResponseMessage;
 use App\Models\Subject;
 use App\Models\Course;
-
 use App\Repositories\BaseRepository;
 use App\Repositories\Subject\SubjectInterface;
-
+use Illuminate\Http\Client\ResponseSequence;
+use Illuminate\Support\Facades\DB;
 /**
  * Class EquipmentRepository
  * @package App\Repositories\Equipment
@@ -147,6 +148,71 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
                 'success' => true
             ];
         } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function assignSubjectToUserById($userId, $id)
+    {
+        try {
+            $checkUserIsActive = DB::table('user_subject')
+                ->where('user_id', $userId)
+                ->where('status', config('configsubject.status_user_activity'))
+                ->count();
+            if ($checkUserIsActive >= 1) {
+                return [
+                    'success' => false,
+                    'message' => ResponseMessage::SUBJECT['USER_ACTIVATING']
+                ];
+            }
+            else {
+                $checkUserJoinSubject = DB::table('user_subject')
+                    ->where('user_id', $userId)
+                    ->where('subject_id', $id)
+                    ->count();
+                if ($checkUserJoinSubject >= 1) {
+                    DB::table('user_subject')
+                       ->where('user_id', $userId)
+                       ->where('subject_id', $id)
+                       ->update(['status' => config('configsubject.status_user_activity')]);
+
+                    return [
+                        'success' => true,
+                        'message' => ResponseMessage::SUBJECT['ASSIGN_SUCCESS']
+                    ];
+                }
+                else {
+                    $count = 0;
+                    $subject = $this->model->findOrFail($id);
+                    $courseId = $subject->courses;
+                    foreach ($courseId as $course) {
+                        $checkUserCourse =  DB::table('user_course')
+                            ->where('user_id', $userId)
+                            ->where('course_id', $course->id)
+                            ->where('status', config('configsubject.status_user_activity'))
+                            ->count();
+                        if ($checkUserCourse >= 1) $count++;
+                    }
+                    if ($count >= 1) {
+                        $subject->users()->attach($userId, ['status' => config('configsubject.status_user_activity')]);
+
+                        return [
+                            'success' => true,
+                            'message' => ResponseMessage::SUBJECT['ASSIGN_SUCCESS']
+                        ];
+                    }
+
+                    return [
+                        'success' => false,
+                        'message' => ResponseMessage::SUBJECT['ASSIGN_ERROR']
+                    ];
+                }
+            }
+        }
+        catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()

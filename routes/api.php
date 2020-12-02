@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::resource('/', 'SubjectController');
         Route::get('/courses/{id}', 'SubjectController@listCourseBySubjectId')->name('courses.list');
         Route::get('/{id}/count', 'SubjectController@countTaskCourseById')->name('courses.tasks.count');
+        Route::post('/{id}/assign_user_to_subject', 'SubjectController@assignUserToSubject');
     });
     Route::group(['prefix' => 'tasks', 'as' => 'tasks'], function () {
         Route::resource('/', 'TaskController');
