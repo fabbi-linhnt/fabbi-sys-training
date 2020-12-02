@@ -29,10 +29,18 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
         return $result;
     }
 
-    public function categories()
+    public function getCategories()
     {
-        $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
-        $data = $this->createCategories($categories, 0);
+        try {
+            $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
+            $data = $this->createCategories($categories, 0);
+        } catch (\Exception $exception) {
+            return [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ];
+        }
+
         return [
             'success' => true,
             'data' => $data,
@@ -61,5 +69,48 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
                 'message' => $e->getMessage()
             ];
         }
+    }
+
+    public function storeCategory($data)
+    {
+        DB::beginTransaction();
+        try {
+            $this->model->create($data);
+
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            return [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ];
+        }
+
+        return [
+            'success' => true,
+        ];
+    }
+
+    public function updateCategory($data, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $category = $this->model->findOrFail($id);
+            $category->update($data);
+
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            return [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ];
+        }
+
+        return [
+            'success' => true,
+        ];
     }
 }
