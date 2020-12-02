@@ -21,4 +21,10 @@ final class ResponseMessage extends Enum
         'GET_USER_NAME_ERROR' => 'Get User Name Error',
         'GET_USER_INFO_ERROR' => 'Get User Info Error'
     ];
+
+    const SUBJECT = [
+        'USER_ACTIVATING' => 'User is activating',
+        'ASSIGN_SUCCESS' => 'Assign User to Subject Successfully',
+        'ASSIGN_ERROR' => "Don't have any course activated corressponding with subject"
+    ];
 }

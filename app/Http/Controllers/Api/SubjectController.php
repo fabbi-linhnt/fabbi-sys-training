@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ResponseStatus;
+use App\Enums\ResponseStatusCode;
+use App\Enums\ResponseMessage;
 use App\Http\Requests\Subjects\SubjectStoreRequest;
 use App\Http\Requests\Subjects\SubjectUpdateRequest;
+use App\Models\Subject;
 use App\Repositories\Subject\SubjectInterface;
 use Illuminate\Http\Request;
 
@@ -97,5 +101,20 @@ class SubjectController extends ApiBaseController
         }
 
         return $this->sendSuccess("UPDATE SUBJECT SUCCESS");
+    }
+
+    public function assignUserToSubject(Request $request, $id)
+    {
+        $userId = $request->only('user_id');
+        $subject = $this->subjectRepository->assignSubjectToUserById($userId, $id);
+        if (!$subject['success']) {
+           return $this->sendError(
+               ResponseStatusCode::INTERNAL_SERVER_ERROR,
+               $subject['message'],
+               ResponseStatus::STATUS_ERROR
+           );
+        }
+
+        return $this->sendSuccess($subject['message']);
     }
 }
