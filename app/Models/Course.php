@@ -10,22 +10,17 @@ class Course extends Model
         'name',
         'description',
         'is_active',
-        'category_id'];
-
-
-    public function getFillable()
-    {
-        return $this->fillable;
-    }
+        'category_id'
+    ];
 
     function categories()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    function course()
+    public function image()
     {
-        return $this->hasOne(Image::class, 'imgable_id');
+        return $this->morphOne(Image::class, 'imageable');
     }
 
     function users()
