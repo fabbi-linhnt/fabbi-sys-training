@@ -50,7 +50,7 @@ class UserController extends ApiBaseController
 
         $inputData['password'] = bcrypt($inputData['password']);
         $data = $this->userRepository->addUser($inputData);
-        if ($data['success']) {
+        if (!$data['success']) {
             return $this->sendError(
                 ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 ResponseMessage::USER['ADD_ERROR'],
@@ -84,7 +84,7 @@ class UserController extends ApiBaseController
             );
         }
 
-        return $this->sendSuccess("UPDATE USER SUCCESS");
+        return $this->sendSuccess($user['message']);
     }
 
     public function destroy($id)

@@ -19,7 +19,8 @@ final class ResponseMessage extends Enum
         'COUNT_SUBJECT_ERROR' => 'Count Subject Error',
         'COUNT_TASK_ERROR' => 'Count Task Error',
         'GET_USER_NAME_ERROR' => 'Get User Name Error',
-        'GET_USER_INFO_ERROR' => 'Get User Info Error'
+        'GET_USER_INFO_ERROR' => 'Get User Info Error',
+        'UPDATE_SUCCESS' => 'Update user success'
     ];
 
     const SUBJECT = [
@@ -31,7 +32,9 @@ final class ResponseMessage extends Enum
     const COURSE = [
         'ASSIGN_SUCCESS' => 'Assign user to course success',
         'ASSIGN_ERROR' => 'User has another course',
-        'FINISH_COURSE' => 'User has finished the course'
+        'FINISH_COURSE' => 'User has finished the course',
+        'ADD_SUCCESS' => 'Add course success',
+        'UPDATE_SUCCESS' => 'Update course success'
     ];
 
     const TASK = [

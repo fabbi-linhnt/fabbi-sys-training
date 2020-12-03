@@ -31,8 +31,7 @@ class UserUpdateRequest extends FormRequest
             'address' => 'required',
             'course_id' => 'required|array',
             'course_id.*' => 'exists:courses,id',
-            'birthday' => 'required',
-            'img_path' => 'required',
+            'birthday' => 'required'
         ];
     }
 }

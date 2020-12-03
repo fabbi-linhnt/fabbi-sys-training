@@ -52,34 +52,53 @@ class CourseRepository extends BaseRepository implements CourseInterface
 
     public function createCourse($data)
     {
+        DB::beginTransaction();
         try {
-            $data = $this->model->create($data);
-            return [
-                'success' => true,
-                'data' => $data
-            ];
+            $course = $this->model->create($data);
+            if ($data['path'] == '') {
+                $data['path'] = config('configcourse.images_default');
+            }
+            $course->image()->create(['path' => $data['path']]);
 
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollBack();
+
             return [
-                'success' => false
+                'success' => false,
+                'message' => $e->getMessage()
             ];
         }
+
+        return [
+            'success' => true,
+            'message' => ResponseMessage::COURSE['ADD_SUCCESS']
+        ];
     }
 
-    public function updateCourse(array $data, $id)
+    public function updateCourse($data, $id)
     {
+        DB::beginTransaction();
         try {
-            $courseByID = $this->model->findOrFail($id);
-            $courseByID->update($data);
-            return [
-                'success' => true
-            ];
+            $course = $this->model->findOrFail($id);
+            $course->update($data);
+            if ($data['path'] == '') {
+                $data['path'] = config('configcourse.images_default');
+            }
+            $course->image()->create(['path' => $data['path']]);
 
+            DB::commit();
         } catch (\Exception $e) {
             return [
-                'success' => false
+                'success' => false,
+                'message' => $e->getMessage()
             ];
         }
+
+        return [
+            'success' => true,
+            'message' => ResponseMessage::COURSE['UPDATE_SUCCESS']
+        ];
     }
 
     public function deleteCourse($id)

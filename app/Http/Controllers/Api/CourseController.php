@@ -30,24 +30,32 @@ class CourseController extends ApiBaseController
 
     public function store(CourseStoreRequest $request)
     {
-        $fillable = $request->only(['name', 'description', 'is_active', 'category_id']);
-        $addCourse = $this->courseRepository->createCourse($fillable);
-        if (!$addCourse) {
-            return $this->sendError(500, 'ERROR', 500);
+        $data = $request->only(['name', 'description', 'is_active', 'category_id', 'path']);
+        $course = $this->courseRepository->createCourse($data);
+        if (!$course['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                $course['message'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess($addCourse['data']);
+        return $this->sendSuccess($course['message']);
     }
 
     public function update(CourseUpdateRequest $request, $id)
     {
-        $fillable = $request->only(['name', 'description', 'is_active', 'category_id']);
-        $editCourse = $this->courseRepository->updateCourse($fillable, $id);
-        if (!$editCourse) {
-            return $this->sendError(500, 'ERROR', 500);
+        $data = $request->only(['name', 'description', 'is_active', 'category_id', 'path']);
+        $course = $this->courseRepository->updateCourse($data, $id);
+        if (!$course['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                $course['message'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess($editCourse['success']);
+        return $this->sendSuccess($course['message']);
     }
 
     public function destroy($id)

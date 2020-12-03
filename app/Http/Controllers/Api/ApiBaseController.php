@@ -54,10 +54,11 @@ class ApiBaseController extends Controller
             'error' => [
                 'code' => $code,
                 'message' => $message,
+                'status' => $status
             ],
         ];
 
-        return response()->json($response, $status);
+        return response()->json($response);
     }
 
     /**
