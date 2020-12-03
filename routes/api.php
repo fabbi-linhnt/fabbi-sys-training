@@ -24,33 +24,33 @@ Route::group([
     Route::post('refresh', 'Auth\AuthController@refresh');
     Route::post('me', 'Auth\AuthController@me');
 });
-
-Route::resource('/test', 'Api\HomeController');
-Route::resource('/tasks', 'Api\TaskController');
-Route::get('/tasks/subject-task/{id}', 'Api\TaskController@getSubjectOfTask');
-Route::get('/subject/list','Api\SubjectController@index');
-Route::get('/subject/add','Api\SubjectController@store');
-Route::resource('/course', 'Api\CourseController');
-Route::get('/category','Api\CategoryController@index');
-Route::get('/course/category/{id}','Api\CourseController@listCategoryByCourseId');
-
-
-Route::resource('/course', 'Api\CourseController');
-Route::get('/course', 'Api\CourseController@index');
-Route::resource('/subjects','Api\SubjectController');
-Route::get('/subjects/count/{id}','Api\SubjectController@countTaskCourseSubjectById');
-Route::get('/subjects/courses/{id}','Api\SubjectController@ListCourseBySubjetID');
-Route::get('/subject/all', 'Api\SubjectController@getAllSubject');
-Route::resource('user','Api\UserController');
-Route::get('/user/countSubject/{id}', 'Api\UserController@countSubject');
-Route::get('/user/countTask/{id}', 'Api\UserController@countTask');
-Route::get('/user/userName/{id}', 'Api\UserController@userName');
-Route::get('/user-task/{id}', 'Api\TaskController@getUserTask');
-Route::get('/user/getInfo/{id}','Api\UserController@getUserInfo');
-Route::put('user-task/{id}', 'Api\TaskController@updateComment');
-Route::get('/courses/list','Api\SubjectController@listCourses' );
-Route::put('/is_active/update/{id}','Api\SubjectController@updateActive' );
-Route::get('/categories', 'Api\CategoryController@category');
-Route::resource('/category', 'Api\CategoryController');
-Route::get('/task/users/{id}', 'Api\TaskController@getUsersByTaskId');
+Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
+    Route::group(['prefix' => 'categories'], function () {
+        Route::resource('/', 'CategoryController');
+    });
+    Route::group(['prefix' => 'courses', 'as' => 'courses'], function () {
+        Route::resource('/', 'CourseController');
+        Route::get('/categories/{id}', 'CourseController@listCategoryByCourseId')->name('category.get');
+    });
+    Route::group(['prefix' => 'subjects', 'as' => 'subjects'], function () {
+        Route::resource('/', 'SubjectController');
+        Route::get('/courses/{id}', 'SubjectController@listCourseBySubjectId')->name('courses.list');
+        Route::get('/{id}/count', 'SubjectController@countTaskCourseById')->name('courses.tasks.count');
+    });
+    Route::group(['prefix' => 'tasks', 'as' => 'tasks'], function () {
+        Route::resource('/', 'TaskController');
+        Route::get('/subjects/{id}', 'TaskController@getSubjectsByTaskId')->name('subjects.list');
+        Route::get('/users/{id}', 'TaskController@getUsersByTaskId')->name('users.id');
+    });
+    Route::group(['prefix' => 'reports', 'as' => 'reports'], function () {
+        Route::put('/comment/{id}', 'TaskController@updateComment')->name('comment');
+        Route::get('/{id}', 'TaskController@getUserTask')->name('list');
+    });
+    Route::group(['prefix' => 'users', 'as' => 'users'], function () {
+        Route::resource('/', 'UserController');
+        Route::get('/subjects/{id}', 'UserController@countSubject')->name('subject.count');
+        Route::get('/tasks/{id}', 'UserController@countTask')->name('tasks.count');
+        Route::get('/username/{id}', 'UserController@userName')->name('username');
+    });
+});
 

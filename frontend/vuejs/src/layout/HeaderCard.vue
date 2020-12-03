@@ -5,7 +5,6 @@
         <div class="col-xl-3 col-lg-6"></div>
       </div>
     </base-header>
-
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">

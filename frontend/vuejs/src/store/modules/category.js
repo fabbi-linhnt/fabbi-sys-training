@@ -1,24 +1,32 @@
 import apiCaller from '../../utils/api';
 
 export const state = {
-  test: 1
+  listCategories: null,
+  deleteCategory: '',
 };
 
 export const getters = {
-  GET_TEST_STATE: state => state.test
+  listCategories: state => state.listCategories,
+  deleteCategory: state => state.deleteCategory
 };
 
 export const mutations = {
-
+  setListCategories(state, listCategories) {
+    state.listCategories = listCategories;
+  },
+  setDeleteCategory(state, deleteCategory) {
+    state.deleteCategory = deleteCategory;
+  }
 };
 
 export const actions = {
-  getData({ }) {
+  GET_CATEGORIES({ commit }) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/categories',
         '',
         response => {
+          commit('setListCategories', response.data);
           resolve(response.data);
         },
         err => {
@@ -27,12 +35,13 @@ export const actions = {
       );
     });
   },
-  deleteData({ }, id) {
+  DESTROY_CATEGORY({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.deleteRequest(
         '/api/category/' + id,
         '',
         response => {
+          commit('setDeleteCategory', id);
           resolve(response.data);
         },
         err => {

@@ -1,26 +1,63 @@
 import apiCaller from '../../utils/api';
 
 export const state = {
-
+  listSubjects: null,
+  deleteSubject: '',
+  storeSubject: null,
+  updateSubject: null,
+  subjectById: null,
+  coursesByIdSubject: null,
+  countTasksCoursesUsers: null,
+  updateActive: null,
 };
 
 export const getters = {
-  listSubject: state => state.test
+  listSubjects: state => state.listSubjects,
+  deleteSubject: state => state.deleteSubject,
+  storeSubject: state => state.storeSubject,
+  updateSubject: state => state.updateSubject,
+  subjectById: state => state.subjectById,
+  coursesByIdSubject: state => state.coursesByIdSubject,
+  countTasksCoursesUsers: state => state.countTasksCoursesUsers,
+  updateActive: state => state.updateActive
 };
 
-
-
 export const mutations = {
+  setListSubjects(state, listSubjects) {
+    state.listSubjects = listSubjects;
+  },
+  setDeleteSubject(state, deleteSubject) {
+    state.deleteSubject = deleteSubject;
+  },
+  setStoreSubjecy(state, storeSubject) {
+    state.storeSubject = storeSubject;
+  },
+  setUpdateSubject(state, updateSubject) {
+    state.updateSubject = updateSubject;
+  },
+  setSubjectById(state, subjectById) {
+    state.subjectById = subjectById;
+  },
+  setCoursesByIdSubject(state, coursesByIdSubject) {
+    state.coursesByIdSubject = coursesByIdSubject;
+  },
+  setCountTasksCoursesUsers(state, countTasksCoursesUsers) {
+    state.countTasksCoursesUsers = countTasksCoursesUsers;
+  },
+  setUpdateActive(state, updateActive) {
+    state.updateActive = updateActive;
+  }
 };
 
 export const actions = {
 
-  getData({ }, param) {
+  GET_SUBJECTS({ commit }, param) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/subjects',
         param,
         response => {
+          commit('setListSubjects', response.data);
           resolve(response.data);
         },
         err => {
@@ -29,12 +66,13 @@ export const actions = {
       );
     });
   },
-  deleteData({ }, id) {
+  DESTROY_SUBJECT({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.deleteRequest(
         '/api/subjects/' + id,
         '',
         response => {
+          commit('setDeleteSubject', id);
           resolve(response.data);
         },
         err => {
@@ -43,13 +81,13 @@ export const actions = {
       );
     });
   },
-
-  addData({ }, params) {
+  STORE_SUBJECT({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.postRequest(
         '/api/subjects',
         params,
         response => {
+          commit('setStoreSubject', response.data);
           resolve(response.data);
         },
         err => {
@@ -58,13 +96,13 @@ export const actions = {
       );
     });
   },
-
-  getSubjectById({ }, id) {
+  GET_SUBJECT_BY_ID({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/subjects/' + id,
         '',
         response => {
+          commit('setSubjectById', response.data);
           resolve(response.data);
         },
         err => {
@@ -73,12 +111,13 @@ export const actions = {
       );
     });
   },
-  updateData({ }, params) {
+  UPDATE_SUBJECT({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
         '/api/subjects/' + params.id,
         params.subjects,
         response => {
+          commit('setUpdateSubject', response.data);
           resolve(response.data);
         },
         err => {
@@ -87,14 +126,13 @@ export const actions = {
       );
     });
   },
-
-
-  updateActive({ }, id) {
+  UPDATE_ACTIVE({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
         '/api/is_active/update/' + id,
         '',
         response => {
+          commit('setUpdateActive', response.data);
           resolve(response.data);
         },
         err => {
@@ -103,12 +141,13 @@ export const actions = {
       );
     });
   },
-  countCourseTaskUsers({ }, id) {
+  COUNT_COURSES_TASKS_USERS({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/subjects/count/' + id,
         '',
         response => {
+          commit('setCountTasksCoursesUsers', response.data);
           resolve(response.data);
         },
         err => {
@@ -117,12 +156,13 @@ export const actions = {
       );
     });
   },
-  listCourse({ }, id) {
+  GET_COURSES_BY_SUBJECT_ID({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/subjects/courses/' + id,
         '',
         response => {
+          commit('setCoursesByIdSubject', response.data);
           resolve(response.data);
         },
         err => {
@@ -131,35 +171,4 @@ export const actions = {
       );
     });
   },
-
-  course({ }) {
-    return new Promise((resolve, reject) => {
-      apiCaller.getRequest(
-        '/api/courses/list',
-        '',
-        response => {
-          resolve(response.data);
-        },
-        err => {
-          reject(err.response.data);
-        }
-      );
-    });
-  },
-
-  getAllSubject({ }) {
-    return new Promise((resolve, reject) => {
-      apiCaller.getRequest(
-        '/api/subject/all',
-        '',
-        response => {
-          resolve(response.data)
-        },
-        err => {
-          reject(err.data)
-        }
-      )
-    });
-  }
 };
-

@@ -1,15 +1,57 @@
 import apiCaller from "../../utils/api";
 
 export const state = {
-  course: null
+  listCourses: null,
+  deleteCourse: '',
+  storeCourse: null,
+  updateCourse: null,
+  courseById: null,
+  dataCategories: null,
+  categoriesById: null
 };
+
+export const getters = {
+  listCourses: state => state.courses,
+  deleteCourse: state => state.deleteCourse,
+  storeCourse: state => state.storeCourse,
+  updateCourse: state => state.updateCourse,
+  courseById: state => state.courseById,
+  dataCategories: state => state.dataCategories,
+  categoriesById: state => state.categoriesById
+};
+
+export const mutations = {
+  setListCourses(state, listCourses) {
+    state.listCourses = listCourses;
+  },
+  setDeleteCourse(state, deleteCourse) {
+    state.deleteCourse = deleteCourse;
+  },
+  setStoreCourse(state, storeCourse) {
+    state.storeCourse = storeCourse;
+  },
+  setUpdateCourse(state, updateCourse) {
+    state.updateCourse = updateCourse;
+  },
+  setCourseById(state, courseById) {
+    state.courseById = courseById;
+  },
+  setDataCategories(state, dataCategories) {
+    state.dataCategories = dataCategories;
+  },
+  setCategoriesById(state, categoriesById) {
+    state.categoriesById = categoriesById;
+  }
+}
+
 export const actions = {
-  getData({}, param) {
+  GET_COURSES({ commit }, param) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/course',
         param,
         response => {
+          commit('setListCourses', response.data.data);
           resolve(response.data.data);
         },
         err => {
@@ -18,28 +60,29 @@ export const actions = {
       )
     });
   },
-  destroyCourse({}, id) {
+  DESTROY_COURSE({ commit }, id) {
     return new Promise((resolve, reject) => {
-        apiCaller.deleteRequest
-        (
-          '/api/course/' + id,
-          '',
-          response => {
-            resolve(response.data);
-          },
-          err => {
-            reject(err.response.data);
-          }
-        )
-      }
+      apiCaller.deleteRequest(
+        '/api/course/' + id,
+        '',
+        response => {
+          commit('setDeleteCourse', id);
+          resolve(response.data);
+        },
+        err => {
+          reject(err.response.data);
+        }
+      )
+    }
     )
   },
-  storeCourse({}, params) {
+  STORE_COURSE({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.postRequest(
         '/api/course',
         params,
         response => {
+          commit('setStoreCourse', response.data);
           resolve(response.data);
         },
         err => {
@@ -48,12 +91,13 @@ export const actions = {
       )
     })
   },
-  updateCourse({}, params) {
+  UPDATE_COURSE({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
         '/api/course/' + params.id,
         params,
         response => {
+          commit('setUpdateCourse', response);
           resolve(response);
         },
         err => {
@@ -62,28 +106,14 @@ export const actions = {
       )
     });
   },
-  getIdCourse({}, id) {
-    return new Promise((resolve, reject) => {
-        apiCaller.getRequest(
-          '/api/course/' + id,
-          '',
-          response => {
-            resolve(response.data);
-          },
-          err => {
-            reject(err.response.data);
-          }
-        )
-      }
-    )
-  },
-  getDataCategory({}) {
+  GET_ID_COURSE({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/category',
+        '/api/course/' + id,
         '',
         response => {
-          resolve(response.data.data);
+          commit('setCourseById', response.data)
+          resolve(response.data);
         },
         err => {
           reject(err.response.data);
@@ -91,17 +121,33 @@ export const actions = {
       )
     });
   },
-  getCategoryByCourse({}, id) {
+  GET_DATA_CATEGORIES({ commit }) {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        '/api/categories',
+        '',
+        response => {
+          commit('setDataCategories', response.data.data);
+          resolve(response.data.data)
+        },
+        err => {
+          reject(err.response.data);
+        }
+      )
+    });
+  },
+  GET_CATEGORIES_BY_COURSE({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/course/category/' + id,
         '',
         response => {
+          commit('setCategoriesById', response.data);
           resolve(response.data);
         },
         err => {
           reject(err.response.data);
         })
-    })
-  }
+    });
+  },
 }

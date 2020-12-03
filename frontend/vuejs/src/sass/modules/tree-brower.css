@@ -1,0 +1,11 @@
+.action button {
+    float: right;
+}
+
+#delete-category {
+    background-color: red;
+}
+
+#children {
+    margin-left: 10%;
+}

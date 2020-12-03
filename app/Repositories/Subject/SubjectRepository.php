@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Repositories\Subjects;
+namespace App\Repositories\Subject;
 
 use App\Models\Subject;
 use App\Models\Course;
 
 use App\Repositories\BaseRepository;
-use App\Repositories\Subjects\SubjectInterface;
+use App\Repositories\Subject\SubjectInterface;
 
 /**
  * Class EquipmentRepository
  * @package App\Repositories\Equipment
  */
-class SubjectRepon extends BaseRepository implements SubjectInterface
+class SubjectRepository extends BaseRepository implements SubjectInterface
 {
 
     public function __construct(Subject $subject)

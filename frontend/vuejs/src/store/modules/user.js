@@ -1,24 +1,37 @@
 import apiCaller from '../../utils/api';
 
 export const state = {
-
+  listUsers: null,
+  storeUser: null,
+  deleteUser: ''
 };
 
 export const getters = {
-
+  listUsers: state => state.listUsers,
+  storeUser:  state => state.storeUser,
+  deleteUser: state => state.deleteUser
 };
 
 export const mutations = {
-
+  setListUsers(state, listUsers) {
+    state.listUsers = listUsers;
+  },
+  setStoreUser(state, storeUser) {
+    state.storeUser = storeUser;
+  },
+  setDeleteUser(state, deleteUser) {
+    state.deleteUser = deleteUser;
+  }
 };
 
 export const actions = {
-  ADD_USER: ({ } ,data) => {
+  ADD_USER: ({ commit } ,data) => {
     return new Promise((resolve, reject) => {
       apiCaller.postRequest(
-        `api/user`,
+        `api/users/`,
         data.params,
         res => {
+          commit('setStoreUser', res.data);
           resolve(res.data);
         },
         err => {
@@ -27,12 +40,13 @@ export const actions = {
       );
     });
   },
-  GET_USER: ({ } ,params) => {
+  GET_USER: ({ commit } ,params) => {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        `api/user`,
+        `api/users/`,
         params,
         res => {
+          commit('setListUsers', res.data);
           resolve(res.data);
         },
         err => {
@@ -41,16 +55,17 @@ export const actions = {
       );
     });
   },
-  DELETE_USER: ({}, id) => {
+  DELETE_USER: ({ commit }, id) => {
     return new Promise((resolve, reject) => {
       apiCaller.deleteRequest(
-        '/api/user/' + id,
-        null,
-        response => {
-          resolve(response.data);
+        '/api/users/' + id,
+        '',
+        res => {
+          commit('setDeleteUser', res.data);
+          resolve(res.data);
         },
         err => {
-          reject(err.response.data);
+          reject(err.res.data);
         }
       )
     });

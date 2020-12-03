@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\Subjects\SubjectInterface;
+use App\Http\Requests\Subjects\SubjectStoreRequest;
+use App\Http\Requests\Subjects\SubjectUpdateRequest;
+use App\Repositories\Subject\SubjectInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -34,7 +36,7 @@ class SubjectController extends ApiBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SubjectStoreRequest $request)
     {
         $data = $request->only('name', 'description', 'is_active', 'course_id');
         $subjects = $this->repository->createSubject($data);
@@ -68,7 +70,7 @@ class SubjectController extends ApiBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SubjectUpdateRequest $request, $id)
     {
         $data = $request->only('name', 'description', 'is_active', 'course_id');
         $subjects = $this->repository->updateSubject($data, $id);

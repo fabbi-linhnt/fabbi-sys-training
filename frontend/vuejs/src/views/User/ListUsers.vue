@@ -6,7 +6,7 @@
     >
     </base-header>
     <div class="content">
-      <router-link class="btn btn-primary" :to="{ name: 'users.add'}">
+      <router-link class="btn btn-primary" :to="{ name: 'user.create'}">
         {{ $t("list_users.label.add") }}
       </router-link>
       <form
@@ -49,13 +49,13 @@
           </b-button>
           <router-link
             class="btn btn-success"
-            :to="{ name: 'users.add', params: { id: row.item.id }}"
+            :to="{ name: 'user.create', params: { id: row.item.id }}"
           >
             {{ $t("list_users.button.update") }}
           </router-link>
           <router-link
             class="btn btn-primary"
-            :to="{ name: 'users.detail', params: { id: row.item.id }}"
+            :to="{ name: 'user.detail', params: { id: row.item.id }}"
           >
             {{ $t("list_users.button.show") }}
           </router-link>
@@ -76,7 +76,8 @@
 </template>
 
 <script>
-import {DEFAULT_OPTION, DEFAULT_PERPAGE} from "../../definition/constants";
+import {DEFAULT_OPTION, DEFAULT_PERPAGE} from "@/definition/constants";
+require("@/sass/modules/list-user.css");
 
 export default {
   name: "ListUsers",
@@ -96,7 +97,7 @@ export default {
         {key: 'phone', label: this.$i18n.t("list_users.label.phone_number"), sortable: true, sortDirection: 'desc'},
         {key: 'email', label: this.$i18n.t("list_users.label.gmail"), sortable: true, sortDirection: 'desc'},
         {key: 'address', label: this.$i18n.t("list_users.label.address"), sortable: true, sortDirection: 'desc'},
-        {key: 'actions', label: 'Actions'}
+        {key: 'actions', label: this.$i18n.t("task_screen.label.action")}
       ],
     }
   },
@@ -142,17 +143,5 @@ export default {
   },
 }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style scoped>
-.content
-{
-  padding: 50px;
-}
 
-.custom-paginate
-{
-  float: right;
-  margin-right: 50px;
-  width: 200px;
-}
-</style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
