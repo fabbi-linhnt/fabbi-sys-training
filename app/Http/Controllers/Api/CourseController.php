@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ResponseMessage;
 use App\Enums\ResponseStatus;
 use App\Enums\ResponseStatusCode;
 use App\Http\Requests\Courses\CourseStoreRequest;
@@ -22,7 +23,11 @@ class CourseController extends ApiBaseController
     {
         $courseList = $this->courseRepository->getListCourse($request);
         if (!$courseList['success']) {
-            return $this->sendError(500, 'ERROR', 500);
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::COURSE['GET_LIST_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($courseList['listCourse']);
@@ -60,37 +65,30 @@ class CourseController extends ApiBaseController
 
     public function destroy($id)
     {
-        return $this->courseRepository->deleteCourse($id);
+        $course = $this->courseRepository->deleteCourse($id);
+        if (!$course['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::COURSE['DELETE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess(ResponseMessage::COURSE['DELETE_SUCCESS']);
     }
 
     public function show($id)
     {
         $course = $this->courseRepository->getCourseById($id);
-        if (!$course) {
-            return $this->sendError(500, 'ERROR', 500);
+        if (!$course['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::COURSE['SHOW_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($course['data']);
-    }
-
-    public function getCategory()
-    {
-        $category = $this->courseRepository->getCategory();
-        if (!$category) {
-            return $this->sendError(500, 'ERROR', 500);
-        }
-
-        return $this->sendSuccess($category['data']);
-    }
-
-    public function listCategoryByCourseId($id)
-    {
-        $category = $this->courseRepository->listCategoryByCourseId($id);
-        if (!$category) {
-            return $this->sendError(500, 'ERROR', 500);
-        }
-
-        return $this->sendSuccess($category['data']);
     }
 
     public function assignUserToCourse(Request $request, $id)

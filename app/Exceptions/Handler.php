@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
 
     private function getJsonMessage($e) {
         return [
-            'code' => 500,
+            'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
             'message' => $e->getMessage(),
             'errors' => $e->errors()
         ];

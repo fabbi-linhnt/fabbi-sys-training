@@ -32,7 +32,7 @@ class TasksStoreRequest extends FormRequest
             'subject_id' => 'required|array',
             'subject_id.*' => 'exists:subjects,id',
             'user_id' => 'required|array',
-            'user_id.*' => 'exists:users, id'
+            'user_id.*' => 'exists:users,id'
         ];
     }
 }

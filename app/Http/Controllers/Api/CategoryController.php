@@ -75,6 +75,6 @@ class CategoryController extends ApiBaseController
             );
         }
 
-        return $this->sendSuccess(ResponseMessage::CATEGORY['delete_success']);
+        return $this->sendSuccess(ResponseMessage::CATEGORY['DELETE_SUCCESS']);
     }
 }

@@ -7,7 +7,6 @@ use App\Enums\ResponseStatusCode;
 use App\Enums\ResponseMessage;
 use App\Http\Requests\Subjects\SubjectStoreRequest;
 use App\Http\Requests\Subjects\SubjectUpdateRequest;
-use App\Models\Subject;
 use App\Repositories\Subject\SubjectInterface;
 use Illuminate\Http\Request;
 
@@ -24,7 +23,11 @@ class SubjectController extends ApiBaseController
     {
         $subjects = $this->subjectRepository->getListSubject($request);
         if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['GET_LIST_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($subjects['data']);
@@ -35,17 +38,25 @@ class SubjectController extends ApiBaseController
         $data = $request->only('name', 'description', 'is_active', 'course_id');
         $subjects = $this->subjectRepository->createSubject($data);
         if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['ADD_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess("ADD SUBJECT SUCCESS");
+        return $this->sendSuccess(ResponseMessage::SUBJECT['ADD_SUCCESS']);
     }
 
     public function show($id)
     {
         $subjects = $this->subjectRepository->getSubjectbyId($id);
         if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['SHOW_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($subjects['data']);
@@ -56,28 +67,39 @@ class SubjectController extends ApiBaseController
         $data = $request->only('name', 'description', 'is_active', 'course_id');
         $subjects = $this->subjectRepository->updateSubject($data, $id);
         if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['UPDATE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess("UPDATE SUBJECT SUCCESS");
+        return $this->sendSuccess(ResponseMessage::SUBJECT['UPDATE_SUCCESS']);
     }
 
     public function destroy($id)
     {
-        //
         $subjects = $this->subjectRepository->deleteSubject($id);
         if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['DELETE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess("DELETE SUBJECT SUCCESS");
+        return $this->sendSuccess(ResponseMessage::SUBJECT['DELETE_SUCCESS']);
     }
 
     public function countTaskCourseById($id)
     {
         $subjects = $this->subjectRepository->countTaskCourseById($id);
         if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['COUNT_TASK_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($subjects['data']);
@@ -87,10 +109,14 @@ class SubjectController extends ApiBaseController
     {
         $subject = $this->subjectRepository->updateActive($id);
         if (!$subject['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::SUBJECT['UPDATE_ACTIVE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess("UPDATE SUBJECT SUCCESS");
+        return $this->sendSuccess(ResponseMessage::SUBJECT['UPDATE_ACTIVE_SUCCESS']);
     }
 
     public function assignUserToSubject(Request $request, $id)

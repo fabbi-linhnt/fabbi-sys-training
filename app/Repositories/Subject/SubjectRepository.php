@@ -4,10 +4,8 @@ namespace App\Repositories\Subject;
 
 use App\Enums\ResponseMessage;
 use App\Models\Subject;
-use App\Models\Course;
 use App\Repositories\BaseRepository;
 use App\Repositories\Subject\SubjectInterface;
-use Illuminate\Http\Client\ResponseSequence;
 use Illuminate\Support\Facades\DB;
 /**
  * Class EquipmentRepository
@@ -23,18 +21,26 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
 
     public function getListSubject($request)
     {
-        $list = $this->model;
-        if (!empty($request['name'])) {
+        try {
+            $list = $this->model;
+            if (!empty($request['name'])) {
+                return [
+                    'success' => true,
+                    'data' => $list->where('name', 'like', '%' . $request['name'] . '%')->paginate($request['perPage'])
+                ];
+            }
+
             return [
                 'success' => true,
-                'data' => $list->where('name', 'like', '%' . $request['name'] . '%')->paginate($request['perPage'])
+                'data' => $list->paginate($request['perPage'])
             ];
         }
-
-        return [
-            'success' => true,
-            'data' => $list->paginate($request['perPage'])
-        ];
+        catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     public function deleteSubject($id)
@@ -45,6 +51,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             $subject->tasks()->detach();
             $subject->courses()->detach();
             $subject->delete();
+
             return [
                 'success' => true
             ];
@@ -58,18 +65,28 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
 
     public function createSubject($data)
     {
-        $subject = $this->model->create($data);
-        $course_id = $data['course_id'];
-        $subject->courses()->attach($course_id, ['status' => 'Create']);
-        return [
-            'success' => true
-        ];
+        try {
+            $subject = $this->model->create($data);
+            $course_id = $data['course_id'];
+            $subject->courses()->attach($course_id, ['status' => 'Create']);
+
+            return [
+                'success' => true
+            ];
+        }
+        catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     public function getSubjectById($id)
     {
         try {
             $data = $this->model->findOrFail($id);
+
             return [
                 'data' => $data,
                 'success' => true,
@@ -90,6 +107,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             $course = $data->courses()->count('course_id');
             $user = $data->users()->count('user_id');
             $array = [$task, $course, $user];
+
             return [
                 'data' => $array,
                 'success' => true,
@@ -107,9 +125,10 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
         try {
             $subject = $this->model->findOrFail($id);
             $subject->update($data);
-            $course_id = $data['course_id'];
+            $courseId = $data['course_id'];
             $subject->courses()->detach();
-            $subject->courses()->attach($course_id, ['status' => 'Update']);
+            $subject->courses()->attach($courseId, ['status' => config('configsubject.status_user_activity')]);
+
             return [
                 'success' => true
             ];
@@ -127,6 +146,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             $subject = $this->model->findOrFail($id);
             $subject->is_active = !$subject->is_active;
             $subject->update();
+
             return [
                 'success' => true
             ];

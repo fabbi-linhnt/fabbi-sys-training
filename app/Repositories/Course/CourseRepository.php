@@ -21,6 +21,7 @@ class CourseRepository extends BaseRepository implements CourseInterface
     {
         try {
             $data = $this->model->findOrFail($id);
+
             return [
                 'data' => $data,
                 'success' => true,
@@ -35,19 +36,24 @@ class CourseRepository extends BaseRepository implements CourseInterface
 
     public function getListCourse($request)
     {
-        $perPage = $request->perPage;
-        $listCourse = $this->model;
-        if (!empty($request['name'])) {
-            $listCourse = $listCourse->where('name', 'LIKE', '%' . $request['name'] . '%');
+        try {
+            $perPage = $request->perPage;
+            $listCourse = $this->model;
+            if (!empty($request['name'])) {
+                $listCourse = $listCourse->where('name', 'LIKE', '%' . $request['name'] . '%');
+            }
+
             return [
                 'success' => true,
                 'listCourse' => $listCourse->paginate($perPage)
             ];
         }
-        return [
-            'success' => true,
-            'listCourse' => $listCourse->paginate($perPage)
-        ];
+        catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     public function createCourse($data)
@@ -106,24 +112,9 @@ class CourseRepository extends BaseRepository implements CourseInterface
         try {
             $courseByID = $this->model->findOrFail($id);
             $courseByID->delete();
+
             return [
                 'success' => true
-            ];
-        } catch (\Exception $e) {
-            return [
-                'success' => false
-            ];
-        }
-    }
-
-    public function listCategoryByCourseId($id)
-    {
-        try {
-            $course = $this->model->findOrFail($id);
-            $data = $course->categories;
-            return [
-                'success' => true,
-                'data' => $data,
             ];
         } catch (\Exception $e) {
             return [

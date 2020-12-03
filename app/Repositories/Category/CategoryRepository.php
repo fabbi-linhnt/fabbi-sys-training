@@ -3,7 +3,6 @@
 namespace App\Repositories\Category;
 
 use App\Models\Category;
-
 use App\Repositories\BaseRepository;
 use App\Repositories\Category\CategoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -18,15 +17,27 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
 
     public function createCategories($categories, $parent_id = 0, $level = 0)
     {
-        $result = [];
-        foreach ($categories as $item) {
-            if ($item['parent_id'] == $parent_id) {
-                $item['level'] = $level;
-                $item['children'] = $this->createCategories($categories, $item['id'], $level + 1);
-                $result[] = $item;
+        try {
+            $result = [];
+            foreach ($categories as $item) {
+                if ($item['parent_id'] == $parent_id) {
+                    $item['level'] = $level;
+                    $item['children'] = $this->createCategories($categories, $item['id'], $level + 1);
+                    $result[] = $item;
+                }
             }
+
+            return [
+                'success' => true,
+                'data' => $result
+            ];
         }
-        return $result;
+        catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     public function getCategories()
@@ -34,17 +45,18 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
         try {
             $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
             $data = $this->createCategories($categories, 0);
-        } catch (\Exception $exception) {
+
             return [
-                'success' => false,
-                'message' => $exception->getMessage()
+                'success' => true,
+                'data' => $data,
             ];
         }
-
-        return [
-            'success' => true,
-            'data' => $data,
-        ];
+        catch(\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     public function deleteCategory($id)
