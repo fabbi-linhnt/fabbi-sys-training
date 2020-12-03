@@ -36,9 +36,9 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::post('/users/{id}/assign-user-to-course', 'CourseController@assignUserToCourse')->name('assign.users');
     });
     Route::group(['prefix' => 'subjects', 'as' => 'subjects'], function () {
-        Route::get('/courses/{id}', 'SubjectController@listCourseBySubjectId')->name('courses.list');
-        Route::get('/{id}/count', 'SubjectController@countTaskCourseById')->name('courses.tasks.count');
+        Route::get('/{id}/count', 'SubjectController@countTaskCourseById')->name('count.courses.tasks');
         Route::post('/{id}/assign-user-to-subject', 'SubjectController@assignUserToSubject')->name('assign.users');
+        Route::get('/{id}/change-status', 'SubjectController@updateActive')->name('change.status');
     });
     Route::group(['prefix' => 'tasks', 'as' => 'tasks'], function () {
         Route::get('/subjects/{id}', 'TaskController@getSubjectsByTaskId')->name('subjects.list');

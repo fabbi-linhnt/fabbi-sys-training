@@ -73,19 +73,9 @@ class SubjectController extends ApiBaseController
         return $this->sendSuccess("DELETE SUBJECT SUCCESS");
     }
 
-    public function countTaskCourseSubjectById($id)
+    public function countTaskCourseById($id)
     {
-        $subjects = $this->subjectRepository->countTaskCourseSubjectById($id);
-        if (!$subjects['success']) {
-            return $this->sendError(500, "ERROR", "500");
-        }
-
-        return $this->sendSuccess($subjects['data']);
-    }
-
-    public function ListCourseBySubjectId($id)
-    {
-        $subjects = $this->subjectRepository->ListCourseBySubjectId($id);
+        $subjects = $this->subjectRepository->countTaskCourseById($id);
         if (!$subjects['success']) {
             return $this->sendError(500, "ERROR", "500");
         }
