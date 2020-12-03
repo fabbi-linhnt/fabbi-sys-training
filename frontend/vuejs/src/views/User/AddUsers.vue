@@ -200,7 +200,7 @@ export default {
       this.picture = null;
       const storageRef = Firebase.storage().ref();
       const imgRef = storageRef.child(`imagesUser/${this.imageData.name}`)
-      imgRef.put(this.imageData).then(s => {
+      imgRef.put(this.imageData).then(() => {
         imgRef.getDownloadURL().then(url => {
           this.picture = url;
         })

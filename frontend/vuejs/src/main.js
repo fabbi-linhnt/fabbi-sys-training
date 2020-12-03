@@ -10,7 +10,7 @@ import authToken from './utils/token'
 import VueIziToast from 'vue-izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import i18n from './utils/i18n';
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Multiselect from 'vue-multiselect';
@@ -33,6 +33,7 @@ Vue.component('multiselect', Multiselect)
 Vue.component('Treeselect', Treeselect)
 Vue.use(Multiselect);
 Vue.use(Firebase);
+Vue.use(BootstrapVueIcons)
 
 
 router.beforeEach((to, from, next) => {

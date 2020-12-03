@@ -11,7 +11,7 @@ export const state = {
 };
 
 export const getters = {
-  listCourses: state => state.courses,
+  listCourses: state => state.listCourses,
   deleteCourse: state => state.deleteCourse,
   storeCourse: state => state.storeCourse,
   updateCourse: state => state.updateCourse,
@@ -139,7 +139,7 @@ export const actions = {
   GET_CATEGORIES_BY_COURSE({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/course/category/' + id,
+        '/api/courses/categories/' + id,
         '',
         response => {
           commit('setCategoriesById', response.data);

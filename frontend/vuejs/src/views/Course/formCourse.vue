@@ -38,7 +38,6 @@
               <span class="err">{{ errors[0] }}</span>
             </b-form-group>
           </ValidationProvider>
-
           <ValidationProvider :name="$t('course_screen.label.is_active')" rules="required" v-slot="{ errors }">
             <b-form-group id="input-group-3"
                           :label="$t('course_screen.label.activate')"
@@ -64,16 +63,96 @@
               <span class="err">{{ errors[0] }}</span>
             </b-form-group>
           </ValidationProvider>
+          <div>
+            <div class="form-group">
+            <div>
+              <b-button v-b-modal.modal-center>
+                {{ $t("task_screen.button.add_user_btn") }}
+              </b-button>
+              <b-modal
+                id="modal-center"
+                size="xl"
+                centered
+                :title="$t('task_screen.label.list_user')"
+              >
+                <div>
+                  <b-form-group
+                    label-cols-sm="3"
+                    label-align-sm="right"
+                    label-size="sm"
+                    label-for="filterInput"
+                    class="mb-3"
+                  >
+                    <b-input-group size="sm" id="modal_action_user_search">
+                      <b-form-input
+                        v-model="paginateUser.search"
+                        type="search"
+                        id="filterInput"
+                        :placeholder="$t('course_screen.message.search_by_name')"
+                      ></b-form-input>
+                      <b-input-group-append>
+                        <b-button variant="primary" @click="getUsers()">
+                          {{ $t("course_screen.button.search") }}
+                        </b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-form-group>
+                </div>
+                <div class="custom-modal">
+                  <template>
+                    <div class="overflow-auto">
+                      <b-table id="my-table" :items="users" :fields="fieldUser">
+                        <template #cell(index)="row">
+                          {{ ++row.index }}
+                        </template>
+                        <template v-slot:cell(actions)="row">
+                          <input
+                            type="checkbox"
+                            v-model="submitUser"
+                            :value="row.item"
+                          />
+                        </template>
+                      </b-table>
+                      <b-pagination
+                        v-model="paginateUser.page"
+                        :total-rows="paginateUser.total"
+                        :per-page="paginateUser.perPage"
+                        aria-controls="my-table"
+                        @change="changePageUser(paginateUser.page)"
+                      ></b-pagination>
+                    </div>
+                  </template>
+                </div>
+              </b-modal>
+            </div>
+          </div>
+            <div class="">
+           <span v-if="status === true" class="span-err">
+             {{ $t("task_screen.message.required") }}
+           </span>
+              <div class="tag-input">
+                <div
+                  v-for="(user, index) in submitUser"
+                  :key="user.id"
+                  class="tag-input__tag"
+                >
+                  {{ user.name }}
+                  <span @click="removeTagUser(index)" class="removeTagUser">x</span>
+                </div>
+              </div>
+            </div>
+            <div style="clear: both"></div>
+          </div>
           <b-form-group :label="$t('course_screen.label.image')">
             <div>
               <b-form-file
-                v-model="picture"
-                :state="Boolean(picture)"
+                v-model="course.picture"
+                :state="Boolean(course.picture)"
                 :placeholder="$t('course_screen.message.choose_a_file_or_drop_it_here')"
                 @change="previewImage"
               ></b-form-file>
-              <div class="mt-3" v-if="picture">
-                <b-img id="imgCourse" :src="picture"></b-img>
+              <div class="mt-3" v-if="course.picture">
+                <b-img id="imgCourse" :src="course.picture"></b-img>
               </div>
             </div>
           </b-form-group>
@@ -91,6 +170,7 @@
 
 <script>
 import Firebase from 'firebase';
+import {DEFAULT_PERPAGE_USER} from "../../definition/constants";
 
 require("@/sass/modules/form-course.css");
 export default {
@@ -102,42 +182,77 @@ export default {
         description: "",
         is_active: "",
         category_id: null,
+        picture: null,
       },
       activate: [
         {text: this.$i18n.t("course_screen.message.please_select_an_option"), value: "", disabled: true},
         {text: "Activate", value: "1"},
         {text: "Inactivate", value: "0"},
       ],
+      fieldUser: [
+        {key: "index", label: this.$i18n.t("common.label.index")},
+        {key: "name", label: this.$i18n.t("user_screen.label.name")},
+        {key: "phoneNumber", label: this.$i18n.t("user_screen.label.phone_number")},
+        {key: "email", label: this.$i18n.t("user_screen.label.email")},
+        {key: "actions", label: this.$i18n.t("user_screen.label.action")},
+      ],
+      paginateUser: {
+        page: 1,
+        perPage: DEFAULT_PERPAGE_USER,
+        total: 0,
+        search: "",
+      },
+      users: [],
+      status: false,
+      submitUser: [],
       categories: [],
       imageData: null,
-      picture: null,
       uploadValue: 0,
+      imageError: false,
+      defaultImage: require("@/assets/imgs/default.jpeg")
     };
   },
   created() {
     if (this.id) {
       this.getCourseById();
-      this.getCategoryByCourse();
     }
     this.getDataCategory();
+    this.getUsers();
   },
   methods: {
     async onSubmit() {
+      if (this.submitUser.length === 0) {
+        return this.status = true;
+      }
       if (this.id) {
-        this.course.category_id = this.course.category_id.id;
         await this.$store
           .dispatch("course/UPDATE_COURSE", this.course)
           .then(() => {
             this.$router.push({name:"courses.list"});
           });
       } else {
-        this.course.category_id = this.course.category_id.id;
         await this.$store
           .dispatch("course/STORE_COURSE", this.course)
           .then(() => {
             this.$router.push({name:"courses.list"});
           });
       }
+    },
+    removeTagUser(index) {
+      this.submitUser.splice(index, 1);
+    },
+    changePageUser(page) {
+      this.paginateUser.page = page;
+      this.getUsers();
+    },
+    async getUsers() {
+      await this.$store
+        .dispatch("user/GET_USER", {params: this.paginateUser})
+        .then((response) => {
+          this.users = response.data.data;
+          this.paginateUser.perPage = response.data.per_page;
+          this.paginateUser.total = response.data.total;
+        });
     },
     async getCourseById() {
       await this.$store.dispatch("course/GET_ID_COURSE", this.id).then((res) => {
@@ -149,23 +264,16 @@ export default {
         this.categories = res;
       });
     },
-    async getCategoryByCourse() {
-      await this.$store
-        .dispatch("course/GET_CATEGORIES_BY_COURSE", this.id)
-        .then((res) => {
-          this.course.category_id = res.data;
-        });
-    },
     previewImage(event) {
       this.uploadValue = 0;
-      this.picture = null;
+      this.course.picture = null;
       this.imageData = event.target.files[0];
-      this.picture = null;
+      this.course.picture = null;
       const storageRef = Firebase.storage().ref();
       const imgRef = storageRef.child(`imagesCourse/${this.imageData.name}`)
-      imgRef.put(this.imageData).then(s => {
+      imgRef.put(this.imageData).then(() => {
         imgRef.getDownloadURL().then(url => {
-          this.picture = url;
+          this.course.picture = url;
         })
       })
     }

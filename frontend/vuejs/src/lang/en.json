@@ -34,7 +34,8 @@
     "message": {
       "task_msgDelete": "delete ok",
       "task_msgUpdate": "update success",
-      "task_msgCreate": "create success"
+      "task_msgCreate": "create success",
+      "required" : "Required"
     },
     "button": {
       "search_btn": "Search",

@@ -34,7 +34,8 @@
     "message": {
       "task_msgDelete": "Xóa thành công",
       "task_msgUpdate": "Cập nhật thành công",
-      "task_msgCreate": "Thêm mới thành công"
+      "task_msgCreate": "Thêm mới thành công",
+      "required" : "Trường bắt buộc"
     },
     "button": {
       "search_btn": "Tìm kiếm",
