@@ -77,7 +77,7 @@ class TaskController extends ApiBaseController
 
     public function getSubjectsByTaskId($id)
     {
-        $task = $this->taskRepository->getSubjectOfTask($id);
+        $task = $this->taskRepository->getSubjectsByTaskId($id);
         if (!$task['success']) {
             return $this->sendError(500, $task['message'], 'failed');
         }
