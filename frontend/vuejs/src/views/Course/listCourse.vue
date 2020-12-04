@@ -1,13 +1,14 @@
 <template>
   <div class="card shadow">
-    <div
-      class="card-header border-0"
-    >
+    <div class="card-header border-0">
       <div class="row align-items-center">
         <div class="col">
           <h3 class="mb-0">
             {{ $t("course_screen.title.list_course") }}
           </h3>
+          <router-link class="btn btn-primary" :to="{ name: 'course.create' }">
+            {{ $t("course_screen.button.add_course") }}
+          </router-link>
         </div>
         <div class="col text-right">
           <div class="paginate">
@@ -27,99 +28,81 @@
         </div>
       </div>
     </div>
-    <div>
-      <b-row>
-        <b-col>
-          <b-button
-            :to="{ name: 'course.create' }"
-            class="my-1"
-            size="md"
-            variant="primary"
-          >
-            {{ $t("course_screen.button.add_course") }}
-          </b-button>
-        </b-col>
-        <b-col lg="5" class="my-1" style="float: right">
-          <b-form-group
-            label-cols-sm="3"
-            label-align-sm="right"
-            label-size="sm"
-            label-for="filterInput"
-            class="mb-2"
-          >
-            <b-input-group size="sm">
-              <b-form-input
-                v-model="paginate.name"
-                type="search"
-                id="filterInput"
-                :placeholder="$t('course_screen.message.search_by_name')"
-              ></b-form-input>
-              <b-input-group-append>
-                <b-button variant="primary" @click="getData()">
-                  {{ $t("course_screen.button.search") }}
-                </b-button>
-              </b-input-group-append>
-            </b-input-group>
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </div>
-    <div>
-      <b-table striped hover :items="data" :fields="fields">
-        <template v-slot:cell(is_active)="row">
-          <p>
-            {{
-              row.item.is_active == 1
-                ? $t("course_screen.label.active")
-                : $t("course_screen.label.inactive")
-            }}
-          </p>
-        </template>
-        <template v-slot:cell(actions)="row">
-          <b-icon
-            icon="trash"
-            font-scale="2"
-            variant="danger"
-            @click="destroyCourse(row.item.id)">
-          </b-icon>
-          <b-icon
-            variant="secondary"
-            font-scale="2"
-            icon="pencil-square"
-            class="distanceIcon"
-            @click="$router.push({ name: 'course.edit', params: { id: row.item.id } })">
-          </b-icon>
-          <b-icon
-            v-b-modal.modal-center
-            @click="getData(row.item.id)"
-            variant="info"
-            font-scale="2"
-            icon="info-circle"
-            class="distanceIcon">
-          </b-icon>
-        </template>
-      </b-table>
-      <b-modal id="modal-center" centered title="BootstrapVue">
-        <p class="my-4" v-if="course">
-          {{ $t("course_screen.label.name") }}: {{ course.name }}
+    <b-input-group class="mt-3">
+      <b-form-input
+        :placeholder="$t('list_users.label.search_user')"
+        v-model="paginate.name"
+      ></b-form-input>
+      <b-input-group-append>
+        <b-button variant="info" @click="getData()">
+          {{ $t("list_users.label.search") }}
+        </b-button>
+      </b-input-group-append>
+    </b-input-group>
+    <br />
+    <b-table show-empty small stacked="md" :items="courses" :fields="fields">
+      <template #cell(index)="row">
+        {{
+          ++row.index + (Number(paginate.page) - 1) * Number(paginate.perPage)
+        }}
+      </template>
+      <template #cell(is_active)="row">
+        <p>
+          {{
+            row.item.is_active == 1
+              ? $t("list_subjects.label.active")
+              : $t("list_subjects.label.inActive")
+          }}
         </p>
-      </b-modal>
-    </div>
+      </template>
+      <template v-slot:cell(actions)="row">
+        <b-icon
+          icon="trash"
+          variant="danger"
+          font-scale="2"
+          @click="destroyCourse(row.item.id)"
+          class="deleteCousre"
+        ></b-icon>
+        <b-icon
+          icon="info-circle"
+          variant="info"
+          font-scale="2"
+          @click="detailCourse(row.item.id)"
+          class="detailCourse"
+        ></b-icon>
+        <b-icon
+          icon="pencil-square"
+          variant="dark"
+          font-scale="2"
+          @click="
+            $router.push({
+              name: 'course.edit',
+              params: { id: row.item.id },
+            })
+          "
+          class="updateCourse"
+        ></b-icon>
+      </template>
+    </b-table>
     <div class="pagination">
       <b-pagination
         v-model="paginate.page"
         :total-rows="paginate.total"
         :per-page="paginate.perPage"
         aria-controls="my-table"
-        @change="changePage"
-      ></b-pagination>
+        @change="changePage(paginate.page)"
+      >
+      </b-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import {DEFAULT_OPTION, DEFAULT_PERPAGE, DEFAULT_PAGE} from "@/definition/constants";
-
+import {
+  DEFAULT_OPTION,
+  DEFAULT_PERPAGE,
+  DEFAULT_PAGE,
+} from "@/definition/constants";
 require("@/sass/modules/list-course.css");
 
 export default {
@@ -127,6 +110,7 @@ export default {
   data() {
     return {
       fields: [
+        { key: "index", label: this.$i18n.t("list_users.label.no") },
         {
           key: "name",
           label: this.$i18n.t("course_screen.label.name"),
@@ -144,7 +128,7 @@ export default {
           label: this.$i18n.t("course_screen.label.actions"),
         },
       ],
-      data: null,
+      courses: null,
       type: "",
       filter: "",
       options: DEFAULT_OPTION,
@@ -163,9 +147,9 @@ export default {
   methods: {
     async getData() {
       await this.$store
-        .dispatch("course/GET_COURSES", {params: this.paginate})
+        .dispatch("course/GET_COURSES", { params: this.paginate })
         .then((res) => {
-          this.data = res.data;
+          this.courses = res.data;
           this.paginate.perPage = res.per_page;
           this.paginate.total = res.total;
         });
@@ -178,16 +162,27 @@ export default {
       this.getData();
     },
     async destroyCourse(id) {
-      if (confirm(this.$i18n.t("course_screen.message.are_you_sure"))) {
-        await this.$store.dispatch("course/DESTROY_COURSE", id).then(() => {
-          this.getData();
-        });
-      }
-    },
-  },
-  computed: {
-    rows() {
-      return this.courseData.length;
+      swal({
+        title: this.$i18n.t("course_screen.label.delete_confirm"),
+        text: this.$i18n.t("course_screen.label.warning"),
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          swal(this.$i18n.t("course_screen.label.delete_success"), {
+            icon: "success",
+          });
+          this.$store
+            .dispatch("course/DESTROY_COURSE", id)
+            .then(() => {
+              this.getData();
+            })
+            .catch(() => {});
+        } else {
+          return;
+        }
+      });
     },
   },
 };

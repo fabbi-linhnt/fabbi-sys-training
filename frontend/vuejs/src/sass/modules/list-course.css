@@ -1,9 +1,13 @@
 .paginate {
     float: right;
-    margin-right: 50px;
-    width: 80px;
+    width: 10vw;
 }
 
-.distanceIcon {
-margin-left: 1vh;
+.updateCourse, .detailCourse {
+    margin-left: 1vw;
+}
+
+.mt-3 {
+    width: 20vw;
+    margin-left: 2vw;
 }

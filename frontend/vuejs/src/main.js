@@ -18,7 +18,8 @@ import Firebase from 'firebase';
 import { ValidationObserver, ValidationProvider  } from "vee-validate";
 import { loadVeeValidate } from './utils/custom-veevalidate';
 import Treeselect from '@riophae/vue-treeselect';
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css';
+import swal from "sweetalert";
 
 loadVeeValidate();
 Vue.component('ValidationProvider', ValidationProvider);

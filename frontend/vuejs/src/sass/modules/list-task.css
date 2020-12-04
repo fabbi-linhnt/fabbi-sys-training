@@ -1,13 +1,13 @@
-.content {
-    padding: 50px;
+.paginate {
+  float: right;
+  width: 10vw;
 }
 
-.custom-paginate {
-    float: right;
-    margin-right: 50px;
-    width: 200px;
+.updateTask, .detailTask {
+  margin-left: 1vw;
 }
 
-.distanceIcon {
-  margin-left: 1vh;
+.mt-3 {
+  width: 20vw;
+  margin-left: 2vw;
 }

@@ -1,32 +1,13 @@
-#delete {
-    background-color: red;
-    margin-top: 2%;
-}
-
-#detail {
-    background-color: blue;
-    color: white;
-    margin-top: 2%;
-}
-
-#add {
-    background-color: blue;
-}
-
-#update {
-    background-color: green;
-    margin-top: 2%;
-}
-
-#paginate {
+.paginate {
     float: right;
-    margin-right: 10%;
+    width: 10vw;
 }
 
-#icon-active {
-    background-color: white;
+.updateSubject, .detailSubject {
+    margin-left: 1vw;
 }
 
-#icon-unactive {
-    background-color: yellow;
+.mt-3 {
+    width: 20vw;
+    margin-left: 2vw;
 }

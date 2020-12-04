@@ -14,144 +14,102 @@
                     {{ $t("list_subjects.title.list_subjects") }}
                   </h3>
                   <router-link
-                    id="add"
-                    class="btn btn-success"
+                    class="btn btn-primary"
                     :to="{ name: 'subject.create' }"
                   >
                     {{ $t("list_subjects.title.add_new_subject") }}
                   </router-link>
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">{{
-                    $t("list_subjects.label.selectRecords")
-                  }}</label>
-                  <multiselect
-                    v-model="paginate.perPage"
-                    :options="options"
-                    :searchable="false"
-                    :close-on-select="false"
-                    :show-labels="false"
-                    @select="customPaginate()"
-                  >
-                  </multiselect>
-                </div>
                 <div class="col text-right">
-                  <input
-                    :placeholder="$t('list_subjects.label.name')"
-                    v-model="paginate.name"
-                    name="key"
-                    id="nameSubject"
-                  />
-                  <base-button
-                    type="primary"
-                    size="sm"
-                    @click="searchSubject()"
-                  >
-                    {{ $t("list_subjects.button.search") }}
-                  </base-button>
+                  <div class="paginate">
+                    <label class="typo__label">
+                      {{ $t("course_screen.label.record") }}
+                    </label>
+                    <multiselect
+                      v-model="paginate.perPage"
+                      :options="options"
+                      :searchable="false"
+                      :close-on-select="false"
+                      :show-labels="false"
+                      @select="customPaginate()"
+                    >
+                    </multiselect>
+                  </div>
                 </div>
               </div>
             </div>
-            <div>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">{{ $t("list_subjects.label.name") }}</th>
-                    <th scope="col">
-                      {{ $t("list_subjects.label.description") }}
-                    </th>
-                    <th scope="col">{{ $t("list_subjects.label.time") }}</th>
-                    <th scope="col">
-                      {{ $t("list_subjects.label.is_active") }}
-                    </th>
-                    <th scope="col">{{ $t("list_subjects.label.action") }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="sub in tableData" :key="sub.id">
-                    <td>{{ sub.name }}</td>
-                    <td>{{ sub.description }}</td>
-                    <td>{{ sub.time }}</td>
-                    <td v-if="sub.is_active == 1">
-                      <base-button
-                        @click="change(sub.id)"
-                        icon="ni ni-check-bold"
-                        id="icon-active"
-                      ></base-button>
-                    </td>
-                    <td v-else>
-                      <base-button
-                        @click="change(sub.id)"
-                        icon="ni ni-fat-remove"
-                        id="icon-unactive"
-                      ></base-button>
-                    </td>
-                    <b-button
-                      id="delete"
-                      type="button"
-                      class="btn btn-primary"
-                      @click="deleteSubject(sub.id)"
-                    >
-                      {{ $t("list_subjects.button.delete") }}
-                    </b-button>
-                    <b-button
-                      id="detail"
-                      v-b-modal.modal-detail-subject
-                      class="btn btn-primary"
-                      @click="detail(sub.id)"
-                      >{{ $t("list_subjects.button.detail") }}
-                    </b-button>
-                    <router-link
-                      id="update"
-                      class="btn btn-success"
-                      :to="{
-                        name: 'subject.edit',
-                        params: { id: sub.id },
-                      }"
-                    >
-                      {{ $t("list_subjects.button.update") }}
-                    </router-link>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="overflow-auto" id="paginate">
-                <b-pagination
-                  v-model="paginate.page"
-                  :total-rows="paginate.total"
-                  :per-page="paginate.perPage"
-                  aria-controls="my-table"
-                  @change="changePage"
-                ></b-pagination>
-              </div>
-              <b-modal
-                id="modal-detail-subject"
-                centered
-                :title="$t('list_subjects.label.detailSubject')"
+            <b-input-group class="mt-3">
+              <b-form-input
+                :placeholder="$t('list_users.label.search_user')"
+                v-model="paginate.name"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-button variant="info" @click="getData()">
+                  {{ $t("list_users.label.search") }}
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+            <br />
+            <b-table
+              show-empty
+              small
+              stacked="md"
+              :items="subjects"
+              :fields="fields"
+            >
+              <template #cell(index)="row">
+                {{
+                  ++row.index +
+                  (Number(paginate.page) - 1) * Number(paginate.perPage)
+                }}
+              </template>
+              <template v-slot:cell(is_active)="row">
+                <p>
+                  {{
+                    row.item.is_active == 1
+                      ? $t("list_subjects.label.active")
+                      : $t("list_subjects.label.inActive")
+                  }}
+                </p>
+              </template>
+              <template v-slot:cell(actions)="row">
+                <b-icon
+                  icon="trash"
+                  variant="danger"
+                  font-scale="2"
+                  @click="deleteSubject(row.item.id)"
+                  class="deleteSubject"
+                ></b-icon>
+                <b-icon
+                  icon="info-circle"
+                  variant="info"
+                  font-scale="2"
+                  @click="detailSubject(row.item.id)"
+                  class="detailSubject"
+                ></b-icon>
+                <b-icon
+                  icon="pencil-square"
+                  variant="dark"
+                  font-scale="2"
+                  @click="
+                    $router.push({
+                      name: 'subject.edit',
+                      params: { id: row.item.id },
+                    })
+                  "
+                  class="updateSubject"
+                ></b-icon>
+              </template>
+            </b-table>
+            <div class="pagination">
+              <b-pagination
+                v-model="paginate.page"
+                :total-rows="paginate.total"
+                :per-page="paginate.perPage"
+                aria-controls="my-table"
+                @change="changePage(paginate.page)"
               >
-                <p class="my-4">
-                  {{ $t("list_subjects.label.nameSubject") }}
-                  {{ subject.name }}
-                </p>
-                <p class="my-4">
-                  {{ $t("list_subjects.label.countCourse") }}
-                  {{ this.count.countCourse }}
-                  {{ $t("list_subjects.label.courses") }}
-                </p>
-                <p class="my-4">
-                  {{ $t("list_subjects.label.countTask") }}
-                  {{ this.count.countTask }}
-                  {{ $t("list_subjects.label.task") }}
-                </p>
-                <p class="my-4">
-                  {{ $t("list_subjects.label.countTask") }}
-                  {{ this.count.countUser }}
-                  {{ $t("list_subjects.label.student") }}
-                </p>
-                <p class="my-4">
-                  {{ $t("list_subjects.label.countTask") }} 5
-                  {{ $t("list_subjects.label.finish") }}
-                </p>
-              </b-modal>
+              </b-pagination>
             </div>
           </div>
         </div>
@@ -167,13 +125,11 @@ import {
   DEFAULT_OPTION,
 } from "@/definition/constants";
 import ProjectsTable from "@/layout/HeaderCard";
-import Multiselect from "vue-multiselect";
 require("@/sass/modules/list-subject.css");
 
 export default {
   components: {
     ProjectsTable,
-    Multiselect,
   },
   data() {
     return {
@@ -184,17 +140,29 @@ export default {
         total: "",
         name: "",
       },
-      subject: {
-        name: "",
-        description: "",
-        is_active: "",
-      },
-      tableData: null,
-      count: {
-        countCourse: "",
-        countTask: "",
-        countUser: "",
-      },
+      subjects: [],
+      fields: [
+        { key: "index", label: this.$i18n.t("list_users.label.no") },
+        {
+          key: "name",
+          label: this.$i18n.t("list_subjects.label.name"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "description",
+          label: this.$i18n.t("list_subjects.label.description"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "is_active",
+          label: this.$i18n.t("list_subjects.label.is_active"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        { key: "actions", label: this.$i18n.t("list_subjects.label.action") },
+      ],
     };
   },
   created() {
@@ -210,17 +178,33 @@ export default {
       await this.$store
         .dispatch("subject/GET_SUBJECTS", { params: this.paginate })
         .then((response) => {
-          this.tableData = response.data.data;
+          this.subjects = response.data.data;
           this.paginate.perPage = response.data.per_page;
           this.paginate.total = response.data.total;
         });
     },
     async deleteSubject(id) {
-      if (confirm(this.$i18n.t("list_subjects.label.deleteConfirm"))) {
-        await this.$store.dispatch("subject/DESTROY_SUBJECT", id).then(() => {
-          this.getData();
-        });
-      }
+      swal({
+        title: this.$i18n.t("list_subjects.label.delete_confirm"),
+        text: this.$i18n.t("list_subjects.label.warning"),
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          swal(this.$i18n.t("list_subjects.label.delete_success"), {
+            icon: "success",
+          });
+          this.$store
+            .dispatch("subject/DESTROY_SUBJECT", id)
+            .then(() => {
+              this.getData();
+            })
+            .catch(() => {});
+        } else {
+          return;
+        }
+      });
     },
     async searchSubject() {
       this.getData();
