@@ -196,7 +196,10 @@
       "user_detail": "Chi tiết người dùng"
     },
     "label": {
-      "name": "Tên ",
+      "name": "Tên môn học",
+      "phone": "Số điện thoại",
+      "email": "Địa chỉ email",
+      "address": "Địa chỉ",
       "course_participated": "Các khóa học tham gia ",
       "course_completed": "Các khóa học đã hoàn thành ",
       "number_of_subject_participated": "Số lượng môn học tham gia ",
