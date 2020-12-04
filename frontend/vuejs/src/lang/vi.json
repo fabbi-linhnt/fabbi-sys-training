@@ -149,6 +149,8 @@
       "record": "Số bản ghi",
       "category": "Thể loại",
       "image": "Ảnh",
+      "user_course": "Các học viên của khóa học",
+      "course_detail": "Chi tiết khóa học",
       "delete_confirm": "Bạn có muốn xóa khóa học này không?",
       "delete_success": "Bạn đã xóa khóa học thành công",
       "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"

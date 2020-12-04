@@ -72,6 +72,20 @@ export default new Router({
         props: true,
       },
       {
+        path: '/subjects/detail/:id',
+        name: 'subject.detail',
+        component: () =>
+          import('@/views/Subjects/DetailSubject.vue'),
+        props: true,
+      },
+      {
+        path: '/courses/detail/:id',
+        name: 'course.detail',
+        component: () =>
+          import('@/views/Course/DetailCourse.vue'),
+        props: true,
+      },
+      {
         path: '/courses/create',
         name: 'course.create',
         component: () =>
