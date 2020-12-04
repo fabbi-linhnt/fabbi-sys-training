@@ -18,7 +18,7 @@ class TaskSeeder extends Seeder
                     'name'=>Str::random(10),
                     'description'=>Str::random(10),
                     'content'=>Str::random(10),
-                    'deadline'=>'2020-10-10',
+                    'time'=>rand(1,5),
                     'is_active'=>(bool)rand(0,1),
                 ]
             );
