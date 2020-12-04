@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Enums\ResponseStatusCode;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Validation\ValidationException;
@@ -64,13 +65,13 @@ class Handler extends ExceptionHandler
     private function getJsonMessage($e) {
         return [
             'code' => 500,
-            'message' => $e->getJsonMessage(),
+            'message' => $e->getMessage(),
             'errors' => $e->errors()
         ];
     }
 
     private function getExceptionHTTPStatusCode($e) {
-        return method_exists($e, 'getStatusCode' ? $e->getStatusCode() : 500);
+        return method_exists($e, 'getStatusCode') ? $e->getStatusCode() : ResponseStatusCode::INTERNAL_SERVER_ERROR;
     }
 
 }

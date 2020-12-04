@@ -2,6 +2,7 @@
 
 namespace App\Repositories\User;
 
+use App\Enums\ResponseMessage;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -23,37 +24,43 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function addUser(array $data)
     {
-        try {
-           $user = $this->user->create($data);
-           $userData = $this->user->find($user->id);
-           $courseId = $data['course'];
-           $userData->courses()->attach($courseId, ['status' => 'Create']);
+        DB::beginTransaction();
 
-           return [
-               'success' => true
-           ];
-        }
-        catch(\Exception $e) {
+        try {
+            if ($data['img_path'] == '') {
+                $data['img_path'] = config('configuser.images_default');
+            }
+            $user = $this->user->create($data);
+            $user->image()->create(['path' => $data['img_path']]);
+            $user->courses()->attach($data['course_id'], ['status' => config('configcourse.status_user_inactive')]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
             return [
                 'success' => false
             ];
         }
+
+        return [
+            'success' => true
+        ];
     }
 
     public function getListUser(array $data)
     {
-       $list = $this->model;
-       $perPage = $data['perPage'];
-       if(array_key_exists('search', $data) && !empty($data['search']))
-       {
-          $input = $data['search'];
-          $list = $list->where('name', 'LIKE', "%$input%");
-       }
+        $list = $this->model;
+        $perPage = $data['perPage'];
+        if (array_key_exists('search', $data) && !empty($data['search'])) {
+            $input = $data['search'];
+            $list = $list->where('name', 'LIKE', "%$input%");
+        }
 
-       return [
-          'success' => true,
-          'listUser' => $list->paginate($perPage)
-       ];
+        return [
+            'success' => true,
+            'listUser' => $list->paginate($perPage)
+        ];
     }
 
     public function countSubjectById($id)
@@ -66,12 +73,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 'success' => true,
                 'result' => $result
             ];
-        }
-        catch(\Exception $e)
-        {
-           return [
-               'success' => false
-           ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false
+            ];
         }
     }
 
@@ -85,12 +90,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 'success' => true,
                 'result' => $result
             ];
-        }
-        catch(\Exception $e)
-        {
-           return [
-               'success' => false
-           ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false
+            ];
         }
     }
 
@@ -104,90 +107,88 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 'success' => true,
                 'result' => $name
             ];
-        }
-        catch(\Exception $e)
-        {
-           return [
-               'success' => false
-           ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false
+            ];
         }
     }
 
     public function getUserInfoById($id)
     {
-       try {
-           $userData = $this->user->findOrFail($id);
-           $name = $userData->name;
-           $numberTask = $userData->tasks()->where('user_id', $id)->count();
-           $numberSubject = $userData->subjects()->where('user_id', $id)->count();
-           $courseParticipatedInfo = $userData->courses()->where('user_id', $id)->select('course_id')->get()->toArray();
-           foreach ($courseParticipatedInfo as $value)
-           {
+        try {
+            $userData = $this->user->findOrFail($id);
+            $name = $userData->name;
+            $numberTask = $userData->tasks()->where('user_id', $id)->count();
+            $numberSubject = $userData->subjects()->where('user_id', $id)->count();
+            $courseParticipatedInfo = $userData->courses()->where('user_id', $id)->select('course_id')->get()->toArray();
+            foreach ($courseParticipatedInfo as $value) {
                 $courseParticipatedName[] = DB::table('courses')->where('id', $value['course_id'])->value('name');
-           }
-           $result = array(
+            }
+            $result = array(
                 "name" => $name,
                 "numberSubject" => $numberSubject,
                 "numberTask" => $numberTask,
                 "courseParticipatedName" => $courseParticipatedName
             );
 
-           return [
-               'success' => true,
-               'result'  => $result
-           ];
-       }
-       catch(\Exception $e)
-       {
-           return [
-               'success' => false
-           ];
-       }
+            return [
+                'success' => true,
+                'result' => $result
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false
+            ];
+        }
     }
 
     public function deleteUserById($id)
     {
-        try
-        {
-           $userData = $this->user->findOrFail($id);
-           $userData->subjects()->detach();
-           $userData->courses()->detach();
-           $userData->tasks()->detach();
-           $userData->delete();
+        try {
+            $userData = $this->user->findOrFail($id);
+            $userData->subjects()->detach();
+            $userData->courses()->detach();
+            $userData->tasks()->detach();
+            $userData->delete();
 
-           return [
-               'success' => true
-           ];
-        }
-        catch(\Exception $e)
-        {
-           return [
-               'success' => false,
-               'message' => $e->getMessage()
-           ];
+            return [
+                'success' => true
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
         }
     }
 
-    public function updateUserById($data,$id)
+    public function updateUserById($data, $id)
     {
-       try
-       {
-          $userData = $this->user->findOrFail($id);
-          $userData->update($data);
-          $course_id = $data['course'];
-          $userData->courses()->detach();
-          $userData->courses()->attach($course_id, ['status' => 'Update']);
+        DB::beginTransaction();
+        try {
+            if ($data['img_path'] == '') {
+                $data['img_path'] = config('configuser.images_default');
+            }
+            $userData = $this->user->findOrFail($id);
+            $userData->update($data);
+            $course_id = $data['course'];
+            $userData->courses()->detach();
+            $userData->courses()->attach($course_id, ['status' => 'Update']);
+            $userData->image()->create(['path' => $data['img_path']]);
 
-          return [
-              'success' => true
-          ];
-       }
-       catch(\Exception $e)
-       {
-          return [
-              'success' => false,
-              'message' => $e->getMessage()
-          ];
-       }
+            DB::commit();
+            return [
+                'success' => true,
+                'message' => ResponseMessage::USER['UPDATE_SUCCESS']
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 }

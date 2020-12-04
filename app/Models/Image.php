@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    function users()
-    {
-        return $this->belongsTo(User::class, 'id', 'imgable_id');
-    }
+    protected $fillable = [
+        'path'
+    ];
 
-    function images()
+    public function imageable()
     {
-        return $this->belongsTo(Course::class, 'id', 'imgable_id');
+        return $this->morphTo();
     }
 }

@@ -32,7 +32,6 @@ class UserStoreRequest extends FormRequest
             'course_id' => 'required|array',
             'course_id.*' => 'exists:courses,id',
             'birthday' => 'required',
-            'img_path' => 'required',
         ];
     }
 }
