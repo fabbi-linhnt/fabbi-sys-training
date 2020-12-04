@@ -33,6 +33,7 @@ Vue.component('multiselect', Multiselect)
 Vue.component('Treeselect', Treeselect)
 Vue.use(Multiselect);
 Vue.use(Firebase);
+Vue.use(BootstrapVueIcons)
 
 
 router.beforeEach((to, from, next) => {

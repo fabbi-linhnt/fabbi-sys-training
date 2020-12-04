@@ -1,3 +1,19 @@
-.err{
+.err, .removeTagUser, .span-err{
   color: red;
 }
+#modal_action_user_search{
+  width: 350px;
+  float: right;
+}
+.tag-input__tag {
+  height: 30px;
+  float: left;
+  margin-right: 10px;
+  background-color: #eee;
+  margin-bottom: 10px;
+  line-height: 30px;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+

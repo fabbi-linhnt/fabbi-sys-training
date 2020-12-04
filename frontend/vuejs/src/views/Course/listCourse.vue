@@ -76,18 +76,27 @@
           </p>
         </template>
         <template v-slot:cell(actions)="row">
-          <b-button class="btn btn-danger" @click="destroyCourse(row.item.id)">
-            {{ $t("course_screen.button.delete") }}
-          </b-button>
-          <b-button
-            class="btn btn-success"
-            :to="{ name: 'course.edit', params: { id: row.item.id } }"
-          >
-            {{ $t("course_screen.button.update") }}
-          </b-button>
-          <b-button v-b-modal.modal-center @click="getData(row.item.id)">
-            {{ $t("course_screen.button.detail") }}
-          </b-button>
+          <b-icon
+            icon="trash"
+            font-scale="2"
+            variant="danger"
+            @click="destroyCourse(row.item.id)">
+          </b-icon>
+          <b-icon
+            variant="secondary"
+            font-scale="2"
+            icon="pencil-square"
+            class="distanceIcon"
+            @click="$router.push({ name: 'course.edit', params: { id: row.item.id } })">
+          </b-icon>
+          <b-icon
+            v-b-modal.modal-center
+            @click="getData(row.item.id)"
+            variant="info"
+            font-scale="2"
+            icon="info-circle"
+            class="distanceIcon">
+          </b-icon>
         </template>
       </b-table>
       <b-modal id="modal-center" centered title="BootstrapVue">
@@ -109,7 +118,8 @@
 </template>
 
 <script>
-import { DEFAULT_OPTION, DEFAULT_PERPAGE } from "@/definition/constants";
+import {DEFAULT_OPTION, DEFAULT_PERPAGE, DEFAULT_PAGE} from "@/definition/constants";
+
 require("@/sass/modules/list-course.css");
 
 export default {
@@ -140,9 +150,9 @@ export default {
       options: DEFAULT_OPTION,
       paginate: {
         perPage: DEFAULT_PERPAGE,
-        total: "0",
+        total: "",
         name: "",
-        page: "1",
+        page: DEFAULT_PAGE,
       },
       course: null,
     };
@@ -153,7 +163,7 @@ export default {
   methods: {
     async getData() {
       await this.$store
-        .dispatch("course/GET_COURSES", { params: this.paginate })
+        .dispatch("course/GET_COURSES", {params: this.paginate})
         .then((res) => {
           this.data = res.data;
           this.paginate.perPage = res.per_page;

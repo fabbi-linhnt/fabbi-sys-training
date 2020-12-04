@@ -10,7 +10,7 @@
         <div class="row">
           <div class="col-4">
             <div class="img-thumb">
-              <img src="../../assets/khanh.jpg" alt="">
+              <img src="../../assets/imgs/khanh.jpg" alt="">
             </div>
           </div>
           <div class="col-7">

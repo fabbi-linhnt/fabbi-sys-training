@@ -13,9 +13,7 @@
 
 .tag-input {
     width: 100%;
-    border: 1px solid #eee;
     font-size: 0.9em;
-    height: 50px;
     box-sizing: border-box;
     padding: 0 10px;
 }
@@ -41,6 +39,9 @@
 #modal_action_subject_search{
   width: 350px;
   float: right;
+}
+.span-err{
+  color: red;
 }
 .err{
   color: red;

@@ -37,7 +37,7 @@
         </multiselect>
       </div>
       <div style="clear: both"></div>
-      <br />
+      <br/>
       <b-table show-empty small stacked="md" :items="tasks" :fields="fields">
         <template #cell(index)="row">
           {{ ++row.index }}
@@ -52,21 +52,28 @@
           </p>
         </template>
         <template v-slot:cell(actions)="row">
-          <b-button class="btn btn-danger" @click="onDeleteTask(row.item.id)">
-            {{ $t("task_screen.label.task_delete") }}
-          </b-button>
-          <router-link
-            class="btn btn-success"
-            :to="{ name: 'task.edit', params: { id: row.item.id } }"
+          <b-icon
+            icon="trash"
+            font-scale="2"
+            variant="danger"
+            @click="onDeleteTask(row.item.id)">
+          </b-icon>
+          <b-icon
+            variant="secondary"
+            font-scale="2"
+            icon="pencil-square"
+            class="distanceIcon"
+            @click="$router.push({ name: 'task.edit', params: { id: row.item.id } })"
           >
             {{ $t("task_screen.label.task_update") }}
-          </router-link>
-          <router-link
-            class="btn btn-primary"
-            :to="{ name: 'task.detail', params: { id: row.item.id } }"
-          >
-            {{ $t("task_screen.label.task_detail") }}
-          </router-link>
+          </b-icon>
+          <b-icon
+            variant="info"
+            font-scale="2"
+            icon="info-circle"
+            class="distanceIcon"
+            @click="$router.push({ name: 'task.detail', params: { id: row.item.id } })">
+          </b-icon>
         </template>
         <template v-slot:cell(user_task)="row">
           <router-link
@@ -92,6 +99,7 @@
 
 <script>
 import { DEFAULT_OPTION, DEFAULT_PERPAGE, DEFAULT_PAGE } from "@/definition/constants";
+
 require("@/sass/modules/list-task.css");
 
 export default {
@@ -107,7 +115,7 @@ export default {
         name: "",
       },
       fields: [
-        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
+        {key: "index", label: this.$i18n.t("task_screen.label.task_index")},
         {
           key: "name",
           label: this.$i18n.t("task_screen.label.task_name"),
@@ -140,7 +148,7 @@ export default {
           key: "user_task",
           label: this.$i18n.t("task_screen.label.task_user"),
         },
-        { key: "actions", label: this.$i18n.t("task_screen.label.action") },
+        {key: "actions", label: this.$i18n.t("task_screen.label.action")},
       ],
     };
   },
@@ -157,7 +165,7 @@ export default {
         this.paginate.page = DEFAULT_PAGE;
       }
       this.$store
-        .dispatch("task/GET_TASKS", { params: this.paginate })
+        .dispatch("task/GET_TASKS", {params: this.paginate})
         .then((response) => {
           this.tasks = response.data;
           this.paginate.perPage = response.per_page;
@@ -183,7 +191,8 @@ export default {
             "success"
           );
         })
-        .catch(() => {});
+        .catch(() => {
+        });
     },
     customPaginate() {
       this.getData();

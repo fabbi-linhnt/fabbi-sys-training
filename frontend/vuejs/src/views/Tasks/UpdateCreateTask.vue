@@ -69,7 +69,6 @@
                       </b-input-group-append>
                     </b-input-group>
                   </b-form-group>
-
                 </div>
                 <div class="custom-modal">
                   <template>
@@ -113,101 +112,10 @@
               </b-modal>
             </div>
           </div>
-          <div class="">
-            <div class="tag-input">
-              <div
-                v-for="(subject, index) in submitSubject"
-                :key="subject.id"
-                class="tag-input__tag">
-                {{ subject.name }}
-                <span @click="removeTagSubject(index)">x</span>
-              </div>
-            </div>
-          </div>
-          <div style="clear: both"></div>
-          <br>
-          <div class="form-group">
-            <div>
-              <b-button v-b-modal.modal-center>{{
-                  $t("task_screen.button.add_user_btn")
-                }}
-              </b-button>
-              <b-modal
-                id="modal-center"
-                size="xl"
-                centered
-                :title="$t('task_screen.label.list_user')"
-              >
-                <div>
-                  <b-form-group
-                    label-cols-sm="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    label-for="filterInput"
-                    class="mb-3"
-                  >
-                    <b-input-group size="sm" id="modal_action_subject_search">
-                      <b-form-input
-                        v-model="paginateUser.search"
-                        type="search"
-                        id="filterInput"
-                        :placeholder="$t('course_screen.message.search_by_name')"
-                      ></b-form-input>
-                      <b-input-group-append>
-                        <b-button variant="primary" @click="getUsers()">
-                          {{ $t("course_screen.button.search") }}
-                        </b-button>
-                      </b-input-group-append>
-                    </b-input-group>
-                  </b-form-group>
-
-                </div>
-                <div class="custom-modal">
-                  <template>
-                    <div class="overflow-auto">
-                      <b-table id="my-table" :items="users" :fields="fieldUser">
-                        <template #cell(index)="row">
-                          {{ ++row.index }}
-                        </template>
-                        <template v-slot:cell(actions)="row">
-                          <input
-                            type="checkbox"
-                            v-model="submitUser"
-                            :value="row.item"
-                          />
-                        </template>
-                      </b-table>
-                      <b-pagination
-                        v-model="paginateUser.page"
-                        :total-rows="paginateUser.total"
-                        :per-page="paginateUser.perPage"
-                        aria-controls="my-table"
-                        @change="changePageUser"
-                      ></b-pagination>
-                    </div>
-                  </template>
-                </div>
-              </b-modal>
-            </div>
-          </div>
-          <div class="">
-            <div class="tag-input">
-              <div
-                v-for="(user, index) in submitUser"
-                :key="user.id"
-                class="tag-input__tag"
-              >
-                {{ user.name }}
-                <span @click="removeTagUser(index)">x</span>
-              </div>
-            </div>
-          </div>
-          <div style="clear: both"></div>
           <validation-provider
             :name="$t('task_screen.label.task_deadline') "
             rules="required|min:5|max:100 "
-            v-slot="{ errors }"
-          >
+            v-slot="{ errors }">
             <div class="form-group">
               <label>{{ $t("task_screen.label.task_deadline") }}</label>
               <input type="date" v-model="task.deadline" class="form-control"/>
@@ -238,7 +146,6 @@
 </template>
 
 <script>
-import {DEFAULT_PERPAGE_USER} from "@/definition/constants";
 import {DEFAULT_PERPAGE_SUBJECT} from "../../definition/constants";
 
 require("@/sass/modules/update-create-task.css");
@@ -247,25 +154,12 @@ export default {
   name: "UpdateTask",
   data() {
     return {
-      paginateUser: {
-        page: 1,
-        perPage: DEFAULT_PERPAGE_USER,
-        total: 0,
-        search: "",
-      },
       paginateSubject: {
         page: 1,
         perPage: DEFAULT_PERPAGE_SUBJECT,
         name: "",
         total: 0
       },
-      fieldUser: [
-        {key: "index", label: this.$i18n.t("common.label.index")},
-        {key: "name", label: this.$i18n.t("user_screen.label.name")},
-        {key: "phoneNumber", label: this.$i18n.t("user_screen.label.phone_number")},
-        {key: "email", label: this.$i18n.t("user_screen.label.email")},
-        {key: "actions", label: this.$i18n.t("user_screen.label.action")},
-      ],
       fieldSubject: [
         {key: "index", label: this.$i18n.t("common.label.index")},
         {key: "name", label: this.$i18n.t("list_subjects.label.name")},
@@ -273,8 +167,6 @@ export default {
         {key: "is_active", label: this.$i18n.t("list_subjects.label.is_active")},
         {key: "actions", label: this.$i18n.t("user_screen.label.action")},
       ],
-      users: [],
-      submitUser: [],
       task: {
         name: "",
         content: "",
@@ -284,12 +176,12 @@ export default {
       },
       subjects: [],
       submitSubject: [],
+      status: false,
     };
   },
   props: ["id"],
   created() {
     this.getAllSubject();
-    this.getUsers();
     if (this.id) {
       this.getTask();
       this.getSubjectOfTask();
@@ -297,22 +189,9 @@ export default {
     }
   },
   methods: {
-    changePageUser(page) {
-      this.paginateUser.page = page;
-      this.getUsers();
-    },
     changePageSubject(page) {
       this.paginateSubject.page = page;
       this.getAllSubject();
-    },
-    async getUsers() {
-      await this.$store
-        .dispatch("user/GET_USER", {params: this.paginateUser})
-        .then((response) => {
-          this.users = response.data.data;
-          this.paginateUser.perPage = response.data.per_page;
-          this.paginateUser.total = response.data.total;
-        });
     },
     async getAllSubject() {
       await this.$store.dispatch("subject/GET_SUBJECTS", {params: this.paginateSubject})
@@ -321,9 +200,6 @@ export default {
           this.paginateSubject.perPage = res.data.per_page;
           this.paginateSubject.total = res.data.total;
         });
-    },
-    removeTagUser(index) {
-      this.submitUser.splice(index, 1);
     },
     removeTagSubject(index) {
       this.submitSubject.splice(index, 1);
@@ -349,7 +225,6 @@ export default {
         .dispatch("task/GET_TASK_BY_ID", this.id)
         .then((response) => {
           this.task = response;
-          console.log(this.task)
         });
     },
     makeToast(message, variant) {
@@ -360,7 +235,7 @@ export default {
     },
     async onUpdateCreateTask() {
       if (this.submitSubject.length === 0 || this.submitUser.length === 0) {
-        return  this.$toast.warning( this.$i18n.t("message.you_forgot_important_data"), this.$i18n.t("message.caution"))
+        return this.status = true;
       }
       let subject_id = [];
       this.submitSubject.forEach((subject) => {
