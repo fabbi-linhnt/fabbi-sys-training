@@ -156,6 +156,8 @@
       "active": "Active",
       "inactive": "Inactive",
       "record": "Record",
+      "course_detail": "Course Detail",
+      "user_course": "Users of Course",
       "category": "Category",
       "image": "image",
       "delete_confirm": "Do you want to delete this course?",

@@ -161,6 +161,9 @@ export default {
     customPaginate() {
       this.getData();
     },
+    detailCourse(id) {
+      this.$router.push({ name: "course.detail", params: { id: id } });
+    },
     async destroyCourse(id) {
       swal({
         title: this.$i18n.t("course_screen.label.delete_confirm"),

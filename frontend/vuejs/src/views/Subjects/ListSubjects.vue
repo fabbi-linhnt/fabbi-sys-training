@@ -183,6 +183,9 @@ export default {
           this.paginate.total = response.data.total;
         });
     },
+    detailSubject(id) {
+      this.$router.push({ name: "subject.detail", params: { id: id } });
+    },
     async deleteSubject(id) {
       swal({
         title: this.$i18n.t("list_subjects.label.delete_confirm"),
