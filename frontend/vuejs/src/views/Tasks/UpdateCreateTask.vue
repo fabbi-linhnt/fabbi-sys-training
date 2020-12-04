@@ -1,156 +1,177 @@
 <template>
-  <div class="main-content">
-    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
-    </base-header>
-    <div class="content">
-      <h3>
-        {{
-          id
-            ? $t("task_screen.label.update_title")
-            : $t("task_screen.label.create_title")
-        }}
-      </h3>
-      <ValidationObserver v-slot="{ handleSubmit }">
-        <form action="" @submit.prevent="handleSubmit(onUpdateCreateTask)">
-          <validation-provider
-            :name="$t('task_screen.label.task_content') "
-            rules="required|min:3|max:20"
-            v-slot="{ errors }">
-            <div class="form-group">
-              <label>{{ $t("task_screen.label.task_content") }}</label>
-              <input type="text" v-model="task.content" class="form-control"/>
-            </div>
-            <span class="err">{{ errors[0] }}</span>
-          </validation-provider>
-        <validation-provider
-          :name="$t('task_screen.label.task_description') "
-          rules="required|min:5|max:100  "
-          v-slot="{ errors }">
-          <div class="form-group">
-            <label>{{ $t("task_screen.label.task_description") }}</label>
-            <textarea
-              type="text"
-              rows="10"
-              v-model="task.description"
-              class="form-control"
-            ></textarea>
-          </div>
-          <span class="err">{{ errors[0] }}</span>
-        </validation-provider>
-          <div class="form-group">
-            <div>
-              <b-button v-b-modal.modal-center-1 class="btn_add_subject">
-                {{ $t("task_screen.button.add_subject_btn") }}
-              </b-button>
-              <b-modal
-                id="modal-center-1"
-                size="xl"
-                centered
-                :title="$t('task_screen.label.list_subject')">
-                <div>
-                  <b-form-group
-                    label-cols-sm="3"
-                    label-align-sm="right"
-                    label-size="sm"
-                    label-for="filterInput"
-                    class="mb-3"
-                  >
-                    <b-input-group size="sm" id="modal_action_subject_search">
-                      <b-form-input
-                        v-model="paginateSubject.name"
-                        type="search"
-                        id="filterInput"
-                        :placeholder="$t('course_screen.message.search_by_name')"
-                      ></b-form-input>
-                      <b-input-group-append>
-                        <b-button variant="primary" @click="getAllSubject()">
-                          {{ $t("course_screen.button.search") }}
-                        </b-button>
-                      </b-input-group-append>
-                    </b-input-group>
-                  </b-form-group>
-                </div>
-                <div class="custom-modal">
-                  <template>
-                    <div class="overflow-auto">
-                      <b-table id="my-table" :items="subjects" :fields="fieldSubject">
-                        <template #cell(index)="row">
-                          {{ ++row.index }}
-                        </template>
-                        <template #cell(is_active)="row">
-                          <p>
-                            {{
-                              row.item.is_active === 1
-                                ? $t("course_screen.label.active")
-                                : $t("course_screen.label.inactive")
-                            }}
-                          </p>
-                        </template>
-                        <template
-                          v-slot:cell(actions)="row">
-                          <input
-                            v-if="row.item.is_active === 1"
-                            type="checkbox"
-                            v-model="submitSubject"
-                            :value="row.item"
-                          />
-                          <span id="modal_action_subject" v-else>
+<div>
+  <div>
+    <projects-table></projects-table>
+  </div>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col">
+        <div class="card shadow">
+          <div class="card-header border-0">
+            <div class="content">
+              <h3>
+                {{
+                  id
+                    ? $t("task_screen.label.update_title")
+                    : $t("task_screen.label.create_title")
+                }}
+              </h3>
+              <ValidationObserver v-slot="{ handleSubmit }">
+                <form action="" @submit.prevent="handleSubmit(onUpdateCreateTask)">
+                  <validation-provider
+                    :name="$t('task_screen.label.task_content') "
+                    rules="required|min:3|max:20"
+                    v-slot="{ errors }">
+                    <div class="form-group">
+                      <label>{{ $t("task_screen.label.task_content") }}</label>
+                      <input type="text" v-model="task.content" class="form-control"/>
+                    </div>
+                    <span class="err">{{ errors[0] }}</span>
+                  </validation-provider>
+                  <validation-provider
+                    :name="$t('task_screen.label.task_description') "
+                    rules="required|min:5|max:100  "
+                    v-slot="{ errors }">
+                    <div class="form-group">
+                      <label>{{ $t("task_screen.label.task_description") }}</label>
+                      <textarea
+                        type="text"
+                        rows="10"
+                        v-model="task.description"
+                        class="form-control"
+                      ></textarea>
+                    </div>
+                    <span class="err">{{ errors[0] }}</span>
+                  </validation-provider>
+                  <div class="form-group">
+                    <div>
+                      <b-button v-b-modal.modal-center-1 class="btn_add_subject">
+                        {{ $t("task_screen.button.add_subject_btn") }}
+                      </b-button>
+                      <b-modal
+                        id="modal-center-1"
+                        size="xl"
+                        centered
+                        :title="$t('task_screen.label.list_subject')">
+                        <div>
+                          <b-form-group
+                            label-cols-sm="3"
+                            label-align-sm="right"
+                            label-size="sm"
+                            label-for="filterInput"
+                            class="mb-3"
+                          >
+                            <b-input-group size="sm" id="modal_action_subject_search">
+                              <b-form-input
+                                v-model="paginateSubject.name"
+                                type="search"
+                                id="filterInput"
+                                :placeholder="$t('course_screen.message.search_by_name')"
+                              ></b-form-input>
+                              <b-input-group-append>
+                                <b-button variant="primary" @click="getAllSubject()">
+                                  {{ $t("course_screen.button.search") }}
+                                </b-button>
+                              </b-input-group-append>
+                            </b-input-group>
+                          </b-form-group>
+                        </div>
+                        <div class="custom-modal">
+                          <template>
+                            <div class="overflow-auto">
+                              <b-table id="my-table" :items="subjects" :fields="fieldSubject">
+                                <template #cell(index)="row">
+                                  {{ ++row.index }}
+                                </template>
+                                <template #cell(is_active)="row">
+                                  <p>
+                                    {{
+                                      row.item.is_active === 1
+                                        ? $t("course_screen.label.active")
+                                        : $t("course_screen.label.inactive")
+                                    }}
+                                  </p>
+                                </template>
+                                <template
+                                  v-slot:cell(actions)="row">
+                                  <input
+                                    v-if="row.item.is_active === 1"
+                                    type="checkbox"
+                                    v-model="submitSubject"
+                                    :value="row.item"
+                                  />
+                                  <span id="modal_action_subject" v-else>
                           x
                         </span>
-                        </template>
-                      </b-table>
-                      <b-pagination
-                        v-model="paginateSubject.page"
-                        :total-rows="paginateSubject.total"
-                        :per-page="paginateSubject.perPage"
-                        aria-controls="my-table"
-                        @change="changePageSubject"
-                      ></b-pagination>
+                                </template>
+                              </b-table>
+                              <b-pagination
+                                v-model="paginateSubject.page"
+                                :total-rows="paginateSubject.total"
+                                :per-page="paginateSubject.perPage"
+                                aria-controls="my-table"
+                                @change="changePageSubject"
+                              ></b-pagination>
+                            </div>
+                          </template>
+                        </div>
+                      </b-modal>
                     </div>
-                  </template>
-                </div>
-              </b-modal>
+                  </div>
+                  <validation-provider
+                    :name="$t('task_screen.label.task_deadline') "
+                    rules="required|min:5|max:100 "
+                    v-slot="{ errors }">
+                    <div class="form-group">
+                      <label>{{ $t("task_screen.label.task_deadline") }}</label>
+                      <input type="date" v-model="task.deadline" class="form-control"/>
+                    </div>
+                    <span class="err">{{ errors[0] }}</span>
+                  </validation-provider>
+                  <div class="form-group">
+                    <input type="checkbox" v-model="task.is_active"/>
+                    <p>
+                      {{
+                        task.is_active == 1
+                          ? $t("task_screen.label.task_active")
+                          : $t("task_screen.label.task_inactive")
+                      }}
+                    </p>
+                  </div>
+                  <b-button
+                    class="btn btn-danger float-right"
+                    :to="{ name: 'tasks.list' }"
+                    variant="danger">
+                    {{ $t("course_screen.button.cancel") }}
+                  </b-button>
+                  <button class="btn btn-success float-right">
+                    {{
+                      id
+                        ? $t("task_screen.button.update_btn")
+                        : $t("task_screen.button.create_btn")
+                    }}
+                  </button>
+                </form>
+              </ValidationObserver>
             </div>
           </div>
-          <validation-provider
-            :name="$t('task_screen.label.task_deadline') "
-            rules="required|min:5|max:100 "
-            v-slot="{ errors }">
-            <div class="form-group">
-              <label>{{ $t("task_screen.label.task_deadline") }}</label>
-              <input type="date" v-model="task.deadline" class="form-control"/>
-            </div>
-            <span class="err">{{ errors[0] }}</span>
-          </validation-provider>
-          <div class="form-group">
-            <input type="checkbox" v-model="task.is_active"/>
-            <p>
-              {{
-                task.is_active == 1
-                  ? $t("task_screen.label.task_active")
-                  : $t("task_screen.label.task_inactive")
-              }}
-            </p>
-          </div>
-          <button class="btn btn-primary">
-            {{
-              id
-                ? $t("task_screen.button.update_btn")
-                : $t("task_screen.button.create_btn")
-            }}
-          </button>
-        </form>
-      </ValidationObserver>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
 </template>
 
 <script>
+import ProjectsTable from "@/layout/HeaderCard";
 import {DEFAULT_PERPAGE_SUBJECT} from "../../definition/constants";
-
 require("@/sass/modules/update-create-task.css");
 
 export default {
+  components: {
+    ProjectsTable,
+  },
   name: "UpdateTask",
   data() {
     return {
