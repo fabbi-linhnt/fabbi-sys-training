@@ -70,7 +70,7 @@
                         {{
                           subject.is_active == 1
                             ? $t("list_subjects.label.active")
-                            : $t("list_subjects.label.unActive")
+                            : $t("list_subjects.label.inActive")
                         }}
                       </p>
                     </div>
@@ -100,7 +100,7 @@
                             <b-button
                               size="sm"
                               text="Button"
-                              variant="success"
+                              variant="info"
                               @click.prevent="getCourses()"
                             >
                               {{ $t("list_users.button.search_btn") }}
@@ -117,7 +117,10 @@
                               :fields="fieldsCourses"
                             >
                               <template #cell(index)="row">
-                                {{ ++row.index }}
+                                {{
+                                  ++row.index +
+                                  (Number(paginateCourse.page) - 1) * Number(paginateCourse.perPage)
+                                }}
                               </template>
                               <template v-slot:cell(actions)="row">
                                 <input
@@ -132,7 +135,7 @@
                               :total-rows="paginateCourse.total"
                               :per-page="paginateCourse.perPage"
                               aria-controls="my-table"
-                              @change="changePageCourse"
+                              @change="changePageCourse(paginateCourse.page)"
                             ></b-pagination>
                           </div>
                         </template>
@@ -190,7 +193,7 @@
                             <b-button
                               size="sm"
                               text="Button"
-                              variant="success"
+                              variant="info"
                               @click.prevent="getTasks()"
                             >
                               {{ $t("list_users.button.search_btn") }}
@@ -207,7 +210,10 @@
                               :fields="fields"
                             >
                               <template #cell(index)="row">
-                                {{ ++row.index }}
+                                {{
+                                  ++row.index +
+                                  (Number(paginateTask.page) - 1) * Number(paginateTask.perPage)
+                                }}
                               </template>
                               <template v-slot:cell(actions)="row">
                                 <input
@@ -222,7 +228,7 @@
                               :total-rows="paginateTask.total"
                               :per-page="paginateTask.perPage"
                               aria-controls="my-table"
-                              @change="changePageTask"
+                              @change="changePageTask(paginateTask.page)"
                             ></b-pagination>
                           </div>
                         </template>
@@ -252,7 +258,7 @@
                       {{ $t("list_subjects.label.add_tasks_error") }}
                     </span>
                   </b-form-group>
-                  <button id="update-add-subject" class="btn btn-primary">
+                  <button id="update-add-subject" class="btn btn-success">
                     {{
                       id
                         ? $t("list_subjects.button.update")
@@ -261,7 +267,7 @@
                   </button>
                   <router-link
                     id="cancel"
-                    class="btn btn-success"
+                    class="btn btn-danger"
                     :to="{ name: 'subjects.list' }"
                     >{{ $t("list_subjects.button.cancel") }}
                   </router-link>
@@ -299,6 +305,7 @@ export default {
         name: "",
       },
       fieldsCourses: [
+        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
         {
           key: "name",
           label: this.$i18n.t("course_screen.label.name"),
@@ -306,10 +313,6 @@ export default {
         {
           key: "description",
           label: this.$i18n.t("course_screen.label.description"),
-        },
-        {
-          key: "is_active",
-          label: this.$i18n.t("course_screen.label.is_active"),
         },
         {
           key: "actions",

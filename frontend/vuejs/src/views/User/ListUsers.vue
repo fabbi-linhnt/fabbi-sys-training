@@ -49,7 +49,6 @@
                 </b-button>
               </b-input-group-append>
             </b-input-group>
-            <div style="clear: both"></div>
             <br />
             <b-table
               show-empty
@@ -112,7 +111,6 @@ import {
   DEFAULT_PAGE,
 } from "@/definition/constants";
 import ProjectsTable from "@/layout/HeaderCard";
-import swal from "sweetalert";
 require("@/sass/modules/list-user.css");
 
 export default {

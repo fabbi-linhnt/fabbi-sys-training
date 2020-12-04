@@ -1,108 +1,152 @@
 <template>
-  <div class="main-content">
-    <base-header
-      type="gradient-success"
-      class="pb-6 pb-8 pt-5 pt-md-8"
-    ></base-header>
-    <div class="content">
-      <router-link to="/tasks/create" class="btn btn-primary">
-        {{ $t("task_screen.label.create_task") }}
-      </router-link>
-      <form
-        class="form-inline d-flex justify-content-center md-form form-sm mt-0 col-4"
-        @submit.prevent="getData()"
-      >
-        <label>{{ $t("task_screen.label.search_task") }}</label>
-        <input
-          class="form-control form-control-sm ml-3 w-75"
-          type="text"
-          v-model="paginate.name"
-          v-bind:placeholder="$t('task_screen.label.search_task')"
-          aria-label="Search"
-        />
-        <button class="btn">{{ $t("task_screen.button.search_btn") }}</button>
-      </form>
-      <div class="custom-paginate">
-        <label class="typo__label">
-          {{ $t("task_screen.label.custom_paginate") }}
-        </label>
-        <multiselect
-          v-model="paginate.perPage"
-          :options="options"
-          :searchable="false"
-          :close-on-select="false"
-          :show-labels="false"
-          @select="customPaginate()"
-        >
-        </multiselect>
-      </div>
-      <div style="clear: both"></div>
-      <br/>
-      <b-table show-empty small stacked="md" :items="tasks" :fields="fields">
-        <template #cell(index)="row">
-          {{ ++row.index }}
-        </template>
-        <template v-slot:cell(is_active)="row">
-          <p>
-            {{
-              row.item.is_active == 1
-                ? $t("task_screen.label.task_active")
-                : $t("task_screen.label.task_inactive")
-            }}
-          </p>
-        </template>
-        <template v-slot:cell(actions)="row">
-          <b-icon
-            icon="trash"
-            font-scale="2"
-            variant="danger"
-            @click="onDeleteTask(row.item.id)">
-          </b-icon>
-          <b-icon
-            variant="secondary"
-            font-scale="2"
-            icon="pencil-square"
-            class="distanceIcon"
-            @click="$router.push({ name: 'task.edit', params: { id: row.item.id } })"
-          >
-            {{ $t("task_screen.label.task_update") }}
-          </b-icon>
-          <b-icon
-            variant="info"
-            font-scale="2"
-            icon="info-circle"
-            class="distanceIcon"
-            @click="$router.push({ name: 'task.detail', params: { id: row.item.id } })">
-          </b-icon>
-        </template>
-        <template v-slot:cell(user_task)="row">
-          <router-link
-            class="btn btn-primary"
-            :to="{ name: 'reports.list', params: { id: row.item.id } }"
-          >
-            {{ $t("report_screen.label.list_report") }}
-          </router-link>
-        </template>
-      </b-table>
-      <div class="pagination">
-        <b-pagination
-          v-model="paginate.page"
-          :total-rows="paginate.total"
-          :per-page="paginate.perPage"
-          aria-controls="my-table"
-          @change="changePage"
-        ></b-pagination>
+  <div>
+    <div>
+      <projects-table></projects-table>
+    </div>
+    <div class="container-fluid mt-2">
+      <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">
+                    {{ $t("task_screen.label.list_tasks") }}
+                  </h3>
+                  <router-link
+                    class="btn btn-primary"
+                    :to="{ name: 'user.create' }"
+                  >
+                    {{ $t("list_users.label.add") }}
+                  </router-link>
+                </div>
+                <div class="col text-right">
+                  <div class="paginate">
+                    <label class="typo__label">
+                      {{ $t("course_screen.label.record") }}
+                    </label>
+                    <multiselect
+                      v-model="paginate.perPage"
+                      :options="options"
+                      :searchable="false"
+                      :close-on-select="false"
+                      :show-labels="false"
+                      @select="customPaginate()"
+                    >
+                    </multiselect>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <b-input-group class="mt-3">
+              <b-form-input
+                :placeholder="$t('list_users.label.search_user')"
+                v-model="paginate.name"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-button variant="info" @click="getData()">
+                  {{ $t("list_users.label.search") }}
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+            <br />
+            <b-table
+              show-empty
+              small
+              stacked="md"
+              :items="tasks"
+              :fields="fields"
+            >
+              <template #cell(index)="row">
+                {{
+                  ++row.index +
+                  (Number(paginate.page) - 1) * Number(paginate.perPage)
+                }}
+              </template>
+              <template v-slot:cell(is_active)="row">
+                <p>
+                  {{
+                    row.item.is_active == 1
+                      ? $t("task_screen.label.task_active")
+                      : $t("task_screen.label.task_inactive")
+                  }}
+                </p>
+              </template>
+              <template v-slot:cell(actions)="row">
+                <b-icon
+                  icon="trash"
+                  font-scale="2"
+                  variant="danger"
+                  @click="onDeleteTask(row.item.id)"
+                  class="deleteTask"
+                >
+                </b-icon>
+                <b-icon
+                  variant="info"
+                  font-scale="2"
+                  icon="info-circle"
+                  class="detailTask"
+                  @click="
+                    $router.push({
+                      name: 'task.detail',
+                      params: { id: row.item.id },
+                    })
+                  "
+                >
+                  {{ $t("task_screen.label.task_update") }}
+                </b-icon>
+                <b-icon
+                  variant="dark"
+                  font-scale="2"
+                  icon="pencil-square"
+                  class="updateTask"
+                  @click="
+                    $router.push({
+                      name: 'task.edit',
+                      params: { id: row.item.id },
+                    })
+                  "
+                >
+                </b-icon>
+              </template>
+              <template v-slot:cell(user_task)="row">
+                <router-link
+                  class="btn btn-primary"
+                  :to="{ name: 'reports.list', params: { id: row.item.id } }"
+                >
+                  {{ $t("report_screen.label.list_report") }}
+                </router-link>
+              </template>
+            </b-table>
+            <div class="pagination">
+              <b-pagination
+                v-model="paginate.page"
+                :total-rows="paginate.total"
+                :per-page="paginate.perPage"
+                aria-controls="my-table"
+                @change="changePage(paginate.page)"
+              ></b-pagination>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { DEFAULT_OPTION, DEFAULT_PERPAGE, DEFAULT_PAGE } from "@/definition/constants";
-
+import {
+  DEFAULT_OPTION,
+  DEFAULT_PERPAGE,
+  DEFAULT_PAGE,
+} from "@/definition/constants";
+import ProjectsTable from "@/layout/HeaderCard";
 require("@/sass/modules/list-task.css");
 
 export default {
+  components: {
+    ProjectsTable,
+  },
   name: "Tasks",
   data() {
     return {
@@ -115,7 +159,7 @@ export default {
         name: "",
       },
       fields: [
-        {key: "index", label: this.$i18n.t("task_screen.label.task_index")},
+        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
         {
           key: "name",
           label: this.$i18n.t("task_screen.label.task_name"),
@@ -148,7 +192,7 @@ export default {
           key: "user_task",
           label: this.$i18n.t("task_screen.label.task_user"),
         },
-        {key: "actions", label: this.$i18n.t("task_screen.label.action")},
+        { key: "actions", label: this.$i18n.t("task_screen.label.action") },
       ],
     };
   },
@@ -165,34 +209,35 @@ export default {
         this.paginate.page = DEFAULT_PAGE;
       }
       this.$store
-        .dispatch("task/GET_TASKS", {params: this.paginate})
+        .dispatch("task/GET_TASKS", { params: this.paginate })
         .then((response) => {
           this.tasks = response.data;
           this.paginate.perPage = response.per_page;
           this.paginate.total = response.total;
         });
     },
-    makeToast(message, variant) {
-      this.$bvToast.toast(message, {
-        variant: variant,
-        solid: true,
-      });
-    },
     async onDeleteTask(id) {
-      if (!confirm("Xóa?")) {
-        return;
-      }
-      await this.$store
-        .dispatch("task/DESTROY_TASK", id)
-        .then(() => {
-          this.getData();
-          this.makeToast(
-            this.$i18n.t("task_screen.message.task_msgDelete"),
-            "success"
-          );
-        })
-        .catch(() => {
-        });
+      swal({
+        title: this.$i18n.t("task_screen.message.delete_confirm"),
+        text: this.$i18n.t("task_screen.message.warning"),
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          swal(this.$i18n.t("task_screen.message.delete_success"), {
+            icon: "success",
+          });
+          this.$store
+            .dispatch("task/DESTROY_TASK", id)
+            .then(() => {
+              this.getData();
+            })
+            .catch(() => {});
+        } else {
+          return;
+        }
+      });
     },
     customPaginate() {
       this.getData();

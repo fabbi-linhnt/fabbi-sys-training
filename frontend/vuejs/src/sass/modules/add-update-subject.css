@@ -5,12 +5,10 @@
 #update-add-subject {
     float: right;
     margin-right: 10%;
-    background-color: blue;
 }
 
 #cancel {
     float: right;
-    background-color: red;
     margin-right: 5%;
 }
 

@@ -36,7 +36,10 @@
       "task_msgDelete": "Xóa thành công",
       "task_msgUpdate": "Cập nhật thành công",
       "task_msgCreate": "Thêm mới thành công",
-      "required" : "Trường bắt buộc"
+      "required" : "Trường bắt buộc",
+      "delete_confirm": "Bạn có muốn xóa bài tập này không?",
+      "delete_success": "Bạn đã xóa bài tập thành công",
+      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"
     },
     "button": {
       "search_btn": "Tìm kiếm",
@@ -54,8 +57,8 @@
       "is_active": "Tình Trạng",
       "action": "Hành Động",
       "course": "Khóa học",
-      "active": "Hiện",
-      "unActive": "Ẩn",
+      "active": "Đang hiện",
+      "inActive": "Đang ẩn",
       "nameCourse": "Tên Khóa Học",
       "countCourse": "Môn học này thuộc về ",
       "countTask": "Môn học này có",
@@ -74,7 +77,10 @@
       "add_tasks_error": "Ban cần thêm bài tập",
       "add_courses_error": "Bạn cần thêm khóa học",
       "success" : "Thành công",
-      "error" : "Thất bại"
+      "error" : "Thất bại",
+      "delete_confirm": "Bạn có muốn xóa môn học này không?",
+      "delete_success": "Bạn đã xóa môn học thành công",
+      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"
     },
     "title": {
       "list_subjects": "Danh sách môn học",
@@ -142,7 +148,10 @@
       "inactive": "Ẩn",
       "record": "Số bản ghi",
       "category": "Thể loại",
-      "image": "Ảnh"
+      "image": "Ảnh",
+      "delete_confirm": "Bạn có muốn xóa khóa học này không?",
+      "delete_success": "Bạn đã xóa khóa học thành công",
+      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"
     },
     "button": {
       "submit": "Lưu",
