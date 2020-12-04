@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import {DEFAULT_OPTION, DEFAULT_PERPAGE} from "@/definition/constants";
+import { DEFAULT_OPTION, DEFAULT_PERPAGE, DEFAULT_PAGE } from "@/definition/constants";
 
 require("@/sass/modules/list-task.css");
 
@@ -109,9 +109,9 @@ export default {
       options: DEFAULT_OPTION,
       tasks: [],
       paginate: {
-        page: 1,
+        page: DEFAULT_PAGE,
         perPage: DEFAULT_PERPAGE,
-        total: 0,
+        total: "",
         name: "",
       },
       fields: [
@@ -162,7 +162,7 @@ export default {
     },
     getData() {
       if (this.paginate.name) {
-        this.paginate.page = 1;
+        this.paginate.page = DEFAULT_PAGE;
       }
       this.$store
         .dispatch("task/GET_TASKS", {params: this.paginate})

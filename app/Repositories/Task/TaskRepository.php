@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Task;
 
+use App\Enums\ResponseMessage;
 use App\Models\Task;
 use App\Repositories\BaseRepository;
 use App\Repositories\Task\TaskRepositoryInterface;
@@ -179,5 +180,72 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
             'success' => true,
             'data' => $data
         ];
+    }
+
+    public function assignUserToTaskById($userId, $id)
+    {
+        try {
+            $checkUserActive = DB::table('user_task')
+                ->where('user_id', $userId)
+                ->where('status', config('configtask.status_user_activity'))
+                ->count();
+            if ($checkUserActive >= 1) {
+                return [
+                    'success' => false,
+                    'message' => ResponseMessage::TASK['USER_ACTIVATING']
+                ];
+            }
+            else {
+                $countTaskOfUser = DB::table('user_task')
+                    ->where('user_id', $userId)
+                    ->where('task_id', $id)
+                    ->count();
+                if ($countTaskOfUser >= 1)
+                {
+                    DB::table('user_task')
+                        ->where('user_id', $userId)
+                        ->where('task_id', $id)
+                        ->update(['status' => config('configtask.status_user_activity')]);
+
+                    return [
+                        'success' => true,
+                        'message' => ResponseMessage::TASK['ASSIGN_SUCCESS']
+                    ];
+                }
+                else {
+                    $countSubjectOfUser = 0;
+                    $task = $this->model->findOrFail($id);
+                    $subjectId = $task->subjects;
+                    foreach ($subjectId as $subject) {
+                        $checkUserSubject = DB::table('user_subject')
+                            ->where('user_id', $userId)
+                            ->where('subject_id', $subject->id)
+                            ->where('status', config('configtask.status_user_activity'))
+                            ->count();
+                        if ($checkUserSubject >= 1) $countSubjectOfUser++;
+                    }
+                    if ($countSubjectOfUser >= 1) {
+                        $task->users()->attach($userId, ['status' => config('configtask.status_user_activity')]);
+
+                        return [
+                            'success' => true,
+                            'message' => ResponseMessage::TASK['ASSIGN_SUCCESS']
+                        ];
+                    }
+                    else {
+                        return [
+                            'success' => false,
+                            'message' => ResponseMessage::TASK['ASSIGN_ERROR']
+                        ];
+                    }
+                }
+            }
+        }
+        catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 }

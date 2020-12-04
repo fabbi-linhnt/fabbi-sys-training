@@ -6,6 +6,7 @@
   },
   "task_screen": {
     "label": {
+      "list_tasks" : "Danh sách bài tập",
       "task_name": "Tên bài tập",
       "task_content": "Đề bài",
       "task_description": "Mô tả",
@@ -65,7 +66,15 @@
       "courses": "khóa học",
       "nameSubject": "Tên của môn học này là: ",
       "deleteConfirm": "Bạn có muốn xóa môn học này không?",
-      "selectRecords": "Chọn số lượng bản ghi trả về"
+      "selectRecords": "Chọn số lượng bản ghi trả về",
+      "update_success": "Bạn đã cập nhật môn học thành công",
+      "add_tasks": "Thêm bài tập",
+      "add_courses": "Thêm khóa học",
+      "add_success": "Bạn đã thêm mới môn học thành công",
+      "add_tasks_error": "Ban cần thêm bài tập",
+      "add_courses_error": "Bạn cần thêm khóa học",
+      "success" : "Thành công",
+      "error" : "Thất bại"
     },
     "title": {
       "list_subjects": "Danh sách môn học",
@@ -109,7 +118,10 @@
       "email": "Email",
       "password": "Mật khẩu",
       "course": "Khóa học",
-      "action": "Hành động"
+      "action": "Hành động",
+      "delete_confirm": "Bạn có muốn xóa người dùng này không?",
+      "delete_success": "Bạn đã xóa người dùng thành công",
+      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"
     },
     "button": {
       "submit": "Gửi"
@@ -190,7 +202,7 @@
     },
     "label": {
       "custom_paginate": "Chọn số bản ghi",
-      "search_task": "Tìm kiếm theo tên",
+      "search_user": "Tìm kiếm theo tên",
       "add": "Thêm mới",
       "search": "Tìm kiếm",
       "no": "Stt",
