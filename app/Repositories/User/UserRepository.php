@@ -172,7 +172,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             }
             $userData = $this->user->findOrFail($id);
             $userData->update($data);
-            $course_id = $data['course'];
+            $course_id = $data['course_id'];
             $userData->courses()->detach();
             $userData->courses()->attach($course_id, ['status' => 'Update']);
             $userData->image()->create(['path' => $data['img_path']]);

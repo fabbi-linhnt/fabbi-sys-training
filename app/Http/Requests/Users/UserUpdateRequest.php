@@ -23,11 +23,12 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->user;
         return [
             'name' => 'required|min:3|max:50',
-            'email' => 'required|min:10|max:50|unique:users',
+            'email' => 'required|min:10|max:50|unique:users,email,' . $id,
             'password' => 'required|min:6|max:20',
-            'phone' => 'required|numeric|digits:10|unique:users',
+            'phone' => 'required|numeric|digits:10|unique:users,phone,' . $id,
             'address' => 'required',
             'course_id' => 'required|array',
             'course_id.*' => 'exists:courses,id',

@@ -16,8 +16,7 @@
         "laravel/framework": "^7.24",
         "laravel/tinker": "^2.0",
         "myclabs/php-enum": "^1.7",
-        "tymon/jwt-auth": "^1.0",
-      "ext-mysql_xdevapi": "*"
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
