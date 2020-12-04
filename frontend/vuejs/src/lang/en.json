@@ -206,6 +206,9 @@
     },
     "label": {
       "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
       "course_participated": "Course Participated",
       "course_completed": "Course Completed",
       "number_of_subject_participated": "Number of Subject Participated",
