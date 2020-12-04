@@ -6,6 +6,7 @@
   },
   "task_screen": {
     "label": {
+      "list_task" : "List tasks",
       "task_name": "Title",
       "task_content": "Content",
       "task_description": "Description",
@@ -70,7 +71,15 @@
       "courses": "Courses",
       "nameSubject": "This Subject's name is: ",
       "deleteConfirm": "Do you want to delete this subject?",
-      "selectRecords": "Select the number of records to return"
+      "selectRecords": "Select the number of records to return",
+      "update_success": "You have update this subject successfully!",
+      "add_tasks": "Add tasks",
+      "add_courses": "Add courses",
+      "add_success": "You have added a new subject successfully!",
+      "add_tasks_error": "You need to add tasks",
+      "add_courses_error": "You need to add courses",
+      "success" : "Success",
+      "error" : "Error"
     },
     "title": {
       "list_subjects": "List Subjects",
@@ -198,7 +207,7 @@
     },
     "label": {
       "custom_paginate": "Pick option",
-      "search_task": "Search",
+      "search_user": "Search",
       "add": "Add",
       "search": "Search",
       "address": "Address",

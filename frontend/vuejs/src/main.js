@@ -10,11 +10,10 @@ import authToken from './utils/token'
 import VueIziToast from 'vue-izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import i18n from './utils/i18n';
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Multiselect from 'vue-multiselect';
-import Vuetify from 'vuetify';
 import Firebase from 'firebase';
 import { ValidationObserver, ValidationProvider  } from "vee-validate";
 import { loadVeeValidate } from './utils/custom-veevalidate';
@@ -25,6 +24,7 @@ loadVeeValidate();
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.use(BootstrapVue);
+Vue.use(BootstrapVueIcons)
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
 Vue.use(ArgonDashboard);
@@ -77,6 +77,5 @@ new Vue({
   router,
   store,
   i18n,
-  Vuetify,
   render: h => h(App)
 }).$mount('#app')

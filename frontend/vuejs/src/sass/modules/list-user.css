@@ -2,8 +2,16 @@
     padding: 50px;
 }
 
-.custom-paginate {
+.paginate {
     float: right;
-    margin-right: 50px;
-    width: 200px;
+    width: 10vw;
+}
+
+.updateUser, .detailUser {
+    margin-left: 1vw;
+}
+
+.mt-3 {
+    width: 20vw;
+    margin-left: 2vw;
 }

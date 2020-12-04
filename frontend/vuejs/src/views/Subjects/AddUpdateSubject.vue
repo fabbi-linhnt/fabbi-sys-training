@@ -10,125 +10,264 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0" v-if="id">
-                    {{ $t("list_subjects.title.editSubject") }}
-                  </h3>
-                  <h3 class="mb-0" v-else>
-                    {{ $t("list_subjects.title.addSubject") }}
+                  <h3 class="mb-0">
+                    {{
+                      id
+                        ? $t("list_subjects.title.editSubject")
+                        : $t("list_subjects.title.addSubject")
+                    }}
                   </h3>
                 </div>
               </div>
             </div>
-            <form>
-              <div class="form-group" id="subject-name">
-                <label for="exampleInputEmail1">{{
-                  $t("list_subjects.label.name")
-                }}</label>
-                <input
-                  v-model="subject.name"
-                  id="name"
-                  class="form-control"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div class="form-group" id="subject-description">
-                <label for="exampleInputPassword1">{{
-                  $t("list_subjects.label.description")
-                }}</label>
-                <textarea
-                  v-model="subject.description"
-                  id="description"
-                  class="form-control"
-                  name=""
-                  cols="50"
-                  rows="10"
-                ></textarea>
-              </div>
-              <label class="radio" for="exampleInputPassword1">
-                {{ $t("list_subjects.label.is_active") }}
-              </label>
-              <div class="radio">
-                <label
-                  ><input
-                    v-if="subject.is_active == false"
-                    type="radio"
-                    id="unActive"
-                    name="exampleRadios"
-                    value=""
-                    checked
-                  />
-                  <input
-                    v-else
-                    type="radio"
-                    id="unActive"
-                    name="exampleRadios"
-                    value=""
-                  />{{ $t("list_subjects.label.unActive") }}
-                </label>
-              </div>
-              <div class="radio">
-                <label
-                  ><input
-                    v-if="subject.is_active"
-                    type="radio"
-                    id="active"
-                    name="exampleRadios"
-                    value=""
-                    checked
-                  />
-                  <input
-                    v-else
-                    type="radio"
-                    id="active"
-                    name="exampleRadios"
-                    value=""
-                  />{{ $t("list_subjects.label.active") }}
-                </label>
-              </div>
-              <div class="form-group" id="multiselect-course">
-                <label for="exampleInputPassword1">
-                  {{ $t("list_subjects.label.course") }}
-                </label>
-                <multiselect
-                  v-model="value"
-                  :options="courseData"
-                  :multiple="true"
-                  :close-on-select="false"
-                  :clear-on-select="false"
-                  :preserve-search="true"
-                  :placeholder="$t('list_subjects.label.nameCourse')"
-                  label="name"
-                  track-by="name"
-                  :preselect-first="true"
-                >
-                </multiselect>
-              </div>
-
-              <button
-                v-if="id"
-                id="update-subject"
-                type="submit"
-                class="btn btn-success"
-                @click="update()"
-              >
-                {{ $t("list_subjects.button.update") }}
-              </button>
-              <button
-                v-else
-                id="add-subject"
-                type="submit"
-                class="btn btn-success"
-                @click="add()"
-              >
-                {{ $t("list_subjects.button.add") }}
-              </button>
-              <router-link
-                id="cancel"
-                class="btn btn-success"
-                :to="{ name: 'subjects.list' }"
-                >{{ $t("list_subjects.button.cancel") }}
-              </router-link>
-            </form>
+            <div class="content">
+              <ValidationObserver v-slot="{ handleSubmit }">
+                <form @submit.prevent="handleSubmit(onSubmit)">
+                  <b-form-group
+                    id="subject-name"
+                    :label="$t('list_subjects.label.name')"
+                    label-for="input-1"
+                  >
+                    <ValidationProvider
+                      :name="$t('list_subjects.label.name')"
+                      rules="required|min:5|max:20"
+                      v-slot="{ errors }"
+                    >
+                      <b-form-input
+                        :placeholder="$t('list_subjects.label.name')"
+                        v-model="subject.name"
+                        class="form-control"
+                      />
+                      <span class="span-error">{{ errors[0] }}</span>
+                    </ValidationProvider>
+                  </b-form-group>
+                  <b-form-group
+                    id="subject-description"
+                    :label="$t('list_subjects.label.description')"
+                  >
+                    <ValidationProvider
+                      :name="$t('list_subjects.label.description')"
+                      rules="required|min:5"
+                      v-slot="{ errors }"
+                    >
+                      <b-form-textarea
+                        :placeholder="$t('list_subjects.label.description')"
+                        v-model="subject.description"
+                        class="form-control"
+                        cols="50"
+                        rows="10"
+                      />
+                      <span class="span-error">{{ errors[0] }}</span>
+                    </ValidationProvider>
+                  </b-form-group>
+                  <div>
+                    <label class="radio" for="exampleInputPassword1">
+                      {{ $t("list_subjects.label.is_active") }}
+                    </label>
+                    <div id="check-active">
+                      <input type="checkbox" v-model="subject.is_active" />
+                      <p>
+                        {{
+                          subject.is_active == 1
+                            ? $t("list_subjects.label.active")
+                            : $t("list_subjects.label.unActive")
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <b-form-group class="text-center">
+                    <b-button
+                      v-b-modal.modal-list-courses
+                      class="btn btn-default"
+                    >
+                      {{ $t("list_subjects.label.add_courses") }}
+                    </b-button>
+                    <b-modal
+                      id="modal-list-courses"
+                      size="xl"
+                      centered
+                      :title="$t('course_screen.title.list_course')"
+                    >
+                      <form>
+                        <label>{{ $t("list_users.label.search_user") }}</label>
+                        <b-input-group class="button_search">
+                          <b-form-input
+                            :placeholder="$t('list_users.label.search_user')"
+                            type="text"
+                            v-model="paginateCourse.name"
+                          ></b-form-input>
+                          <b-input-group-append>
+                            <b-button
+                              size="sm"
+                              text="Button"
+                              variant="success"
+                              @click.prevent="getCourses()"
+                            >
+                              {{ $t("list_users.button.search_btn") }}
+                            </b-button>
+                          </b-input-group-append>
+                        </b-input-group>
+                      </form>
+                      <div class="custom-modal">
+                        <template>
+                          <div class="overflow-auto">
+                            <b-table
+                              id="my-table"
+                              :items="courses"
+                              :fields="fieldsCourses"
+                            >
+                              <template #cell(index)="row">
+                                {{ ++row.index }}
+                              </template>
+                              <template v-slot:cell(actions)="row">
+                                <input
+                                  type="checkbox"
+                                  :value="row.item"
+                                  v-model="submitCourse"
+                                />
+                              </template>
+                            </b-table>
+                            <b-pagination
+                              v-model="paginateCourse.page"
+                              :total-rows="paginateCourse.total"
+                              :per-page="paginateCourse.perPage"
+                              aria-controls="my-table"
+                              @change="changePageCourse"
+                            ></b-pagination>
+                          </div>
+                        </template>
+                      </div>
+                    </b-modal>
+                  </b-form-group>
+                  <b-form-group>
+                    <div class="card shadow" id="card">
+                      <div class="card-header border-0">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="tag-input">
+                              <div
+                                v-for="(course, index) in submitCourse"
+                                :key="course.id"
+                                class="tag-input__tag"
+                              >
+                                {{ course.name }}
+                                <span @click="removeTagCourse(index)">x</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <span
+                      v-if="checkSubmitCourse"
+                      class="span-error-course-task"
+                    >
+                      {{ $t("list_subjects.label.add_courses_error") }}
+                    </span>
+                  </b-form-group>
+                  <b-form-group class="text-center">
+                    <b-button
+                      v-b-modal.modal-list-tasks
+                      class="btn btn-default"
+                    >
+                      {{ $t("list_subjects.label.add_tasks") }}
+                    </b-button>
+                    <b-modal
+                      id="modal-list-tasks"
+                      size="xl"
+                      centered
+                      :title="$t('task_screen.label.list_tasks')"
+                    >
+                      <form>
+                        <label>{{ $t("list_users.label.search_user") }}</label>
+                        <b-input-group class="button_search">
+                          <b-form-input
+                            :placeholder="$t('list_users.label.search_user')"
+                            type="text"
+                            v-model="paginateTask.name"
+                          ></b-form-input>
+                          <b-input-group-append>
+                            <b-button
+                              size="sm"
+                              text="Button"
+                              variant="success"
+                              @click.prevent="getTasks()"
+                            >
+                              {{ $t("list_users.button.search_btn") }}
+                            </b-button>
+                          </b-input-group-append>
+                        </b-input-group>
+                      </form>
+                      <div class="custom-modal">
+                        <template>
+                          <div class="overflow-auto">
+                            <b-table
+                              id="my-table"
+                              :items="tasks"
+                              :fields="fields"
+                            >
+                              <template #cell(index)="row">
+                                {{ ++row.index }}
+                              </template>
+                              <template v-slot:cell(actions)="row">
+                                <input
+                                  type="checkbox"
+                                  v-model="submitTask"
+                                  :value="row.item"
+                                />
+                              </template>
+                            </b-table>
+                            <b-pagination
+                              v-model="paginateTask.page"
+                              :total-rows="paginateTask.total"
+                              :per-page="paginateTask.perPage"
+                              aria-controls="my-table"
+                              @change="changePageTask"
+                            ></b-pagination>
+                          </div>
+                        </template>
+                      </div>
+                    </b-modal>
+                  </b-form-group>
+                  <b-form-group>
+                    <div class="card shadow" id="card">
+                      <div class="card-header border-0">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="tag-input">
+                              <div
+                                v-for="(task, index) in submitTask"
+                                :key="task.id"
+                                class="tag-input__tag"
+                              >
+                                {{ task.name }}
+                                <span @click="removeTagTask(index)">x</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <span v-if="checkSubmitTask" class="span-error-course-task">
+                      {{ $t("list_subjects.label.add_tasks_error") }}
+                    </span>
+                  </b-form-group>
+                  <button id="update-add-subject" class="btn btn-primary">
+                    {{
+                      id
+                        ? $t("list_subjects.button.update")
+                        : $t("list_subjects.button.add")
+                    }}
+                  </button>
+                  <router-link
+                    id="cancel"
+                    class="btn btn-success"
+                    :to="{ name: 'subjects.list' }"
+                    >{{ $t("list_subjects.button.cancel") }}
+                  </router-link>
+                </form>
+              </ValidationObserver>
+            </div>
           </div>
         </div>
       </div>
@@ -137,40 +276,145 @@
 </template>
 
 <script>
-import Multiselect from "vue-multiselect";
+import { DEFAULT_PERPAGE_USER, DEFAULT_PAGE } from "@/definition/constants";
 import ProjectsTable from "@/layout/HeaderCard";
 require("@/sass/modules/add-update-subject.css");
 
 export default {
   components: {
     ProjectsTable,
-    Multiselect,
   },
   data() {
     return {
+      paginateTask: {
+        page: DEFAULT_PAGE,
+        perPage: DEFAULT_PERPAGE_USER,
+        total: "",
+        name: "",
+      },
+      paginateCourse: {
+        page: DEFAULT_PAGE,
+        perPage: DEFAULT_PERPAGE_USER,
+        total: "",
+        name: "",
+      },
+      fieldsCourses: [
+        {
+          key: "name",
+          label: this.$i18n.t("course_screen.label.name"),
+        },
+        {
+          key: "description",
+          label: this.$i18n.t("course_screen.label.description"),
+        },
+        {
+          key: "is_active",
+          label: this.$i18n.t("course_screen.label.is_active"),
+        },
+        {
+          key: "actions",
+          label: this.$i18n.t("course_screen.label.actions"),
+        },
+      ],
+      fields: [
+        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
+        {
+          key: "name",
+          label: this.$i18n.t("task_screen.label.task_name"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "description",
+          label: this.$i18n.t("task_screen.label.task_description"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "content",
+          label: this.$i18n.t("task_screen.label.task_content"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "deadline",
+          label: this.$i18n.t("task_screen.label.task_deadline"),
+          sortable: true,
+          sortDirection: "desc",
+        },
+        { key: "actions", label: this.$i18n.t("task_screen.label.action") },
+      ],
+      tasks: [],
+      submitTask: [],
       subject: {
         name: "",
         description: "",
-        is_active: "",
-        course_id: [],
+        is_active: false,
       },
-      value: [],
-      courseData: [],
+      submitCourse: [],
+      courses: [],
+      courses_by_id: [],
+      checkSubmitTask: false,
+      checkSubmitCourse: false,
+      notificationSystem: {
+        options: {
+          success: {
+            position: "topCenter",
+          },
+          error: {
+            position: "topRight",
+          },
+        },
+      },
     };
   },
   props: ["id"],
   created() {
-    this.getData();
+    this.getCourses();
+    this.getTasks();
     if (this.id) {
       this.getSubject();
-      this.listCourse();
+      this.listCoursesById();
     }
   },
   methods: {
-    async getData() {
-      await this.$store.dispatch("course/GET_COURSES").then((res) => {
-        this.courseData = res.data;
-      });
+    changePageTask(page) {
+      this.paginateTask.page = page;
+      this.getTasks();
+    },
+    changePageCourse(page) {
+      this.paginateCourse.page = page;
+      this.getCourses();
+    },
+    async getTasks() {
+      if (this.paginateTask.name) {
+        this.paginateTask.page = DEFAULT_PAGE;
+      }
+      await this.$store
+        .dispatch("task/GET_TASKS", { params: this.paginateTask })
+        .then((response) => {
+          this.tasks = response.data;
+          this.paginateTask.perPage = response.per_page;
+          this.paginateTask.total = response.total;
+        });
+    },
+    removeTagTask(index) {
+      this.submitTask.splice(index, 1);
+    },
+    removeTagCourse(index) {
+      this.submitCourse.splice(index, 1);
+    },
+    async getCourses() {
+      if (this.paginateCourse.name) {
+        this.paginateCourse.page = DEFAULT_PAGE;
+      }
+      await this.$store
+        .dispatch("course/GET_COURSES", { params: this.paginateCourse })
+        .then((response) => {
+          this.courses = response.data;
+          this.paginateCourse.perPage = response.per_page;
+          this.paginateCourse.total = response.total;
+        });
     },
     async getSubject() {
       await this.$store
@@ -181,27 +425,67 @@ export default {
           this.subject.is_active = response.data.is_active;
         });
     },
-    async update() {
-      for (let index = 0; index < this.value.length; index++) {
-        this.subject.course_id[index] = this.value[index].id;
+    async onSubmit() {
+      let course_id = [];
+      course_id = this.submitCourse.map((obj) => obj.id);
+      let task_id = [];
+      task_id = this.submitTask.map((obj) => obj.id);
+      let params = {
+        subject: this.subject,
+        course_id: course_id,
+        task_id: task_id,
+      };
+      if (task_id.length == 0) {
+        this.checkSubmitTask = true;
       }
-      this.subject.is_active = document.getElementById("active").checked;
-      await this.$store.dispatch("subject/UPDATE_SUBJECT", {
-        subjects: this.subject,
-        id: this.id,
-      });
-    },
-    async add() {
-      this.subject.is_active = document.getElementById("active").checked;
-      for (let index = 0; index < this.value.length; index++) {
-        this.subject.course_id[index] = this.value[index].id;
+      if (course_id.length == 0) {
+        this.checkSubmitCourse = true;
       }
-      await this.$store.dispatch("subject/STORE_SUBJECT", this.subject);
+      if (this.id) {
+        if (task_id.length > 0) {
+          await this.$store
+            .dispatch("subject/UPDATE_SUBJECT", params)
+            .then((res) => {
+              if (res.data) {
+                this.$toast.success(
+                  this.$i18n.t("list_subjects.label.update_success"),
+                  "OK",
+                  this.notificationSystem.options.success
+                ),
+                  this.$router.push({ name: "subjects.list" });
+              }
+            });
+        }
+      } else {
+        if (task_id.length > 0) {
+          await this.$store
+            .dispatch("subject/STORE_SUBJECT", params)
+            .then((res) => {
+              if (res.data) {
+                this.$toast.success(
+                  this.$i18n.t("list_subjects.label.add_success"),
+                  this.$i18n.t("list_subjects.label.success"),
+                  this.notificationSystem.options.success
+                ),
+                  this.$router.push({ name: "subjects.list" });
+              }
+            });
+        }
+      }
     },
-    async listCourse() {
-      await this.$store.dispatch("subject/GET_COURSES_BY_SUBJECT_ID", this.id).then((res) => {
-        this.value = res.data;
-      });
+    async listCoursesById() {
+      await this.$store
+        .dispatch("subject/GET_COURSES_BY_SUBJECT_ID", this.id)
+        .then((res) => {
+          this.courses_by_id = res.data;
+          for (var i = 0; i < this.courses.length; i++) {
+            for (var j = 0; j < this.courses_by_id.length; j++) {
+              if (this.courses_by_id[j].id == this.courses[i].id) {
+                this.submitCourse.push(this.courses[i]);
+              }
+            }
+          }
+        });
     },
   },
 };
