@@ -32,8 +32,8 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
     Route::resource('/users', 'UserController');
 
     Route::group(['prefix' => 'courses', 'as' => 'courses'], function () {
-        Route::get('/categories/{id}', 'CourseController@listCategoryByCourseId')->name('category.get');
-        Route::post('/users/{id}/assign-user-to-course', 'CourseController@assignUserToCourse')->name('assign.users');
+        Route::get('/{id}/categories', 'CourseController@listCategoryByCourseId')->name('category.get');
+        Route::post('/{id}/assign-user-to-course', 'CourseController@assignUserToCourse')->name('assign.users');
     });
     Route::group(['prefix' => 'subjects', 'as' => 'subjects'], function () {
         Route::get('/{id}/count', 'SubjectController@countTaskCourseById')->name('count.courses.tasks');
@@ -41,18 +41,18 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::get('/{id}/change-status', 'SubjectController@updateActive')->name('change.status');
     });
     Route::group(['prefix' => 'tasks', 'as' => 'tasks'], function () {
-        Route::get('/subjects/{id}', 'TaskController@getSubjectsByTaskId')->name('subjects.list');
-        Route::get('/users/{id}', 'TaskController@getUsersByTaskId')->name('users.id');
+        Route::get('/{id}/subjects', 'TaskController@getSubjectsByTaskId')->name('subjects.list');
+        Route::get('/{id}/users', 'TaskController@getUsersByTaskId')->name('users.id');
         Route::post('/{id}/assign-user-to-task', 'TaskController@assignUserToTask')->name('tasks.assignUser');
     });
     Route::group(['prefix' => 'reports', 'as' => 'reports'], function () {
-        Route::put('/comment/{id}', 'TaskController@updateComment')->name('comment');
-        Route::get('/{id}', 'TaskController@getUserTask')->name('list');
+        Route::put('/{id}/comment', 'TaskController@updateComment')->name('comment');
+        Route::get('/{id}/reports', 'TaskController@getUserTask')->name('reports.list');
     });
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {
-        Route::get('/subjects/{id}', 'UserController@countSubject')->name('subject.count');
-        Route::get('/tasks/{id}', 'UserController@countTask')->name('tasks.count');
-        Route::get('/username/{id}', 'UserController@userName')->name('username');
+        Route::get('/{id}/subjects/count', 'UserController@countSubject')->name('subject.count');
+        Route::get('/{id}/tasks/count', 'UserController@countTask')->name('tasks.count');
+        Route::get('/{id}/username', 'UserController@userName')->name('username');
     });
 });
 
