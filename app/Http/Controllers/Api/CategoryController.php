@@ -19,7 +19,7 @@ class CategoryController extends ApiBaseController
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $categories = $this->categoryRepository->getCategories();
         if (!$categories['success']) {

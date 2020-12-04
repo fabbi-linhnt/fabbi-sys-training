@@ -82,7 +82,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
         }
     }
 
-    public function countTaskCourseSubjectById($id)
+    public function countTaskCourseById($id)
     {
         try {
             $data = $this->model->findOrFail($id);
@@ -112,23 +112,6 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             $subject->courses()->attach($course_id, ['status' => 'Update']);
             return [
                 'success' => true
-            ];
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage()
-            ];
-        }
-    }
-
-    public function ListCourseBySubjectId($id)
-    {
-        try {
-            $subject = $this->model->findOrFail($id);
-            $data = $subject->courses()->get();
-            return [
-                'data' => $data,
-                'success' => true,
             ];
         } catch (\Exception $e) {
             return [
