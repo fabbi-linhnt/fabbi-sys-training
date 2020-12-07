@@ -12,48 +12,47 @@
                 <header class="text-center">
                   <h1>{{ $t("user_screen.title.user_screen") }}</h1>
                 </header>
-                <div class="container">
-                  <validation-observer v-slot="{ handleSubmit }">
-                    <form @submit.prevent="handleSubmit(Submit)">
-                      <validation-provider
+                <div class="container ">
+                  <ValidationObserver v-slot="{ handleSubmit }">
+                    <b-form @submit.prevent="handleSubmit(onSubmit)">
+                      <ValidationProvider
                         :name="$t('user_screen.label.name')"
                         rules="required|min:4|max:25"
                         v-slot="{ errors }"
                       >
                         <div class="form-group">
-                          <label for="name">
-                            {{ $t("user_screen.label.name") }}
-                          </label>
-                          <br />
-                          <input
-                            v-model="name"
+                        <b-form-group
+                          id="input-group-1"
+                          :label="$t('user_screen.label.name')"
+                          label-for="input-1">
+                          <b-form-input
+                            id="input-1"
+                            v-model="user.name"
                             type="text"
-                            class="form-control"
-                            id="name"
-                          />
+                            :placeholder="$t('course_screen.message.enter_name_course')"
+                          ></b-form-input>
+                          <span class="err">{{ errors[0] }}</span>
+                        </b-form-group>
                         </div>
-                        <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
-                      <validation-provider
+                      </ValidationProvider>
+                      <ValidationProvider
                         :name="$t('user_screen.label.birth_day')"
                         rules="required|min:4|max:25"
                         v-slot="{ errors }"
                       >
                         <div class="form-group">
-                          <label for="birthday">
-                            {{ $t("user_screen.label.birth_day") }}
-                          </label>
-                          <br />
+                          <label for="birthday">{{ $t("user_screen.label.birth_day") }}</label
+                          ><br/>
                           <input
-                            v-model="birthday"
+                            v-model="user.birthday"
                             type="date"
                             class="form-control"
                             id="birthday"
                           />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
-                      <validation-provider
+                      </ValidationProvider>
+                      <ValidationProvider
                         :name="$t('user_screen.label.phone_number')"
                         :rules="{ regex: /^(0)[0-9]{9}$/, required: true }"
                         v-slot="{ errors }"
@@ -64,7 +63,7 @@
                           </label>
                           <br />
                           <input
-                            v-model="phone"
+                            v-model="user.phone"
                             type="tel"
                             class="form-control"
                             id="phone"
@@ -73,8 +72,8 @@
                           />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
-                      <validation-provider
+                      </ValidationProvider>
+                      <ValidationProvider
                         :name="$t('user_screen.label.address')"
                         rules="required|min:10|max:30"
                         v-slot="{ errors }"
@@ -85,34 +84,33 @@
                           </label>
                           <br />
                           <input
-                            v-model="address"
+                            v-model="user.address"
                             type="text"
                             class="form-control"
                             id="address"
+                            :placeholder="$t('user_screen.label.address')"
                           />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
-                      <validation-provider
+                      </ValidationProvider>
+                      <ValidationProvider
                         :name="$t('user_screen.label.email')"
                         rules="required|min:10|max:30"
                         v-slot="{ errors }"
                       >
                         <div class="form-group">
-                          <label for="email">
-                            {{ $t("user_screen.label.email") }}
-                          </label>
-                          <br />
-                          <input
-                            v-model="email"
-                            type="email"
-                            class="form-control"
-                            id="email"
+                          <label for="email">{{ $t("user_screen.label.email") }}</label
+                          ><br />
+                          <input v-model="user.email"
+                                 type="email"
+                                 class="form-control"
+                                 id="email"
+                                 :placeholder="$t('user_screen.label.email')"
                           />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
-                      <validation-provider
+                      </ValidationProvider>
+                      <ValidationProvider
                         :name="$t('user_screen.label.password')"
                         rules="required|min:10|max:30"
                         v-slot="{ errors }"
@@ -123,15 +121,16 @@
                           </label>
                           <br />
                           <input
-                            v-model="password"
+                            v-model="user.password"
                             type="password"
                             class="form-control"
                             id="password"
+                            :placeholder="$t('user_screen.label.password')"
                           />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
-                      <validation-provider
+                      </ValidationProvider>
+                      <ValidationProvider
                         :name="$t('user_screen.label.password')"
                         rules="required"
                         v-slot="{ errors }"
@@ -154,36 +153,31 @@
                           </multiselect>
                         </div>
                         <span class="err">{{ errors[0] }}</span>
-                      </validation-provider>
+                      </ValidationProvider>
                       <b-form-group :label="$t('course_screen.label.image')">
                         <div>
                           <b-form-file
-                            v-model="picture"
-                            :state="Boolean(picture)"
+                            v-model="imageData"
+                            :state="Boolean(imageData)"
                             :placeholder="$t('course_screen.message.choose_a_file_or_drop_it_here')"
-                            @change="previewImage"
-                          >
-                          </b-form-file>
-                          <div class="mt-3" v-if="picture">
-                            <b-img id="imgCourse" :src="picture"></b-img>
+                            @change="previewImage">
+                          ></b-form-file>
+                          <div class="mt-3" v-if="pictureUrl">
+                            <img id="imgUser" :src="pictureUrl">
                           </div>
                         </div>
                       </b-form-group>
-                      <b-button
-                        type="button"
-                        class="btn btn-success float-right"
-                      >
-                        {{ $t("user_screen.button.submit") }}
-                      </b-button>
-                      <b-button
-                        id="cancel-user"
+                        <b-button  type="submit" class="btn btn-success float-right">
+                          {{ $t("user_screen.button.submit") }}
+                        </b-button>
+                        <b-button
                         :to="{ name: 'users.list' }"
                         class="btn btn-danger float-right"
                       >
                         {{ $t("course_screen.button.cancel") }}
                       </b-button>
-                    </form>
-                  </validation-observer>
+                    </b-form>
+                  </ValidationObserver>
                 </div>
               </div>
             </div>
@@ -205,62 +199,74 @@ export default {
   components: {
     ProjectsTable,
   },
+  created() {
+    this.getCourse();
+  },
   data() {
     return {
       value: [],
-      options: [
-        { name: "Course1", id: 1 },
-        { name: "Course2", id: 2 },
-        { name: "Course3", id: 3 },
-        { name: "Course4", id: 4 },
-        { name: "Course5", id: 5 },
-        { name: "Course6", id: 6 },
-      ],
-      name: "",
-      birthday: "",
-      phone: "",
-      address: "",
-      email: "",
-      password: "",
-      courseId: [],
-      img_path: "",
+      options:[],
+      user:
+        {
+          name: "",
+          birthday: "",
+          phone: "",
+          address: "",
+          email: "",
+          password: "",
+          course_id: [],
+          img_path: "",
+        },
       imageData: null,
-      picture: null,
+      pictureUrl: null,
       uploadValue: 0,
+      defaultImage: require("@/assets/imgs/default.jpeg"),
+      notificationSystem: {
+        options: {
+          success: {
+            position: "topCenter",
+          },
+          error: {
+            position: "topRight",
+          },
+        },
+      },
     };
   },
   methods: {
-    async submit() {
-      for (var i = 0; i < this.value.length; i++) {
-        this.courseId[i] = this.value[i].id;
+    async getCourse(){
+      await this.$store.dispatch('user/GET_COURSE',{}).then(
+        (response)=>{
+          this.options = response.data.data;
+        })
+    },
+    async onSubmit() {
+      this.user.img_path = this.pictureUrl ? this.pictureUrl : this.defaultImage;
+      this.user.course_id = this.value.map((obj) => obj.id);
+      let params = {
+        user: this.user,
       }
-
-      await this.$store.dispatch("user/ADD_USER", {
-        params: {
-          name: this.name,
-          birthday: this.birthday,
-          phone: this.phone,
-          address: this.address,
-          email: this.email,
-          password: this.password,
-          course: this.courseId,
-          img_path: this.img_path,
-        },
+      await this.$store.dispatch("user/STORE_USER", params).then((res) => {
+         {
+          this.$toast.success(
+            this.$i18n.t("list_subjects.label.update_success"),
+            "OK",
+            this.notificationSystem.options.success
+          )
+            this.$router.push({ name: "users.list" });
+        }
       });
     },
     previewImage(event) {
-      this.uploadValue = 0;
-      this.picture = null;
       this.imageData = event.target.files[0];
-      this.picture = null;
       const storageRef = Firebase.storage().ref();
       const imgRef = storageRef.child(`imagesUser/${this.imageData.name}`);
       imgRef.put(this.imageData).then(() => {
-        imgRef.getDownloadURL().then((url) => {
-          this.picture = url;
-        });
-      });
-    },
+        imgRef.getDownloadURL().then(url => {
+          this.pictureUrl = url;
+        })
+      })
+    }
   },
 };
 </script>

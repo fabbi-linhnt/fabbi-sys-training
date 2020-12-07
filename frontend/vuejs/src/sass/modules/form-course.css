@@ -35,6 +35,13 @@
     margin-top: 1vh;
 }
 
+#imgCourse {
+  width: 400px;
+  height: 400px;
+}
+
+
+
 #cancel-course {
     margin-top: 1vh;
     margin-right: 1vw;

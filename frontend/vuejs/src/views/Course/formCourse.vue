@@ -148,17 +148,16 @@
           <b-form-group :label="$t('course_screen.label.image')">
             <div>
               <b-form-file
-                v-model="course.picture"
-                :state="Boolean(course.picture)"
+                v-model="imageData"
+                :state="Boolean(imageData)"
                 :placeholder="$t('course_screen.message.choose_a_file_or_drop_it_here')"
-                @change="previewImage"
-              >
+                @change="previewImage">
               </b-form-file>
-              <div class="mt-3" v-if="course.picture">
-                <b-img id="imgCourse" :src="course.picture"></b-img>
+              <div class="mt-3" v-if="pictureUrl">
+                <b-img id="imgCourse" :src="pictureUrl"></b-img>
               </div>
             </div>
-            <b-button type="submit" class="btn btn-success float-right" id="add-update-course"> 
+            <b-button type="submit" class="btn btn-success float-right" id="add-update-course">
               {{ $t("course_screen.button.submit") }}
             </b-button>
             <b-button
@@ -188,7 +187,7 @@ export default {
         description: "",
         is_active: "",
         category_id: null,
-        picture: null,
+        img_path: "",
       },
       activate: [
         {text: this.$i18n.t("course_screen.message.please_select_an_option"), value: "", disabled: true},
@@ -208,11 +207,12 @@ export default {
         total: 0,
         search: "",
       },
+      imageData: null,
+      pictureUrl: null,
       users: [],
       status: false,
       submitUser: [],
       categories: [],
-      imageData: null,
       uploadValue: 0,
       imageError: false,
       defaultImage: require("@/assets/imgs/default.jpeg")
@@ -276,15 +276,12 @@ export default {
       });
     },
     previewImage(event) {
-      this.uploadValue = 0;
-      this.course.picture = null;
       this.imageData = event.target.files[0];
-      this.course.picture = null;
       const storageRef = Firebase.storage().ref();
       const imgRef = storageRef.child(`imagesCourse/${this.imageData.name}`)
       imgRef.put(this.imageData).then(() => {
         imgRef.getDownloadURL().then(url => {
-          this.course.picture = url;
+          this.pictureUrl = url;
         })
       })
     }

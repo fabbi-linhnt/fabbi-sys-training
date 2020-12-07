@@ -60,16 +60,16 @@
             class="mb-4 mb-xl-0"
           >
             <template slot="footer">
-              <span class="text-success mr-2"
-                ><i class="fa fa-arrow-up"></i> 54.8%</span
-              >
+              <span class="text-success mr-2">
+                <i class="fa fa-arrow-up"></i>
+                54.8%
+              </span>
               <span class="text-nowrap">Since last month</span>
             </template>
           </stats-card>
         </div>
       </div>
     </base-header>
-
     <!--Charts-->
     <div class="container-fluid mt--7">
       <div class="row">
@@ -90,7 +90,7 @@
                       @click.prevent="initBigChart(0)"
                     >
                       <span class="d-none d-md-block">Month</span>
-                      <span class="d-md-none">M</span>
+                      <span class="d-md-none"></span>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -111,8 +111,7 @@
               :height="350"
               ref="bigChart"
               :chart-data="bigLineChart.chartData"
-              :extra-options="bigLineChart.extraOptions"
-            >
+              :extra-options="bigLineChart.extraOptions">
             </line-chart>
           </card>
         </div>

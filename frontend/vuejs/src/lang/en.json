@@ -139,7 +139,8 @@
       "action": "Action",
       "delete_confirm": "Do you want to delete this user?",
       "delete_success": "You have successfully deleted this user",
-      "warning": "Once deleted, you will not be able to recover this file!"
+      "warning": "Once deleted, you will not be able to recover this file!",
+      "update_success": "You have update this user successfully!"
     },
     "button": {
       "submit": "Submit"
