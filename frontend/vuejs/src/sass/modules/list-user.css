@@ -15,3 +15,12 @@
     width: 20vw;
     margin-left: 2vw;
 }
+.imgUser {
+  height: 50px;
+  width: 50px;
+}
+
+.nameUser {
+  margin-left: 1vw;
+  margin-top: 1vw;
+}

@@ -94,6 +94,16 @@
                 >
                 </b-icon>
               </template>
+              <template #cell(name)="row">
+                <div class="row">
+                  <b-img
+                    class="imgUser"
+                    rounded="circle"
+                    src="https://firebasestorage.googleapis.com/v0/b/fabbi-training.appspot.com/o/imagesCourse%2FScreenshot%20from%202020-11-27%2016-43-37.png?alt=media&token=8ac12b50-a42a-40e7-ada2-9454ef032efe">
+                  </b-img>
+                  <p class="nameUser"> {{ row.item.name }} </p>
+                </div>
+              </template>
             </b-table>
             <div class="pagination">
               <b-pagination

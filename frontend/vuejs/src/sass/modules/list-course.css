@@ -11,3 +11,13 @@
     width: 20vw;
     margin-left: 2vw;
 }
+
+.imgCourse {
+  height: 50px;
+  width: 50px;
+}
+
+.nameCourse {
+  margin-left: 1vw;
+  margin-top: 1vw;
+}
