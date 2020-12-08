@@ -23,8 +23,13 @@ class TaskController extends ApiBaseController
     {
         $tasks = $this->taskRepository->getTasks($request);
         if (!$tasks['success']) {
-            return $this->sendError(500, "ERROR", "500");
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['GET_LIST_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
+
         return $this->sendSuccess($tasks['data']);
     }
 
@@ -34,19 +39,26 @@ class TaskController extends ApiBaseController
         $data['subject_id'] = $request['subject_id'];
         $data['user_id'] = $request['user_id'];
         $task = $this->taskRepository->createTask($data);
-
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['ADD_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess(null, 'Thêm mới thành công');
+        return $this->sendSuccess(ResponseMessage::TASK['ADD_SUCCESS']);
     }
 
     public function show($id)
     {
         $task = $this->taskRepository->showTask($id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['SHOW_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($task['data']);
@@ -59,27 +71,39 @@ class TaskController extends ApiBaseController
         $data['user_id'] = $request['user_id'];
         $task = $this->taskRepository->updateTask($data, $id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['UPDATE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess(null, "Cập nhật thành công");
+        return $this->sendSuccess(ResponseMessage::TASK['UPDATE_SUCCESS']);
     }
 
     public function destroy($id)
     {
         $task = $this->taskRepository->deleteTask($id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['DELETE_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess(null, 'Xóa thành công');
+        return $this->sendSuccess(ResponseMessage::TASK['DELETE_SUCCESS']);
     }
 
     public function getSubjectsByTaskId($id)
     {
         $task = $this->taskRepository->getSubjectsByTaskId($id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['GET_SUBJECT_BY_TASK_ID_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($task['data']);
@@ -89,7 +113,11 @@ class TaskController extends ApiBaseController
     {
         $task = $this->taskRepository->getUserTask($id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['GET_USER_TASK_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($task['data']);
@@ -101,17 +129,25 @@ class TaskController extends ApiBaseController
         $data['status'] = $request['status'];
         $task = $this->taskRepository->updateComment($data, $id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['UPDATE_COMMENT_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
-        return $this->sendSuccess(null, 'Thêm mới thành công');
+        return $this->sendSuccess(ResponseMessage::TASK['UPDATE_COMMENT_SUCCESS']);
     }
 
     public function getUsersByTaskId($id)
     {
         $task = $this->taskRepository->getUsersByTaskId($id);
         if (!$task['success']) {
-            return $this->sendError(500, $task['message'], 'failed');
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['GET_USER_BY_TASK_ID_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
         }
 
         return $this->sendSuccess($task['data']);

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'status_user_activity' => 0
+    'status_user_activity' => 1
 ];

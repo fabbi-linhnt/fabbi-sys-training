@@ -50,9 +50,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::get('/{id}/reports', 'TaskController@getUserTask')->name('reports.list');
     });
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {
-        Route::get('/{id}/subjects/count', 'UserController@countSubject')->name('subject.count');
-        Route::get('/{id}/tasks/count', 'UserController@countTask')->name('tasks.count');
-        Route::get('/{id}/username', 'UserController@userName')->name('username');
+        Route::get('/get-user-info/{id}', 'UserController@getUserInfo')->name('user.info');
     });
 });
 

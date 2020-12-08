@@ -11,4 +11,5 @@ interface CourseInterface
     public function createCourse(array $data);
     public function updateCourse(array $data, $id);
     public function assignUserToCourse($userId, $courseId);
+    public function getCourseById($id);
 }

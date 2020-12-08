@@ -10,7 +10,6 @@ use App\Http\Requests\Users\UserUpdateRequest;
 use Illuminate\Http\Request;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Api\ApiBaseController;
-use Facade\FlareClient\Http\Response;
 
 class UserController extends ApiBaseController
 {
@@ -32,6 +31,7 @@ class UserController extends ApiBaseController
                 ResponseStatus::STATUS_ERROR
             );
         }
+
         return $this->sendSuccess($data['listUser']);
     }
 
@@ -53,12 +53,12 @@ class UserController extends ApiBaseController
         if (!$data['success']) {
             return $this->sendError(
                 ResponseStatusCode::INTERNAL_SERVER_ERROR,
-                ResponseMessage::USER['ADD_ERROR'],
+                $data['message'],
                 ResponseStatus::STATUS_ERROR
             );
         }
 
-        return $this->sendSuccess('Add User Success');
+        return $this->sendSuccess($data['message']);
     }
 
     public function update(UserUpdateRequest $request, $id)
@@ -98,49 +98,7 @@ class UserController extends ApiBaseController
             );
         }
 
-        return $this->sendSuccess("DELETE USER SUCCESS");
-    }
-
-    public function countSubject($id)
-    {
-        $data = $this->userRepository->countSubjectById($id);
-        if (!$data['success']) {
-            return $this->sendError(
-                ResponseStatusCode::INTERNAL_SERVER_ERROR,
-                ResponseMessage::USER['COUNT_SUBJECT_ERROR'],
-                ResponseStatus::STATUS_ERROR
-            );
-        }
-
-        return $this->sendSuccess($data['result']);
-    }
-
-    public function countTask($id)
-    {
-        $data = $this->userRepository->countTaskById($id);
-        if (!$data['success']) {
-            return $this->sendError(
-                ResponseStatusCode::INTERNAL_SERVER_ERROR,
-                ResponseMessage::USER['COUNT_TASK_ERROR'],
-                ResponseStatus::STATUS_ERROR
-            );
-        }
-
-        return $this->sendSuccess($data['result']);
-    }
-
-    public function userName($id)
-    {
-        $data = $this->userRepository->getUserNameById($id);
-        if (!$data['success']) {
-            return $this->sendError(
-                ResponseStatusCode::INTERNAL_SERVER_ERROR,
-                ResponseMessage::USER['GET_USER_NAME_ERROR'],
-                ResponseStatus::STATUS_ERROR
-            );
-        }
-
-        return $this->sendSuccess($data['result']);
+        return $this->sendSuccess($data['message']);
     }
 
     public function getUserInfo($id)
