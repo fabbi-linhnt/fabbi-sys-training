@@ -13,7 +13,7 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    function Courses()
+    function courses()
     {
         return $this->hasMany(Course::class);
     }
