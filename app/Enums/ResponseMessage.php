@@ -80,5 +80,7 @@ final class ResponseMessage extends Enum
         'GET_LIST_ERROR' => 'Get List Category Error',
         'DELETE_ERROR' => 'Delete Category Error',
         'DELETE_SUCCESS' => 'Delete Category Success',
+        'UPDATE_SUCCESS' => 'Update Category Success',
+        'ADD_SUCCESS' => 'Add Category Success'
     ];
 }
