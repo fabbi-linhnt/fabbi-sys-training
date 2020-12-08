@@ -125,7 +125,8 @@
                 :per-page="paginate.perPage"
                 aria-controls="my-table"
                 @change="changePage(paginate.page)"
-              ></b-pagination>
+              >
+              </b-pagination>
             </div>
           </div>
         </div>
@@ -140,7 +141,9 @@ import {
   DEFAULT_PERPAGE,
   DEFAULT_PAGE,
 } from "@/definition/constants";
+import swal from "sweetalert";
 import ProjectsTable from "@/layout/HeaderCard";
+import notification from "@/js/sweetAlert.js";
 require("@/sass/modules/list-task.css");
 
 export default {
@@ -217,13 +220,12 @@ export default {
         });
     },
     async onDeleteTask(id) {
-      swal({
-        title: this.$i18n.t("task_screen.message.delete_confirm"),
-        text: this.$i18n.t("task_screen.message.warning"),
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+      swal(
+        notification.notification(
+          this.$i18n.t("task_screen.message.delete_confirm"),
+          this.$i18n.t("task_screen.message.warning")
+        )
+      ).then((willDelete) => {
         if (willDelete) {
           swal(this.$i18n.t("task_screen.message.delete_success"), {
             icon: "success",

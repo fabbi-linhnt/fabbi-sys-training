@@ -104,7 +104,10 @@
     },
     "label": {
       "name_category": "Tên Danh Mục",
-      "action_category": "Hành Động"
+      "action_category": "Hành Động",
+      "delete_confirm": "Bạn có muốn xóa danh mục này không?",
+      "delete_success": "Bạn đã xóa danh mục thành công",
+      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"
     },
     "button": {
       "button_delete": "Xóa",

@@ -62,14 +62,16 @@
           font-scale="2"
           @click="destroyCourse(row.item.id)"
           class="deleteCousre"
-        ></b-icon>
+        >
+        </b-icon>
         <b-icon
           icon="info-circle"
           variant="info"
           font-scale="2"
           @click="detailCourse(row.item.id)"
           class="detailCourse"
-        ></b-icon>
+        >
+        </b-icon>
         <b-icon
           icon="pencil-square"
           variant="dark"
@@ -81,7 +83,8 @@
             })
           "
           class="updateCourse"
-        ></b-icon>
+        >
+        </b-icon>
       </template>
     </b-table>
     <div class="pagination">
@@ -103,6 +106,8 @@ import {
   DEFAULT_PERPAGE,
   DEFAULT_PAGE,
 } from "@/definition/constants";
+import swal from "sweetalert";
+import notification from "@/js/sweetAlert.js";
 require("@/sass/modules/list-course.css");
 
 export default {
@@ -165,13 +170,12 @@ export default {
       this.$router.push({ name: "course.detail", params: { id: id } });
     },
     async destroyCourse(id) {
-      swal({
-        title: this.$i18n.t("course_screen.label.delete_confirm"),
-        text: this.$i18n.t("course_screen.label.warning"),
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+      swal(
+        notification.notification(
+          this.$i18n.t("course_screen.label.delete_confirm"),
+          this.$i18n.t("course_screen.label.warning")
+        )
+      ).then((willDelete) => {
         if (willDelete) {
           swal(this.$i18n.t("course_screen.label.delete_success"), {
             icon: "success",

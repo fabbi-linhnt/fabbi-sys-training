@@ -70,21 +70,29 @@
                   font-scale="2"
                   @click="onDeleteUser(row.item.id)"
                   class="deleteUser"
-                ></b-icon>
+                >
+                </b-icon>
                 <b-icon
                   icon="info-circle"
                   variant="info"
                   font-scale="2"
                   @click="onDetailUser(row.item.id)"
                   class="detailUser"
-                ></b-icon>
+                >
+                </b-icon>
                 <b-icon
                   icon="pencil-square"
                   variant="dark"
                   font-scale="2"
-                  @click="$router.push({ name: 'user.create', params: { id: row.item.id } })"
+                  @click="
+                    $router.push({
+                      name: 'user.create',
+                      params: { id: row.item.id },
+                    })
+                  "
                   class="updateUser"
-                ></b-icon>
+                >
+                </b-icon>
               </template>
             </b-table>
             <div class="pagination">
@@ -110,6 +118,8 @@ import {
   DEFAULT_PERPAGE,
   DEFAULT_PAGE,
 } from "@/definition/constants";
+import swal from "sweetalert";
+import notification from "@/js/sweetAlert.js"
 import ProjectsTable from "@/layout/HeaderCard";
 require("@/sass/modules/list-user.css");
 
@@ -182,13 +192,12 @@ export default {
         });
     },
     async onDeleteUser(id) {
-      swal({
-        title: this.$i18n.t("user_screen.label.delete_confirm"),
-        text: this.$i18n.t("user_screen.label.warning"),
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+      swal(
+        notification.notification(
+          this.$i18n.t("user_screen.label.delete_confirm"),
+          this.$i18n.t("user_screen.label.warning"),
+        )
+      ).then((willDelete) => {
         if (willDelete) {
           swal(this.$i18n.t("user_screen.label.delete_success"), {
             icon: "success",
