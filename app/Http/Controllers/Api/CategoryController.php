@@ -46,7 +46,7 @@ class CategoryController extends ApiBaseController
             );
         }
 
-        return $this->sendSuccess(ResponseMessage::CATEGORY['add_success']);
+        return $this->sendSuccess(ResponseMessage::CATEGORY['ADD_SUCCESS']);
     }
 
     public function update(CategoriesUpdateRequest $request, $id)
@@ -61,7 +61,7 @@ class CategoryController extends ApiBaseController
             );
         }
 
-        return $this->sendSuccess(ResponseMessage::CATEGORY['update_success']);
+        return $this->sendSuccess(ResponseMessage::CATEGORY['UPDATE_SUCCESS']);
     }
 
     public function destroy($id)
