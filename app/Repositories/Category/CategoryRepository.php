@@ -15,22 +15,19 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
         $this->model = $category;
     }
 
-    public function createCategories($categories, $parent_id = 0, $level = 0)
+    public function recursiveCategories($categories, $parent_id = 0, $level = 0)
     {
         try {
             $result = [];
             foreach ($categories as $item) {
                 if ($item['parent_id'] == $parent_id) {
                     $item['level'] = $level;
-                    $item['children'] = $this->createCategories($categories, $item['id'], $level + 1);
+                    $item['children'] = $this->recursiveCategories($categories, $item['id'], $level + 1);
                     $result[] = $item;
                 }
             }
 
-            return [
-                'success' => true,
-                'data' => $result
-            ];
+            return $result;
         }
         catch (\Exception $e) {
             return [
@@ -44,7 +41,7 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
     {
         try {
             $categories = $this->model->select(DB::raw("categories.*, categories.name as label"))->get();
-            $data = $this->createCategories($categories, 0);
+            $data = $this->recursiveCategories($categories, 0);
 
             return [
                 'success' => true,
