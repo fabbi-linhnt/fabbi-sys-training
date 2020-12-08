@@ -25,7 +25,7 @@ class CategoriesUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'parent_id' => 'required|exists:categories,id'
+            'parent_id' => 'required|integer'
         ];
     }
 }

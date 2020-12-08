@@ -15,16 +15,6 @@
                   </h3>
                 </div>
                 <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">
-                        {{ $t("categories.label.name_category") }}
-                        <span id="action-category">
-                          {{ $t("categories.label.action_category") }}
-                        </span>
-                      </th>
-                    </tr>
-                  </thead>
                   <tr v-for="category in categoryData" :key="category.id">
                     <tree-brower :node="category" @reload="reload()"></tree-brower>
                   </tr>
@@ -40,7 +30,7 @@
 
 <script>
 import ProjectsTable from "@/layout/HeaderCard";
-import TreeBrower from "../../components/TreeBrower.vue";
+import TreeBrower from "@/components/TreeBrower.vue";
 require("@/sass/modules/category.css");
 
 export default {

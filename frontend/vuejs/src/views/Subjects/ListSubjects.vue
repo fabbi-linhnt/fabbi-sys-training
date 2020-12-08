@@ -79,14 +79,16 @@
                   font-scale="2"
                   @click="deleteSubject(row.item.id)"
                   class="deleteSubject"
-                ></b-icon>
+                >
+                </b-icon>
                 <b-icon
                   icon="info-circle"
                   variant="info"
                   font-scale="2"
                   @click="detailSubject(row.item.id)"
                   class="detailSubject"
-                ></b-icon>
+                >
+                </b-icon>
                 <b-icon
                   icon="pencil-square"
                   variant="dark"
@@ -98,7 +100,8 @@
                     })
                   "
                   class="updateSubject"
-                ></b-icon>
+                >
+                </b-icon>
               </template>
             </b-table>
             <div class="pagination">
@@ -125,6 +128,8 @@ import {
   DEFAULT_OPTION,
 } from "@/definition/constants";
 import ProjectsTable from "@/layout/HeaderCard";
+import swal from "sweetalert";
+import notification from "@/js/sweetAlert.js";
 require("@/sass/modules/list-subject.css");
 
 export default {
@@ -187,13 +192,12 @@ export default {
       this.$router.push({ name: "subject.detail", params: { id: id } });
     },
     async deleteSubject(id) {
-      swal({
-        title: this.$i18n.t("list_subjects.label.delete_confirm"),
-        text: this.$i18n.t("list_subjects.label.warning"),
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+      swal(
+        notification.notification(
+          this.$i18n.t("list_subjects.label.delete_confirm"),
+          this.$i18n.t("list_subjects.label.warning")
+        )
+      ).then((willDelete) => {
         if (willDelete) {
           swal(this.$i18n.t("list_subjects.label.delete_success"), {
             icon: "success",

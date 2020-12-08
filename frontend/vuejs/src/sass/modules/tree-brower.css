@@ -2,10 +2,19 @@
     float: right;
 }
 
-#delete-category {
-    background-color: red;
-}
-
 #children {
     margin-left: 10%;
+}
+
+#parent {
+    margin-top: 1vh;
+    margin-left: 5vw;
+    margin-right: 20vw;
+    background-color: #ccc;
+    font-weight: bold;
+    border: 1px solid black;
+}
+
+.deleteCategory, .addCategory {
+    margin-left: 1vw;
 }
