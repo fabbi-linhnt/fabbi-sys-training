@@ -40,7 +40,7 @@ class CourseRepository extends BaseRepository implements CourseInterface
             $perPage = $request->perPage;
             $listCourse = $this->model;
             if (!empty($request['name'])) {
-                $listCourse = $listCourse->where('name', 'LIKE', '%' . $request['name'] . '%');
+                $listCourse->where('name', 'LIKE', '%' . $request['name'] . '%');
             }
 
             return [
