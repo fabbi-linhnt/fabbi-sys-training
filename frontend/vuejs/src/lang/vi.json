@@ -6,6 +6,7 @@
   },
   "task_screen": {
     "label": {
+      "day" : "ngày", 
       "list_tasks" : "Danh sách bài tập",
       "task_name": "Tên bài tập",
       "task_content": "Đề bài",
@@ -220,7 +221,7 @@
     "label": {
       "custom_paginate": "Chọn số bản ghi",
       "search_user": "Tìm kiếm theo tên",
-      "add": "Thêm mới",
+      "add": "Thêm mới người dùng",
       "search": "Tìm kiếm",
       "no": "Stt",
       "name": "Tên",

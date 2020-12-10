@@ -52,11 +52,12 @@
                   :per-page="paginateUser.perPage"
                   aria-controls="my-table"
                   @change="changePageSubject(paginateUser.page)"
-                ></b-pagination>
+                >
+                </b-pagination>
               </div>
               <br />
               <div class="form-group">
-                <label>{{ $t("list_subjects.title.list_subjects") }}</label>
+                <label>{{ $t("task_screen.label.list_tasks") }}</label>
                 <b-table
                   striped
                   hover
@@ -78,7 +79,8 @@
                   :per-page="paginateCourse.perPage"
                   aria-controls="my-table"
                   @change="changePageCourse(paginateCourse.page)"
-                ></b-pagination>
+                >
+                </b-pagination>
               </div>
               <router-link class="btn btn-primary" :to="{ name: 'subjects.list' }">
                 <i class="fas fa-undo-alt"> </i>

@@ -1,12 +1,11 @@
 .button {
-   text-align: center;
-}
-.err{
-  color: red;
+    text-align: center;
 }
 
-.btn {
-  margin-left: 1vh;
+.err {
+    color: red;
 }
 
-
+#cancel-user {
+    margin-right: 1vw;
+}

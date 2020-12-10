@@ -12,27 +12,38 @@
                 <header class="text-center">
                   <h1>{{ $t("user_screen.title.user_screen") }}</h1>
                 </header>
-                <div class="container ">
+                <div class="container">
                   <validation-observer v-slot="{ handleSubmit }">
                     <form @submit.prevent="handleSubmit(Submit)">
                       <validation-provider
                         :name="$t('user_screen.label.name')"
                         rules="required|min:4|max:25"
-                        v-slot="{ errors }">
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label for="name">{{ $t("user_screen.label.name") }}</label
-                          ><br />
-                          <input v-model="name" type="text" class="form-control" id="name" />
+                          <label for="name">
+                            {{ $t("user_screen.label.name") }}
+                          </label>
+                          <br />
+                          <input
+                            v-model="name"
+                            type="text"
+                            class="form-control"
+                            id="name"
+                          />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
                       </validation-provider>
                       <validation-provider
                         :name="$t('user_screen.label.birth_day')"
                         rules="required|min:4|max:25"
-                        v-slot="{ errors }">
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label for="birthday">{{ $t("user_screen.label.birth_day") }}</label
-                          ><br />
+                          <label for="birthday">
+                            {{ $t("user_screen.label.birth_day") }}
+                          </label>
+                          <br />
                           <input
                             v-model="birthday"
                             type="date"
@@ -44,11 +55,14 @@
                       </validation-provider>
                       <validation-provider
                         :name="$t('user_screen.label.phone_number')"
-                        :rules="{ regex:/^(0)[0-9]{9}$/, required: true}"
-                        v-slot="{ errors }">
+                        :rules="{ regex: /^(0)[0-9]{9}$/, required: true }"
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label for="phone">{{ $t("user_screen.label.phone_number") }}</label
-                          ><br />
+                          <label for="phone">
+                            {{ $t("user_screen.label.phone_number") }}
+                          </label>
+                          <br />
                           <input
                             v-model="phone"
                             type="tel"
@@ -63,10 +77,13 @@
                       <validation-provider
                         :name="$t('user_screen.label.address')"
                         rules="required|min:10|max:30"
-                        v-slot="{ errors }">
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label for="address">{{ $t("user_screen.label.address") }}</label
-                          ><br />
+                          <label for="address">
+                            {{ $t("user_screen.label.address") }}
+                          </label>
+                          <br />
                           <input
                             v-model="address"
                             type="text"
@@ -79,21 +96,32 @@
                       <validation-provider
                         :name="$t('user_screen.label.email')"
                         rules="required|min:10|max:30"
-                        v-slot="{ errors }">
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label for="email">{{ $t("user_screen.label.email") }}</label
-                          ><br />
-                          <input v-model="email" type="email" class="form-control" id="email" />
+                          <label for="email">
+                            {{ $t("user_screen.label.email") }}
+                          </label>
+                          <br />
+                          <input
+                            v-model="email"
+                            type="email"
+                            class="form-control"
+                            id="email"
+                          />
                         </div>
                         <span class="err">{{ errors[0] }}</span>
                       </validation-provider>
                       <validation-provider
                         :name="$t('user_screen.label.password')"
                         rules="required|min:10|max:30"
-                        v-slot="{ errors }">
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label for="password">{{ $t("user_screen.label.password") }}</label
-                          ><br />
+                          <label for="password">
+                            {{ $t("user_screen.label.password") }}
+                          </label>
+                          <br />
                           <input
                             v-model="password"
                             type="password"
@@ -106,10 +134,11 @@
                       <validation-provider
                         :name="$t('user_screen.label.password')"
                         rules="required"
-                        v-slot="{ errors }">
+                        v-slot="{ errors }"
+                      >
                         <div class="form-group">
-                          <label>{{ $t("user_screen.label.course") }}</label
-                          ><br />
+                          <label>{{ $t("user_screen.label.course") }}</label>
+                          <br />
                           <multiselect
                             v-model="value"
                             :options="options"
@@ -133,18 +162,24 @@
                             :state="Boolean(picture)"
                             :placeholder="$t('course_screen.message.choose_a_file_or_drop_it_here')"
                             @change="previewImage"
-                          ></b-form-file>
+                          >
+                          </b-form-file>
                           <div class="mt-3" v-if="picture">
                             <b-img id="imgCourse" :src="picture"></b-img>
                           </div>
                         </div>
                       </b-form-group>
-                        <b-button  type="button" class="btn btn-success float-right">
-                          {{ $t("user_screen.button.submit") }}
-                        </b-button>
                       <b-button
+                        type="button"
+                        class="btn btn-success float-right"
+                      >
+                        {{ $t("user_screen.button.submit") }}
+                      </b-button>
+                      <b-button
+                        id="cancel-user"
                         :to="{ name: 'users.list' }"
-                        class="btn btn-danger float-right">
+                        class="btn btn-danger float-right"
+                      >
                         {{ $t("course_screen.button.cancel") }}
                       </b-button>
                     </form>
@@ -157,13 +192,12 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <script>
-import Firebase from 'firebase';
+import Firebase from "firebase";
 import ProjectsTable from "@/layout/HeaderCard";
 require("@/sass/modules/add-user.css");
 
@@ -175,12 +209,12 @@ export default {
     return {
       value: [],
       options: [
-        {name: "Course1", id: 1},
-        {name: "Course2", id: 2},
-        {name: "Course3", id: 3},
-        {name: "Course4", id: 4},
-        {name: "Course5", id: 5},
-        {name: "Course6", id: 6},
+        { name: "Course1", id: 1 },
+        { name: "Course2", id: 2 },
+        { name: "Course3", id: 3 },
+        { name: "Course4", id: 4 },
+        { name: "Course5", id: 5 },
+        { name: "Course6", id: 6 },
       ],
       name: "",
       birthday: "",
@@ -220,13 +254,13 @@ export default {
       this.imageData = event.target.files[0];
       this.picture = null;
       const storageRef = Firebase.storage().ref();
-      const imgRef = storageRef.child(`imagesUser/${this.imageData.name}`)
+      const imgRef = storageRef.child(`imagesUser/${this.imageData.name}`);
       imgRef.put(this.imageData).then(() => {
-        imgRef.getDownloadURL().then(url => {
+        imgRef.getDownloadURL().then((url) => {
           this.picture = url;
-        })
-      })
-    }
+        });
+      });
+    },
   },
 };
 </script>

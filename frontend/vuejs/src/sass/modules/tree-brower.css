@@ -1,18 +1,12 @@
-.action button {
-    float: right;
-}
-
 #children {
-    margin-left: 10%;
+    margin-left: 50px;
 }
 
 #parent {
     margin-top: 1vh;
-    margin-left: 5vw;
+    margin-left: 20px;
     margin-right: 20vw;
-    background-color: #ccc;
     font-weight: bold;
-    border: 1px solid black;
 }
 
 .deleteCategory, .addCategory {

@@ -7,13 +7,14 @@
     width: 10vw;
 }
 
-.updateUser, .detailUser {
+.updateUser,
+.detailUser {
     margin-left: 1vw;
 }
 
 .mt-3 {
     width: 20vw;
-    margin-left: 2vw;
+    margin-left: 1vw;
 }
 .imgUser {
   height: 50px;

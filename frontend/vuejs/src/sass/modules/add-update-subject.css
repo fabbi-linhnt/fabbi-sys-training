@@ -2,16 +2,6 @@
     margin-left: 10%;
 }
 
-#update-add-subject {
-    float: right;
-    margin-right: 10%;
-}
-
-#cancel {
-    float: right;
-    margin-right: 5%;
-}
-
 #multiselect-course, #subject-name, #subject-description, #card {
     margin-left: 10%;
     margin-right: 10%;
@@ -31,6 +21,8 @@
 .tag-input {
     box-sizing: border-box;
     padding: 0 1vh;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 .tag-input__tag {
@@ -50,5 +42,20 @@
 }
 
 .button_search {
-    width: 50vh;
+    width: 25vw;
+    float: right;
+}
+
+#add-update-subject {
+    margin-right: 10%;
+    margin-top: 1vh;
+}
+
+#cancel-add-update-subject {
+    margin-right: 1vw;
+    margin-top: 1vh;
+}
+
+.removeTag {
+    color: black;
 }

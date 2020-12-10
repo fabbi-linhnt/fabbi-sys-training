@@ -42,7 +42,8 @@
               <b-form-input
                 :placeholder="$t('list_users.label.search_user')"
                 v-model="paginate.name"
-              ></b-form-input>
+              >
+              </b-form-input>
               <b-input-group-append>
                 <b-button variant="info" @click="getData()">
                   {{ $t("list_users.label.search") }}
