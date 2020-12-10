@@ -62,7 +62,8 @@
                   :per-page="paginateSubject.perPage"
                   aria-controls="my-table"
                   @change="changePageSubject(paginateSubject.page)"
-                ></b-pagination>
+                >
+                </b-pagination>
               </div>
               <br />
               <div class="form-group">
@@ -88,7 +89,8 @@
                   :per-page="paginateSubject.perPage"
                   aria-controls="my-table"
                   @change="changePageSubject(paginateSubject.page)"
-                ></b-pagination>
+                >
+                </b-pagination>
               </div>
               <router-link class="btn btn-primary" :to="{ name: 'tasks.list' }">
                 <i class="fas fa-undo-alt"> </i>

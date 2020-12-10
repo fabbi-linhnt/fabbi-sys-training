@@ -3,11 +3,12 @@
     width: 10vw;
 }
 
-.updateSubject, .detailSubject {
+.updateSubject,
+.detailSubject {
     margin-left: 1vw;
 }
 
 .mt-3 {
     width: 20vw;
-    margin-left: 2vw;
+    margin-left: 1vw;
 }

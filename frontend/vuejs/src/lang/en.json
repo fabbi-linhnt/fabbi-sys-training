@@ -6,6 +6,7 @@
   },
   "task_screen": {
     "label": {
+      "day": "days",
       "list_task" : "List tasks",
       "task_name": "Title",
       "task_content": "Content",
@@ -229,7 +230,7 @@
     "label": {
       "custom_paginate": "Pick option",
       "search_user": "Search",
-      "add": "Add",
+      "add": "Add User",
       "search": "Search",
       "address": "Address",
       "no": "Stt",

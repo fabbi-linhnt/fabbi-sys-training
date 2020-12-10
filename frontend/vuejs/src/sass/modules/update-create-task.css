@@ -1,52 +1,46 @@
-.content h3 {
-    text-align: center;
-}
-
-.content button {
-    margin: auto;
-}
-
 .custom-modal {
     height: 65vh;
     overflow-y: scroll;
 }
 
-.tag-input {
+.tag-input-task {
     width: 100%;
     font-size: 0.9em;
     box-sizing: border-box;
     padding: 0 10px;
 }
 
-.tag-input__tag {
+.tag-input__tag-task {
     height: 30px;
     float: left;
     margin-right: 10px;
-    background-color: #eee;
+    background-color: green;
+    color: white;
     margin-top: 10px;
     line-height: 30px;
     padding: 0 5px;
     border-radius: 5px;
 }
 
-.tag-input__tag>span {
+.tag-input__tag-task>span {
     cursor: pointer;
     opacity: 0.75;
 }
-#modal_action_subject{
-  color: red;
-}
-#modal_action_subject_search{
-  width: 350px;
-  float: right;
-}
-.span-err{
-  color: red;
-}
-.err{
-  color: red;
-}
-.btn {
-  margin-left: 1vh;
+
+#modal_action_subject_search {
+    width: 350px;
+    float: right;
 }
 
+.span-err,
+.err {
+    color: red;
+}
+
+#cancel-add-update-task {
+    margin-right: 1vw;
+}
+
+.removeTagSubject {
+    color: black;
+}

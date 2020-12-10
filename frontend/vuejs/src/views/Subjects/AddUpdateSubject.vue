@@ -88,26 +88,31 @@
                       centered
                       :title="$t('course_screen.title.list_course')"
                     >
-                      <form>
-                        <label>{{ $t("list_users.label.search_user") }}</label>
-                        <b-input-group class="button_search">
-                          <b-form-input
-                            :placeholder="$t('list_users.label.search_user')"
-                            type="text"
-                            v-model="paginateCourse.name"
-                          ></b-form-input>
-                          <b-input-group-append>
-                            <b-button
-                              size="sm"
-                              text="Button"
-                              variant="info"
-                              @click.prevent="getCourses()"
-                            >
-                              {{ $t("list_users.button.search_btn") }}
-                            </b-button>
-                          </b-input-group-append>
-                        </b-input-group>
-                      </form>
+                      <div>
+                        <b-form-group
+                          label-cols-sm="3"
+                          label-align-sm="right"
+                          label-size="sm"
+                          label-for="filterInput"
+                          class="mb-3"
+                        >
+                          <b-input-group size="sm" class="button_search">
+                            <b-form-input
+                              v-model="paginateCourse.name"
+                              type="search"
+                              id="filterInput"
+                              :placeholder="
+                                $t('course_screen.message.search_by_name')
+                              "
+                            ></b-form-input>
+                            <b-input-group-append>
+                              <b-button variant="primary" @click="getCourses()">
+                                {{ $t("course_screen.button.search") }}
+                              </b-button>
+                            </b-input-group-append>
+                          </b-input-group>
+                        </b-form-group>
+                      </div>
                       <div class="custom-modal">
                         <template>
                           <div class="overflow-auto">
@@ -119,7 +124,8 @@
                               <template #cell(index)="row">
                                 {{
                                   ++row.index +
-                                  (Number(paginateCourse.page) - 1) * Number(paginateCourse.perPage)
+                                  (Number(paginateCourse.page) - 1) *
+                                    Number(paginateCourse.perPage)
                                 }}
                               </template>
                               <template v-slot:cell(actions)="row">
@@ -136,29 +142,22 @@
                               :per-page="paginateCourse.perPage"
                               aria-controls="my-table"
                               @change="changePageCourse(paginateCourse.page)"
-                            ></b-pagination>
+                            >
+                            </b-pagination>
                           </div>
                         </template>
                       </div>
                     </b-modal>
                   </b-form-group>
                   <b-form-group>
-                    <div class="card shadow" id="card">
-                      <div class="card-header border-0">
-                        <div class="row align-items-center">
-                          <div class="col">
-                            <div class="tag-input">
-                              <div
-                                v-for="(course, index) in submitCourse"
-                                :key="course.id"
-                                class="tag-input__tag"
-                              >
-                                {{ course.name }}
-                                <span @click="removeTagCourse(index)">x</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                    <div class="tag-input">
+                      <div
+                        v-for="(course, index) in submitCourse"
+                        :key="course.id"
+                        class="tag-input__tag"
+                      >
+                        {{ course.name }}
+                        <span class="removeTag" @click="removeTagCourse(index)">x</span>
                       </div>
                     </div>
                     <span
@@ -181,26 +180,32 @@
                       centered
                       :title="$t('task_screen.label.list_tasks')"
                     >
-                      <form>
-                        <label>{{ $t("list_users.label.search_user") }}</label>
-                        <b-input-group class="button_search">
-                          <b-form-input
-                            :placeholder="$t('list_users.label.search_user')"
-                            type="text"
-                            v-model="paginateTask.name"
-                          ></b-form-input>
-                          <b-input-group-append>
-                            <b-button
-                              size="sm"
-                              text="Button"
-                              variant="info"
-                              @click.prevent="getTasks()"
+                      <div>
+                        <b-form-group
+                          label-cols-sm="3"
+                          label-align-sm="right"
+                          label-size="sm"
+                          label-for="filterInput"
+                          class="mb-3"
+                        >
+                          <b-input-group size="sm" class="button_search">
+                            <b-form-input
+                              v-model="paginateTask.name"
+                              type="search"
+                              id="filterInput"
+                              :placeholder="
+                                $t('course_screen.message.search_by_name')
+                              "
                             >
-                              {{ $t("list_users.button.search_btn") }}
-                            </b-button>
-                          </b-input-group-append>
-                        </b-input-group>
-                      </form>
+                            </b-form-input>
+                            <b-input-group-append>
+                              <b-button variant="primary" @click="getTasks()">
+                                {{ $t("course_screen.button.search") }}
+                              </b-button>
+                            </b-input-group-append>
+                          </b-input-group>
+                        </b-form-group>
+                      </div>
                       <div class="custom-modal">
                         <template>
                           <div class="overflow-auto">
@@ -212,7 +217,8 @@
                               <template #cell(index)="row">
                                 {{
                                   ++row.index +
-                                  (Number(paginateTask.page) - 1) * Number(paginateTask.perPage)
+                                  (Number(paginateTask.page) - 1) *
+                                    Number(paginateTask.perPage)
                                 }}
                               </template>
                               <template v-slot:cell(actions)="row">
@@ -229,36 +235,32 @@
                               :per-page="paginateTask.perPage"
                               aria-controls="my-table"
                               @change="changePageTask(paginateTask.page)"
-                            ></b-pagination>
+                            >
+                            </b-pagination>
                           </div>
                         </template>
                       </div>
                     </b-modal>
                   </b-form-group>
                   <b-form-group>
-                    <div class="card shadow" id="card">
-                      <div class="card-header border-0">
-                        <div class="row align-items-center">
-                          <div class="col">
-                            <div class="tag-input">
-                              <div
-                                v-for="(task, index) in submitTask"
-                                :key="task.id"
-                                class="tag-input__tag"
-                              >
-                                {{ task.name }}
-                                <span @click="removeTagTask(index)">x</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                    <div class="tag-input">
+                      <div
+                        v-for="(task, index) in submitTask"
+                        :key="task.id"
+                        class="tag-input__tag"
+                      >
+                        {{ task.name }}
+                        <span class="removeTag" @click="removeTagTask(index)">x</span>
                       </div>
                     </div>
                     <span v-if="checkSubmitTask" class="span-error-course-task">
                       {{ $t("list_subjects.label.add_tasks_error") }}
                     </span>
                   </b-form-group>
-                  <button id="update-add-subject" class="btn btn-success">
+                  <button
+                    id="add-update-subject"
+                    class="btn btn-success float-right"
+                  >
                     {{
                       id
                         ? $t("list_subjects.button.update")
@@ -266,8 +268,8 @@
                     }}
                   </button>
                   <router-link
-                    id="cancel"
-                    class="btn btn-danger"
+                    id="cancel-add-update-subject"
+                    class="btn btn-danger float-right"
                     :to="{ name: 'subjects.list' }"
                     >{{ $t("list_subjects.button.cancel") }}
                   </router-link>

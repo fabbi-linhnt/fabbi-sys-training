@@ -40,7 +40,6 @@
                   </div>
                 </b-col>
               </b-row>
-
               <br />
               <div class="form-group">
                 <label>{{ $t("user_detail.label.course_completed") }}</label>
@@ -60,7 +59,8 @@
                   :per-page="paginate.perPage"
                   aria-controls="my-table"
                   @change="changePage(paginate.page)"
-                ></b-pagination>
+                >
+                </b-pagination>
               </div>
               <router-link class="btn btn-primary" :to="{ name: 'users.list' }">
                 <i class="fas fa-undo-alt"> </i>

@@ -15,9 +15,9 @@
                   </h3>
                   <router-link
                     class="btn btn-primary"
-                    :to="{ name: 'user.create' }"
+                    :to="{ name: 'task.create' }"
                   >
-                    {{ $t("list_users.label.add") }}
+                    {{ $t("task_screen.label.create_title") }}
                   </router-link>
                 </div>
                 <div class="col text-right">
@@ -70,6 +70,12 @@
                       ? $t("task_screen.label.task_active")
                       : $t("task_screen.label.task_inactive")
                   }}
+                </p>
+              </template>
+              <template v-slot:cell(time)="row">
+                <p>
+                  {{ row.item.time }} 
+                  {{ $t("task_screen.label.day") }}
                 </p>
               </template>
               <template v-slot:cell(actions)="row">
@@ -182,10 +188,8 @@ export default {
           sortDirection: "desc",
         },
         {
-          key: "deadline",
+          key: "time",
           label: this.$i18n.t("task_screen.label.task_deadline"),
-          sortable: true,
-          sortDirection: "desc",
         },
         {
           key: "is_active",

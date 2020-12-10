@@ -118,22 +118,23 @@
                           :per-page="paginateUser.perPage"
                           aria-controls="my-table"
                           @change="changePageUser(paginateUser.page)"
-                        ></b-pagination>
+                        >
+                        </b-pagination>
                       </div>
                     </template>
                   </div>
                 </b-modal>
               </div>
             </div>
-            <div class="">
+            <div>
            <span v-if="status === true" class="span-err">
              {{ $t("task_screen.message.required") }}
            </span>
-              <div class="tag-input">
+              <div class="tag-input-course">
                 <div
                   v-for="(user, index) in submitUser"
                   :key="user.id"
-                  class="tag-input__tag"
+                  class="tag-input__tag-course"
                 >
                   {{ user.name }}
                   <span @click="removeTagUser(index)" class="removeTagUser">x</span>
@@ -149,16 +150,17 @@
                 :state="Boolean(course.picture)"
                 :placeholder="$t('course_screen.message.choose_a_file_or_drop_it_here')"
                 @change="previewImage"
-              ></b-form-file>
+              >
+              </b-form-file>
               <div class="mt-3" v-if="course.picture">
                 <b-img id="imgCourse" :src="course.picture"></b-img>
               </div>
             </div>
-            <b-button type="submit" class="btn btn-success float-right"> {{
-                $t("course_screen.button.submit")
-              }}
+            <b-button type="submit" class="btn btn-success float-right" id="add-update-course"> 
+              {{ $t("course_screen.button.submit") }}
             </b-button>
             <b-button
+              id="cancel-course"
               :to="{ name: 'courses.list' }"
               class="btn btn-danger float-right">
               {{ $t("course_screen.button.cancel") }}

@@ -6,3 +6,4 @@ export const DEFAULT_ONTIME = 1;
 export const DEFAULT_LATE = 0;
 export const DEFAULT_PERPAGE_USER = 15;
 export const DEFAULT_PERPAGE_SUBJECT = 15;
+export const DEFAULT_RAGE_CATEGORY = 300;

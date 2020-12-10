@@ -15,8 +15,23 @@
                   </h3>
                 </div>
                 <table class="table">
-                  <tr v-for="category in categoryData" :key="category.id">
-                    <tree-brower :node="category" @reload="reload()"></tree-brower>
+                  <b-button
+                    v-if="categoryData.length <= 0"
+                    variant="primary"
+                    @click="addCategory()"
+                    >
+                    {{ $t("categories.title.add_new_category") }}
+                  </b-button>
+                  <tr
+                    v-else
+                    v-for="(category) in categoryData"
+                    :key="category.id"
+                  >
+                    <tree-brower
+                      :node="category"
+                      @reload="reload()"
+                    >
+                    </tree-brower>
                   </tr>
                 </table>
               </div>
@@ -40,7 +55,11 @@ export default {
   },
   data() {
     return {
-      categoryData: null,
+      categoryData: [],
+      category: {
+        name: "",
+        parent_id: "",
+      },
     };
   },
   created() {
@@ -52,9 +71,18 @@ export default {
         this.categoryData = res.data;
       });
     },
+    async addCategory() {
+      this.category.name = "new category";
+      this.category.parent_id = 0;
+      await this.$store
+        .dispatch("category/STORE_CATEGORY", this.category)
+        .then(() => {
+          this.getData();
+        });
+    },
     reload() {
       this.getData();
-    }
+    },
   },
 };
 </script>
