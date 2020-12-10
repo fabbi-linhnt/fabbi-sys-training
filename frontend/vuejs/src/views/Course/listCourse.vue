@@ -39,7 +39,7 @@
         </b-button>
       </b-input-group-append>
     </b-input-group>
-    <br />
+    <br/>
     <b-table show-empty small stacked="md" :items="courses" :fields="fields">
       <template #cell(index)="row">
         {{
@@ -54,6 +54,16 @@
               : $t("list_subjects.label.inActive")
           }}
         </p>
+      </template>
+      <template #cell(name)="row">
+        <div class="row">
+          <b-img
+            class="imgCourse"
+            rounded="circle"
+            src="https://firebasestorage.googleapis.com/v0/b/fabbi-training.appspot.com/o/imagesCourse%2FScreenshot%20from%202020-11-27%2016-43-37.png?alt=media&token=8ac12b50-a42a-40e7-ada2-9454ef032efe">
+          </b-img>
+          <p class="nameCourse"> {{ row.item.name }} </p>
+        </div>
       </template>
       <template v-slot:cell(actions)="row">
         <b-icon
@@ -108,6 +118,7 @@ import {
 } from "@/definition/constants";
 import swal from "sweetalert";
 import notification from "@/js/sweetAlert.js";
+
 require("@/sass/modules/list-course.css");
 
 export default {
@@ -115,7 +126,7 @@ export default {
   data() {
     return {
       fields: [
-        { key: "index", label: this.$i18n.t("list_users.label.no") },
+        {key: "index", label: this.$i18n.t("list_users.label.no")},
         {
           key: "name",
           label: this.$i18n.t("course_screen.label.name"),
@@ -152,7 +163,7 @@ export default {
   methods: {
     async getData() {
       await this.$store
-        .dispatch("course/GET_COURSES", { params: this.paginate })
+        .dispatch("course/GET_COURSES", {params: this.paginate})
         .then((res) => {
           this.courses = res.data;
           this.paginate.perPage = res.per_page;
@@ -185,7 +196,8 @@ export default {
             .then(() => {
               this.getData();
             })
-            .catch(() => {});
+            .catch(() => {
+            });
         } else {
           return;
         }
