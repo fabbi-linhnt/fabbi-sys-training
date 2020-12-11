@@ -58,7 +58,7 @@ final class ResponseMessage extends Enum
         'SHOW_ERROR' => 'Show List Error',
         'GET_CATEGORY_ERROR' => 'Get Category Error',
         'GET_LIST_CATEGORY_BY_COURSE_ID' => 'Get List Category By Course Id',
-        'ADD_SUCCESS' => "Add user success"
+        'ADD_SUCCESS' => "Add course success"
     ];
 
     const TASK = [

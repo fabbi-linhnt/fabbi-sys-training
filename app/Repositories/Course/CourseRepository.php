@@ -56,14 +56,27 @@ class CourseRepository extends BaseRepository implements CourseInterface
 
     public function createCourse($data)
     {
+        if ($data['path'] == '') {
+            $data['path'] = config('configcourse.images_default');
+        }
         DB::beginTransaction();
         try {
             $course = $this->model->create($data);
-            if ($data['path'] == '') {
-                $data['path'] = config('configcourse.images_default');
-            }
-            $course->image()->create(['path' => $data['path']]);
 
+            $course->image()->create(['path' => $data['path']]);
+            $course->users()->attach($data['user_id'], ['status' => $data['is_active']]);
+            $subjectIdValues = array();
+            foreach ($data['user_id'] as $value) {
+                $subjectIdValue = DB::table('user_subject')
+                    ->join('subjects', 'subject_id', '=', 'subjects.id')
+                    ->where('user_id', $value)
+                    ->value('subject_id');
+
+                if ($subjectIdValue) {
+                    $subjectIdValues[] = $subjectIdValue;
+                }
+            }
+            $course->subjects()->attach($subjectIdValues, ['status' => $data['is_active']]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

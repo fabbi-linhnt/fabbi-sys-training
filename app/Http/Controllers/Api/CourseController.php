@@ -35,7 +35,7 @@ class CourseController extends ApiBaseController
 
     public function store(CourseStoreRequest $request)
     {
-        $data = $request->only(['name', 'description', 'is_active', 'category_id', 'path']);
+        $data = $request->only(['name', 'description', 'is_active', 'category_id', 'path', 'user_id']);
         $course = $this->courseRepository->createCourse($data);
         if (!$course['success']) {
             return $this->sendError(
