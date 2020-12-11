@@ -114,8 +114,8 @@ export const actions = {
   UPDATE_SUBJECT({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
-        '/api/subjects/' + params.subject.id,
-        params,
+        '/api/subjects/' + params.id,
+        params.data,
         response => {
           commit('setUpdateSubject', response.data);
           resolve(response.data);

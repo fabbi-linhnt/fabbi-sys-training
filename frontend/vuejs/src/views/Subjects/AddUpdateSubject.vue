@@ -87,6 +87,7 @@
                       size="xl"
                       centered
                       :title="$t('course_screen.title.list_course')"
+                      :ok="checkSubmitCourseNull()"
                     >
                       <div>
                         <b-form-group
@@ -157,7 +158,9 @@
                         class="tag-input__tag"
                       >
                         {{ course.name }}
-                        <span class="removeTag" @click="removeTagCourse(index)">x</span>
+                        <span class="removeTagCourse" @click="removeTagCourse(index)">
+                          x
+                        </span>
                       </div>
                     </div>
                     <span
@@ -165,96 +168,6 @@
                       class="span-error-course-task"
                     >
                       {{ $t("list_subjects.label.add_courses_error") }}
-                    </span>
-                  </b-form-group>
-                  <b-form-group class="text-center">
-                    <b-button
-                      v-b-modal.modal-list-tasks
-                      class="btn btn-default"
-                    >
-                      {{ $t("list_subjects.label.add_tasks") }}
-                    </b-button>
-                    <b-modal
-                      id="modal-list-tasks"
-                      size="xl"
-                      centered
-                      :title="$t('task_screen.label.list_tasks')"
-                    >
-                      <div>
-                        <b-form-group
-                          label-cols-sm="3"
-                          label-align-sm="right"
-                          label-size="sm"
-                          label-for="filterInput"
-                          class="mb-3"
-                        >
-                          <b-input-group size="sm" class="button_search">
-                            <b-form-input
-                              v-model="paginateTask.name"
-                              type="search"
-                              id="filterInput"
-                              :placeholder="
-                                $t('course_screen.message.search_by_name')
-                              "
-                            >
-                            </b-form-input>
-                            <b-input-group-append>
-                              <b-button variant="primary" @click="getTasks()">
-                                {{ $t("course_screen.button.search") }}
-                              </b-button>
-                            </b-input-group-append>
-                          </b-input-group>
-                        </b-form-group>
-                      </div>
-                      <div class="custom-modal">
-                        <template>
-                          <div class="overflow-auto">
-                            <b-table
-                              id="my-table"
-                              :items="tasks"
-                              :fields="fields"
-                            >
-                              <template #cell(index)="row">
-                                {{
-                                  ++row.index +
-                                  (Number(paginateTask.page) - 1) *
-                                    Number(paginateTask.perPage)
-                                }}
-                              </template>
-                              <template v-slot:cell(actions)="row">
-                                <input
-                                  type="checkbox"
-                                  v-model="submitTask"
-                                  :value="row.item"
-                                />
-                              </template>
-                            </b-table>
-                            <b-pagination
-                              v-model="paginateTask.page"
-                              :total-rows="paginateTask.total"
-                              :per-page="paginateTask.perPage"
-                              aria-controls="my-table"
-                              @change="changePageTask(paginateTask.page)"
-                            >
-                            </b-pagination>
-                          </div>
-                        </template>
-                      </div>
-                    </b-modal>
-                  </b-form-group>
-                  <b-form-group>
-                    <div class="tag-input">
-                      <div
-                        v-for="(task, index) in submitTask"
-                        :key="task.id"
-                        class="tag-input__tag"
-                      >
-                        {{ task.name }}
-                        <span class="removeTag" @click="removeTagTask(index)">x</span>
-                      </div>
-                    </div>
-                    <span v-if="checkSubmitTask" class="span-error-course-task">
-                      {{ $t("list_subjects.label.add_tasks_error") }}
                     </span>
                   </b-form-group>
                   <button
@@ -294,12 +207,6 @@ export default {
   },
   data() {
     return {
-      paginateTask: {
-        page: DEFAULT_PAGE,
-        perPage: DEFAULT_PERPAGE_USER,
-        total: "",
-        name: "",
-      },
       paginateCourse: {
         page: DEFAULT_PAGE,
         perPage: DEFAULT_PERPAGE_USER,
@@ -321,36 +228,6 @@ export default {
           label: this.$i18n.t("course_screen.label.actions"),
         },
       ],
-      fields: [
-        { key: "index", label: this.$i18n.t("task_screen.label.task_index") },
-        {
-          key: "name",
-          label: this.$i18n.t("task_screen.label.task_name"),
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "description",
-          label: this.$i18n.t("task_screen.label.task_description"),
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "content",
-          label: this.$i18n.t("task_screen.label.task_content"),
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "deadline",
-          label: this.$i18n.t("task_screen.label.task_deadline"),
-          sortable: true,
-          sortDirection: "desc",
-        },
-        { key: "actions", label: this.$i18n.t("task_screen.label.action") },
-      ],
-      tasks: [],
-      submitTask: [],
       subject: {
         name: "",
         description: "",
@@ -358,8 +235,8 @@ export default {
       },
       submitCourse: [],
       courses: [],
+      course_id: [],
       courses_by_id: [],
-      checkSubmitTask: false,
       checkSubmitCourse: false,
       notificationSystem: {
         options: {
@@ -376,35 +253,15 @@ export default {
   props: ["id"],
   created() {
     this.getCourses();
-    this.getTasks();
     if (this.id) {
       this.getSubject();
       this.listCoursesById();
     }
   },
   methods: {
-    changePageTask(page) {
-      this.paginateTask.page = page;
-      this.getTasks();
-    },
     changePageCourse(page) {
       this.paginateCourse.page = page;
       this.getCourses();
-    },
-    async getTasks() {
-      if (this.paginateTask.name) {
-        this.paginateTask.page = DEFAULT_PAGE;
-      }
-      await this.$store
-        .dispatch("task/GET_TASKS", { params: this.paginateTask })
-        .then((response) => {
-          this.tasks = response.data;
-          this.paginateTask.perPage = response.per_page;
-          this.paginateTask.total = response.total;
-        });
-    },
-    removeTagTask(index) {
-      this.submitTask.splice(index, 1);
     },
     removeTagCourse(index) {
       this.submitCourse.splice(index, 1);
@@ -421,6 +278,11 @@ export default {
           this.paginateCourse.total = response.total;
         });
     },
+    checkSubmitCourseNull() {
+      if (this.submitCourse.length > 0) {
+        this.checkSubmitCourse = false;
+      }
+    },
     async getSubject() {
       await this.$store
         .dispatch("subject/GET_SUBJECT_BY_ID", this.id)
@@ -431,30 +293,28 @@ export default {
         });
     },
     async onSubmit() {
-      let course_id = [];
-      course_id = this.submitCourse.map((obj) => obj.id);
-      let task_id = [];
-      task_id = this.submitTask.map((obj) => obj.id);
+      this.course_id = this.submitCourse.map((obj) => obj.id);
       let params = {
-        subject: this.subject,
-        course_id: course_id,
-        task_id: task_id,
+        name: this.subject.name,
+        description: this.subject.description,
+        is_active: this.subject.is_active,
+        course_id: this.course_id,
       };
-      if (task_id.length == 0) {
-        this.checkSubmitTask = true;
-      }
-      if (course_id.length == 0) {
+      if (this.course_id.length === 0) {
         this.checkSubmitCourse = true;
       }
       if (this.id) {
-        if (task_id.length > 0) {
+        if (this.course_id.length > 0) {
           await this.$store
-            .dispatch("subject/UPDATE_SUBJECT", params)
+            .dispatch("subject/UPDATE_SUBJECT", {
+              id: this.id,
+              data: params,
+            })
             .then((res) => {
               if (res.data) {
                 this.$toast.success(
                   this.$i18n.t("list_subjects.label.update_success"),
-                  "OK",
+                  this.$i18n.t("list_subjects.label.success"),
                   this.notificationSystem.options.success
                 ),
                   this.$router.push({ name: "subjects.list" });
@@ -462,7 +322,7 @@ export default {
             });
         }
       } else {
-        if (task_id.length > 0) {
+        if (this.course_id.length > 0) {
           await this.$store
             .dispatch("subject/STORE_SUBJECT", params)
             .then((res) => {
