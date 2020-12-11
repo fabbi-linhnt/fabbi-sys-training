@@ -45,7 +45,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
 
         return [
-            'success' => true
+            'success' => true,
+            'message' => ResponseMessage::USER['ADD_SUCCESS']
         ];
     }
 
@@ -153,6 +154,26 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         } catch (\Exception $e) {
             DB::rollBack();
 
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function getListCourseByUserId($id)
+    {
+        try {
+            $course = DB::table('user_course')
+                ->join('courses', 'course_id', '=', 'courses.id')
+                ->where('user_id', $id)
+                ->paginate(config('config.perPage'));
+
+            return [
+                'success' => true,
+                'result' => $course
+            ];
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()

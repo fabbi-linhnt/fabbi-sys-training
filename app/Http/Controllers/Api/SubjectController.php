@@ -133,4 +133,32 @@ class SubjectController extends ApiBaseController
 
         return $this->sendSuccess($subject['message']);
     }
+
+    public function getListUserBySubjectId($id)
+    {
+        $data = $this->subjectRepository->getListUserBySubjectId($id);
+        if (!$data['success']) {
+            return $this->sendError(
+               ResponseStatusCode::INTERNAL_SERVER_ERROR,
+               ResponseMessage::SUBJECT['GET_LIST_USER_ERROR'],
+               ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
+    }
+
+    public function getListCourseBySubjectId($id)
+    {
+        $data = $this->subjectRepository->getListCourseBySubjectId($id);
+        if (!$data['success']) {
+            return $this->sendError(
+               ResponseStatusCode::INTERNAL_SERVER_ERROR,
+               ResponseMessage::SUBJECT['GET_LIST_USER_ERROR'],
+               ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
+    }
 }

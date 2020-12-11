@@ -45,7 +45,6 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
         try {
             $task = $this->model->create($data['task']);
             $task->subjects()->attach($data['subject_id'], ['status' => config('config.subject_task.status_default')]);
-            $task->users()->attach($data['user_id'], ['status' => config('config.user_task.late')]);
 
             return [
                 'success' => true
@@ -101,8 +100,6 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
             $task->update($data['task']);
             $task->subjects()->detach();
             $task->subjects()->attach($data['subject_id'], ['status' => config('config.subject_task.status_default')]);
-            $task->users()->detach();
-            $task->users()->attach($data['user_id'], ['status' => config('config.user_task.late')]);
 
             return [
                 'success' => true,
@@ -253,6 +250,46 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
             }
         }
         catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function getListUserByTaskId($id)
+    {
+        try {
+            $listUser = DB::table('user_task')
+                ->join('users', 'user_id', '=', 'users.id')
+                ->where('task_id', $id)
+                ->paginate(config('config.perPage'));
+
+            return [
+                'success' => true,
+                'result' => $listUser
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function getListSubjectByTaskId($id)
+    {
+        try {
+            $listSubject = DB::table('subject_task')
+                ->join('subjects', 'subject_id', '=', 'subjects.id')
+                ->where('task_id', $id)
+                ->paginate(config('config.perPage'));
+
+            return [
+                'success' => true,
+                'result' => $listSubject
+            ];
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()

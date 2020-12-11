@@ -222,4 +222,45 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             ];
         }
     }
+
+    public function getListUserBySubjectId($id)
+    {
+        try {
+            $listUser = DB::table('user_subject')
+                ->join('users', 'user_id', '=', 'users.id')
+                ->where('subject_id', $id)
+                ->paginate(config('config.perPage'));
+
+            return [
+                'success' => true,
+                'result' => $listUser
+            ];
+       } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+       }
+    }
+
+    public function getListCourseBySubjectId($id)
+    {
+        try {
+            $listCourse = DB::table('course_subject')
+                ->join('courses', 'course_id', '=', 'courses.id')
+                ->where('subject_id', $id)
+                ->paginate(config('config.perPage'));
+
+            return [
+                'success' => true,
+                'result' => $listCourse
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
 }

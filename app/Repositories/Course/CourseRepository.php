@@ -166,4 +166,24 @@ class CourseRepository extends BaseRepository implements CourseInterface
             'message' => ResponseMessage::COURSE['ASSIGN_SUCCESS']
         ];
     }
+
+    public function getListUserByCourseId($id)
+    {
+        try {
+            $listUser = DB::table('user_course')
+                ->join('users', 'user_id', '=', 'users.id')
+                ->where('course_id', $id)
+                ->paginate(config('config.perPage'));
+
+            return [
+                'success' => true,
+                'result' => $listUser
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
 }

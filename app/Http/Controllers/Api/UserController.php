@@ -114,4 +114,18 @@ class UserController extends ApiBaseController
 
         return $this->sendSuccess($data['result']);
     }
+
+    public function getListCourseByUserId($id)
+    {
+        $data = $this->userRepository->getListCourseByUserId($id);
+        if (!$data['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::USER['GET_USER_INFO_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
+    }
 }
