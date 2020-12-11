@@ -21,18 +21,14 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
         try {
             $tasks = $this->model;
             if (!empty($request['name'])) {
-                return [
-                    'success' => true,
-                    'data' => $tasks->where('name', 'like', '%' . $request['name'] . '%')->paginate($request['perPage'])
-                ];
+                $tasks = $tasks->where('name', 'like', '%' . $request['name'] . '%');
             }
 
             return [
                 'success' => true,
                 'data' => $tasks->paginate($request['perPage'])
             ];
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => true,
                 'message' => $e->getMessage()
@@ -205,14 +201,12 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                     'success' => false,
                     'message' => ResponseMessage::TASK['USER_ACTIVATING']
                 ];
-            }
-            else {
+            } else {
                 $countTaskOfUser = DB::table('user_task')
                     ->where('user_id', $userId)
                     ->where('task_id', $id)
                     ->count();
-                if ($countTaskOfUser >= 1)
-                {
+                if ($countTaskOfUser >= 1) {
                     DB::table('user_task')
                         ->where('user_id', $userId)
                         ->where('task_id', $id)
@@ -222,8 +216,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                         'success' => true,
                         'message' => ResponseMessage::TASK['ASSIGN_SUCCESS']
                     ];
-                }
-                else {
+                } else {
                     $countSubjectOfUser = 0;
                     $task = $this->model->findOrFail($id);
                     $subjectId = $task->subjects;
@@ -242,8 +235,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                             'success' => true,
                             'message' => ResponseMessage::TASK['ASSIGN_SUCCESS']
                         ];
-                    }
-                    else {
+                    } else {
                         return [
                             'success' => false,
                             'message' => ResponseMessage::TASK['ASSIGN_ERROR']
@@ -251,8 +243,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                     }
                 }
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()

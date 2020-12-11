@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
     });
     Route::group(['prefix' => 'reports', 'as' => 'reports'], function () {
         Route::put('/{id}/comment', 'TaskController@updateComment')->name('comment');
-        Route::get('/{id}/reports', 'TaskController@getUserTask')->name('reports.list');
+        Route::get('/{id}', 'TaskController@getUserTask')->name('reports.list');
     });
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {
         Route::get('/get-user-info/{id}', 'UserController@getUserInfo')->name('user.info');

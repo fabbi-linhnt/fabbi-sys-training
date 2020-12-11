@@ -7,6 +7,7 @@ use App\Models\Subject;
 use App\Repositories\BaseRepository;
 use App\Repositories\Subject\SubjectInterface;
 use Illuminate\Support\Facades\DB;
+
 /**
  * Class EquipmentRepository
  * @package App\Repositories\Equipment
@@ -21,21 +22,23 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
 
     public function getListSubject($request)
     {
+
         try {
-            $list = $this->model;
+            $subjects = DB::table('subjects')
+                ->join('subject_task', 'subjects.id', '=', 'subject_task.subject_id')
+                ->join('tasks', 'subject_task.task_id', '=', 'tasks.id')
+                ->select('subjects.*', DB::raw('SUM(tasks.time) as sum_time'))
+                ->groupBy('subjects.id');
+
             if (!empty($request['name'])) {
-                return [
-                    'success' => true,
-                    'data' => $list->where('name', 'like', '%' . $request['name'] . '%')->paginate($request['perPage'])
-                ];
+                $subjects->where('subjects.name', 'like', '%' . $request['name'] . '%');
             }
 
             return [
                 'success' => true,
-                'data' => $list->paginate($request['perPage'])
+                'data' => $subjects->paginate($request['perPage'])
             ];
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()
@@ -73,8 +76,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
             return [
                 'success' => true
             ];
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()
@@ -170,29 +172,27 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
                     'success' => false,
                     'message' => ResponseMessage::SUBJECT['USER_ACTIVATING']
                 ];
-            }
-            else {
+            } else {
                 $checkUserJoinSubject = DB::table('user_subject')
                     ->where('user_id', $userId)
                     ->where('subject_id', $id)
                     ->count();
                 if ($checkUserJoinSubject >= 1) {
                     DB::table('user_subject')
-                       ->where('user_id', $userId)
-                       ->where('subject_id', $id)
-                       ->update(['status' => config('configsubject.status_user_activity')]);
+                        ->where('user_id', $userId)
+                        ->where('subject_id', $id)
+                        ->update(['status' => config('configsubject.status_user_activity')]);
 
                     return [
                         'success' => true,
                         'message' => ResponseMessage::SUBJECT['ASSIGN_SUCCESS']
                     ];
-                }
-                else {
+                } else {
                     $count = 0;
                     $subject = $this->model->findOrFail($id);
                     $courseId = $subject->courses;
                     foreach ($courseId as $course) {
-                        $checkUserCourse =  DB::table('user_course')
+                        $checkUserCourse = DB::table('user_course')
                             ->where('user_id', $userId)
                             ->where('course_id', $course->id)
                             ->where('status', config('configsubject.status_user_activity'))
@@ -214,8 +214,7 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
                     ];
                 }
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()

@@ -37,18 +37,16 @@ class CourseRepository extends BaseRepository implements CourseInterface
     public function getListCourse($request)
     {
         try {
-            $perPage = $request->perPage;
             $listCourse = $this->model;
             if (!empty($request['name'])) {
-                $listCourse->where('name', 'LIKE', '%' . $request['name'] . '%');
+                $listCourse = $listCourse->where('name', 'LIKE', '%' . $request['name'] . '%');
             }
 
             return [
                 'success' => true,
-                'listCourse' => $listCourse->paginate($perPage)
+                'listCourse' => $listCourse->paginate($request['perPage'])
             ];
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()
