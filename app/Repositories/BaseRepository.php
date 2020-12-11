@@ -86,7 +86,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         try {
             $this->model->findOrFail($id)->update($request);
-            
+
             return [
                 'success' => true,
             ];
