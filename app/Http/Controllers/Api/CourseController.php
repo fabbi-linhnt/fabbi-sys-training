@@ -105,4 +105,18 @@ class CourseController extends ApiBaseController
 
         return $this->sendSuccess($course['message']);
     }
+
+    public function getListUserByCourseId($id)
+    {
+        $data = $this->courseRepository->getListUserByCourseId($id);
+        if (!$data['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::COURSE['GET_LIST_USER_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
+    }
 }

@@ -37,7 +37,6 @@ class TaskController extends ApiBaseController
     {
         $data['task'] = $request['task'];
         $data['subject_id'] = $request['subject_id'];
-        $data['user_id'] = $request['user_id'];
         $task = $this->taskRepository->createTask($data);
         if (!$task['success']) {
             return $this->sendError(
@@ -68,7 +67,6 @@ class TaskController extends ApiBaseController
     {
         $data['task'] = $request['task'];
         $data['subject_id'] = $request['subject_id'];
-        $data['user_id'] = $request['user_id'];
         $task = $this->taskRepository->updateTask($data, $id);
         if (!$task['success']) {
             return $this->sendError(
@@ -166,5 +164,33 @@ class TaskController extends ApiBaseController
         }
 
         return $this->sendSuccess($task['message']);
+    }
+
+    public function getListUserByTaskId($id)
+    {
+        $data = $this->taskRepository->getListUserByTaskId($id);
+        if (!$data['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['GET_LIST_USER_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
+    }
+
+    public function getListSubjectByTaskId($id)
+    {
+        $data = $this->taskRepository->getListSubjectByTaskId($id);
+        if (!$data['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['GET_LIST_USER_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
     }
 }

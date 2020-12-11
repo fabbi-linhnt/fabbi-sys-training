@@ -6,5 +6,6 @@ return [
     'user_task' => [
         'late' => 0,
         'on_time' => 1
-    ]
+    ],
+    'perPage' => 5
 ];

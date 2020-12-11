@@ -30,6 +30,8 @@ final class ResponseMessage extends Enum
         'ASSIGN_SUCCESS' => 'Assign User to Subject Successfully',
         'ASSIGN_ERROR' => "Don't have any course activated corressponding with subject",
         'GET_LIST_ERROR' => 'Get List Subject Error',
+        'GET_LIST_USER_ERROR' => 'Get List User Error',
+        'GET_LIST_COURSE_ERROR' => 'Get List Course Error',
         'ADD_SUCCESS' => 'Add Subject Success',
         'ADD_ERROR' => 'Add Subject Error',
         'SHOW_ERROR' => 'Show List Subject Error',
@@ -40,11 +42,12 @@ final class ResponseMessage extends Enum
         'COUNT_TASK_ERROR' => 'Count Task Error',
         'LIST_COURSE_ERROR' => 'List Course Error',
         'UPDATE_ACTIVE_ERROR' => 'Update Active Error',
-        'UPDATE_ACTIVE_SUCCESS' => 'Update Active Success'
+        'UPDATE_ACTIVE_SUCCESS' => 'Update Active Success',
     ];
 
     const COURSE = [
         'GET_LIST_ERROR' => 'Get List User Error',
+        'GET_LIST_USER_ERROR' => 'Get List User Error',
         'ASSIGN_SUCCESS' => 'Assign user to course success',
         'ASSIGN_ERROR' => 'User has another course',
         'FINISH_COURSE' => 'User has finished the course',
@@ -66,6 +69,7 @@ final class ResponseMessage extends Enum
         'ADD_ERROR' => 'Add Task Error',
         'ADD_SUCCESS' => 'Add Task Success',
         'SHOW_ERROR' => 'Show List Task Error',
+        'GET_LIST_USER_ERROR' => 'Get List User Error',
         'UPDATE_ERROR' => 'Update Task Error',
         'UPDATE_SUCCESS' => 'Update Task Success',
         'DELETE_ERROR' => 'Delete Task Error',
