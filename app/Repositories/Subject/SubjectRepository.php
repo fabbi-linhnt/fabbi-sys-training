@@ -22,7 +22,6 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
 
     public function getListSubject($request)
     {
-
         try {
             $subjects = DB::table('subjects')
                 ->join('subject_task', 'subjects.id', '=', 'subject_task.subject_id')
