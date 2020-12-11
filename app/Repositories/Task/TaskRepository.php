@@ -134,7 +134,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
             $data = DB::table('user_task')
                 ->join('users', 'user_task.user_id', '=', 'users.id')
                 ->join('tasks', 'user_task.task_id', '=', 'tasks.id')
-                ->select('user_task.*', 'users.name as username', 'tasks.deadline', 'tasks.name', 'user_task.date_submit')
+                ->select('user_task.*', 'users.name as username', 'tasks.time', 'tasks.name', 'user_task.date_submit')
                 ->where('task_id', $id)
                 ->get();
 
