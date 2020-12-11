@@ -36,11 +36,6 @@
     color: white;
 }
 
-.tag-input__tag > span {
-    cursor: pointer;
-    opacity: 0.75;
-}
-
 .button_search {
     width: 25vw;
     float: right;
@@ -56,6 +51,6 @@
     margin-top: 1vh;
 }
 
-.removeTag {
+.removeTagCourse {
     color: black;
 }

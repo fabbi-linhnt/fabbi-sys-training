@@ -30,13 +30,8 @@
                       {{ course.description }}
                     </p>
                   </div>
-                  <div class="form-group">
-                    <label>{{ $t("course_screen.label.category") }}:</label>
-                    {{ course.category }}
-                  </div>
                 </b-col>
               </b-row>
-
               <br />
               <div class="form-group">
                 <label>{{ $t("course_screen.label.user_course") }}</label>
@@ -58,7 +53,7 @@
                   @change="changePage(paginate.page)"
                 ></b-pagination>
               </div>
-              <router-link class="btn btn-primary" :to="{ name: 'users.list' }">
+              <router-link class="btn btn-primary" :to="{ name: 'courses.list' }">
                 <i class="fas fa-undo-alt"> </i>
                 {{ $t("task_screen.label.back_home") }}
               </router-link>
@@ -90,7 +85,6 @@ export default {
       course: {
         name: "",
         description: "",
-        category: "",
       },
       Field: [
         { key: "index", label: this.$i18n.t("list_users.label.no") },
@@ -123,24 +117,25 @@ export default {
     };
   },
   props: ["id"],
+  created() {
+    this.getData(),
+    this.getCoursesOfUser()
+  },
   methods: {
     async getData() {
-      await this.$store.dispatch("detailUser/GETDATA_ACTION", {
-        params: {
-          id: this.id,
-        },
-      });
+      await this.$store
+        .dispatch("course/GET_ID_COURSE", this.id)
+        .then((res) => {
+          this.course = res.data
+        });
     },
     async getCoursesOfUser() {
-      await this.$store.dispatch("course/GET_COURSES", {}).then((res) => {
-        this.courses = res.data;
-        this.paginate.perPage = res.per_page;
-        this.paginate.total = res.total;
+      await this.$store.dispatch("course/GET_USER_ID_COURSE", this.id).then((res) => {
+        this.users = res.data.data;
+        this.paginate.perPage = res.data.per_page;
+        this.paginate.total = res.data.total;
       });
     },
-  },
-  created() {
-    this.getCoursesOfUser();
   },
 };
 </script>

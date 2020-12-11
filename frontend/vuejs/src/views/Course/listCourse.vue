@@ -78,7 +78,11 @@
           icon="info-circle"
           variant="info"
           font-scale="2"
-          @click="detailCourse(row.item.id)"
+          @click="
+            $router.push({
+            name: 'course.detail',
+            params: { id: row.item.id },
+          })"
           class="detailCourse"
         >
         </b-icon>
@@ -176,9 +180,6 @@ export default {
     },
     customPaginate() {
       this.getData();
-    },
-    detailCourse(id) {
-      this.$router.push({ name: "course.detail", params: { id: id } });
     },
     async destroyCourse(id) {
       swal(

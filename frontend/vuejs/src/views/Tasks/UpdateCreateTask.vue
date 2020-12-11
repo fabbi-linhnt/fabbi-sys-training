@@ -22,17 +22,17 @@
                     @submit.prevent="handleSubmit(onUpdateCreateTask)"
                   >
                     <validation-provider
-                      :name="$t('task_screen.label.task_content')"
+                      :name="$t('task_screen.label.task_name')"
                       rules="required|min:3|max:20"
                       v-slot="{ errors }"
                     >
                       <div class="form-group">
                         <label>
-                          {{ $t("task_screen.label.task_content") }}
+                          {{ $t("task_screen.label.task_name") }}
                         </label>
                         <input
                           type="text"
-                          v-model="task.content"
+                          v-model="task.name"
                           class="form-control"
                         />
                       </div>
@@ -47,10 +47,27 @@
                         <label>
                           {{ $t("task_screen.label.task_description") }}
                         </label>
+                        <input
+                          type="text"
+                          v-model="task.description"
+                          class="form-control"
+                        >
+                      </div>
+                      <span class="err">{{ errors[0] }}</span>
+                    </validation-provider>
+                    <validation-provider
+                      :name="$t('task_screen.label.task_content')"
+                      rules="required|min:5|max:100  "
+                      v-slot="{ errors }"
+                    >
+                      <div class="form-group">
+                        <label>
+                          {{ $t("task_screen.label.task_content") }}
+                        </label>
                         <textarea
                           type="text"
                           rows="10"
-                          v-model="task.description"
+                          v-model="task.content"
                           class="form-control"
                         >
                         </textarea>
@@ -70,6 +87,7 @@
                           size="xl"
                           centered
                           :title="$t('task_screen.label.list_subject')"
+                          :ok="checkSubmitSubject()"
                         >
                           <div>
                             <b-form-group
@@ -153,19 +171,21 @@
                           class="tag-input__tag-task"
                         >
                           {{ subject.name }}
-                          <span id="removeTagSubject" @click="removeTagSubject(index)">x</span>
+                          <span
+                            id="removeTagSubject"
+                            @click="removeTagSubject(index)"
+                          >
+                            x
+                          </span>
                         </div>
-                        <span
-                          v-if="checkSubmitTask"
-                          class="span-error-course-task"
-                        >
+                        <span v-if="status" class="span-error-course-task">
                           {{ $t("list_subjects.label.add_tasks_error") }}
                         </span>
                       </div>
                     </b-form-group>
                     <validation-provider
                       :name="$t('task_screen.label.task_deadline')"
-                      rules="required|min:5|max:100 "
+                      :rules="{ regex: /^[1-9]/, required: true }"
                       v-slot="{ errors }"
                     >
                       <div class="form-group">
@@ -173,8 +193,8 @@
                           $t("task_screen.label.task_deadline")
                         }}</label>
                         <input
-                          type="date"
-                          v-model="task.deadline"
+                          type="number"
+                          v-model="task.time"
                           class="form-control"
                         />
                       </div>
@@ -197,7 +217,7 @@
                           : $t("task_screen.button.create_btn")
                       }}
                     </button>
-                    <b-button 
+                    <b-button
                       id="cancel-add-update-task"
                       class="btn btn-danger float-right"
                       :to="{ name: 'tasks.list' }"
@@ -251,12 +271,23 @@ export default {
         name: "",
         content: "",
         description: "",
-        deadline: "",
+        time: "",
         is_active: true,
       },
       subjects: [],
+      subjects_by_id: [],
       submitSubject: [],
       status: false,
+      notificationSystem: {
+        options: {
+          success: {
+            position: "topCenter",
+          },
+          error: {
+            position: "topRight",
+          },
+        },
+      },
     };
   },
   props: ["id"],
@@ -265,7 +296,6 @@ export default {
     if (this.id) {
       this.getTask();
       this.getSubjectOfTask();
-      this.getUsersOfTask();
     }
   },
   methods: {
@@ -285,20 +315,23 @@ export default {
     removeTagSubject(index) {
       this.submitSubject.splice(index, 1);
     },
-    async getUsersOfTask() {
-      await this.$store
-        .dispatch("task/GET_USERS_OF_TASK", this.id)
-        .then((response) => {
-          this.submitUser = response.data;
-        });
+    checkSubmitSubject() {
+      if (this.submitSubject.length > 0) {
+        this.status = false;
+      }
     },
     async getSubjectOfTask() {
       await this.$store
         .dispatch("task/GET_SUBJECTS_OF_TASK", this.id)
         .then((response) => {
-          response.forEach((subject) => {
-            this.multi.value.push(subject);
-          });
+          this.subjects_by_id = response.data.data;
+          for (var i = 0; i < this.subjects.length; i++) {
+            for (var j = 0; j < this.subjects_by_id.length; j++) {
+              if (this.subjects_by_id[j].id == this.subjects[i].id) {
+                this.submitSubject.push(this.subjects[i]);
+              }
+            }
+          }
         });
     },
     async getTask() {
@@ -308,44 +341,32 @@ export default {
           this.task = response;
         });
     },
-    makeToast(message, variant) {
-      this.$bvToast.toast(message, {
-        variant: variant,
-        solid: true,
-      });
-    },
     async onUpdateCreateTask() {
-      if (this.submitSubject.length === 0 || this.submitUser.length === 0) {
+      if (this.submitSubject.length === 0) {
         return (this.status = true);
       }
       let subject_id = [];
-      this.submitSubject.forEach((subject) => {
-        subject_id.push(subject.id);
-      });
-      let user_id = [];
-      this.submitUser.forEach((user) => {
-        user_id.push(user.id);
-      });
+      subject_id = this.submitSubject.map((obj) => obj.id);
       let params = {
         task: this.task,
         subject_id: subject_id,
-        user_id: user_id,
       };
-
       if (this.id) {
         await this.$store.dispatch("task/UPDATE_TASK", params).then(() => {
           this.$router.push({ name: "tasks.list" });
-          this.makeToast(
+          this.$toast.success(
             this.$i18n.t("task_screen.message.task_msgUpdate"),
-            "success"
+            this.$i18n.t("list_subjects.label.success"),
+            this.notificationSystem.options.success
           );
-        });
+        })
       } else {
         await this.$store.dispatch("task/STORE_TASK", params).then(() => {
           this.$router.push({ name: "tasks.list" });
-          this.makeToast(
+          this.$toast.success(
             this.$i18n.t("task_screen.message.task_msgCreate"),
-            "success"
+            this.$i18n.t("list_subjects.label.success"),
+            this.notificationSystem.options.success
           );
         });
       }

@@ -28,12 +28,6 @@ export default new Router({
           import('@/views/Course/Course.vue')
       },
       {
-        path: '/courses/detail',
-        name: 'course.detail',
-        component: () =>
-          import('@/views/Course/DetailCourse.vue')
-      },
-      {
         path: '/tasks/list',
         name: 'tasks.list',
         component: () =>

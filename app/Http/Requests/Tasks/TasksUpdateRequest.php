@@ -27,12 +27,10 @@ class TasksUpdateRequest extends FormRequest
             'task.name' => 'required|max:255',
             'task.description' => 'required|max:255',
             'task.content' => 'required',
-            'task.deadline' => 'required|date',
+            'task.time' => 'required|integer',
             'task.is_active' => 'required|boolean',
             'subject_id' => 'required|array',
             'subject_id.*' => 'exists:subjects,id',
-            'user_id' => 'required|array',
-            'user_id.*' => 'exists:users,id'
         ];
     }
 }

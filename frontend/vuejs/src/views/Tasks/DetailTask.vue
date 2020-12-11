@@ -31,7 +31,8 @@
               </div>
               <div class="form-group">
                 <label>{{ $t("task_screen.label.task_deadline") }}:</label>
-                {{ task.deadline }}
+                {{ task.time }}
+                {{ $t("task_screen.label.day") }}
               </div>
               <div class="form-group">
                 <label>{{ $t("task_screen.label.task_isActive") }}: </label>
@@ -50,7 +51,7 @@
                   <template #cell(index)="row">
                     {{
                       ++row.index +
-                      (Number(paginateTask.page) - 1) * Number(paginateTask.perPage)
+                      (Number(paginateUser.page) - 1) * Number(paginateUser.perPage)
                     }}
                   </template>
                 </b-table>
@@ -77,7 +78,7 @@
                   <template #cell(index)="row">
                     {{
                       ++row.index +
-                      (Number(paginateTask.page) - 1) * Number(paginateTask.perPage)
+                      (Number(paginateSubject.page) - 1) * Number(paginateSubject.perPage)
                     }}
                   </template>
                 </b-table>
@@ -148,7 +149,7 @@ export default {
   props: ["id"],
   created() {
     this.getTask();
-    this.getSubjectOfTask();
+    this.getSubjectsOfTask();
     this.getUsersOfTask();
   },
   methods: {
@@ -171,14 +172,18 @@ export default {
       await this.$store
         .dispatch("task/GET_USERS_OF_TASK", this.id)
         .then((response) => {
-          this.users = response.data;
+          this.users = response.data.data;
+          this.paginateUser.total = response.data.total;
+          this.paginateUser.perPage = response.data.per_page;
         });
     },
-    async getSubjectOfTask() {
+    async getSubjectsOfTask() {
       await this.$store
         .dispatch("task/GET_SUBJECTS_OF_TASK", this.id)
         .then((response) => {
-          this.subjects = response;
+          this.subjects = response.data.data;
+          this.paginateSubject.total = response.data.total;
+          this.paginateSubject.perPage = response.data.per_page;
         });
     },
   },

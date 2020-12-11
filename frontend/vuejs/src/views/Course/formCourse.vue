@@ -73,6 +73,7 @@
                   size="xl"
                   centered
                   :title="$t('task_screen.label.list_user')"
+                  :ok="checkSubmitCourseNull()"
                 >
                   <div>
                     <b-form-group
@@ -88,7 +89,8 @@
                           type="search"
                           id="filterInput"
                           :placeholder="$t('course_screen.message.search_by_name')"
-                        ></b-form-input>
+                        >
+                        </b-form-input>
                         <b-input-group-append>
                           <b-button variant="primary" @click="getUsers()">
                             {{ $t("course_screen.button.search") }}
@@ -224,6 +226,11 @@ export default {
     this.getUsers();
   },
   methods: {
+    checkSubmitCourseNull() {
+      if (this.submitUser.length > 0) {
+        this.status = false;
+      }
+    },
     async onSubmit() {
       if (this.submitUser.length === 0) {
         return this.status = true;

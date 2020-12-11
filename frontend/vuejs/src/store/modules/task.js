@@ -123,11 +123,11 @@ export const actions = {
   GET_SUBJECTS_OF_TASK({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/tasks/subject-task/' + id,
+        '/api/tasks/' + id +'/subjects',
         '',
         (response) => {
-          commit('setSubjectsOfTask', response.data.data);
-          resolve(response.data.data);
+          commit('setSubjectsOfTask', response.data);
+          resolve(response.data);
         },
         err => {
           reject(err.response);
@@ -138,7 +138,7 @@ export const actions = {
   GET_USERS_OF_TASK({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/task/users/' + id,
+        '/api/tasks/' + id + '/users',
         '',
         response => {
           commit('setUsersOfTask', response.data);

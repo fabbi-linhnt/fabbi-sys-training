@@ -23,7 +23,7 @@ export const actions = {
   GET_USER_TASK({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/user-task/' + id,
+        '/api/reports/' + id,
         '',
         response => {
           commit('setUserTask', response.data);
@@ -38,7 +38,7 @@ export const actions = {
   STORE_COMMENT({ commit }, submitComment) {
     return new Promise((resolve, reject) => {
       apiCaller.putRequest(
-        '/api/user-task/' + submitComment['id'],
+        '/api/reports/' + submitComment['id'] + '/comment',
         submitComment,
         response => {
           commit('setStoreCommit', response.data);
