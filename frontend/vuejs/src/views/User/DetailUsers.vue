@@ -108,25 +108,24 @@ export default {
     };
   },
   props: ["id"],
-
   methods: {
     async getData() {
-      await this.$store.dispatch("detailUser/GETDATA_ACTION", {
-        params: {
-          id: this.id,
-        },
+      await this.$store.dispatch("user/GET_USER_BY_ID", this.id).then((res) => {
+        this.user = res.data;
+
       });
     },
     async getCoursesOfUser() {
-      await this.$store.dispatch("course/GET_COURSES", {}).then((res) => {
-        this.courses = res.data;
-        this.paginate.perPage = res.per_page;
-        this.paginate.total = res.total;
+      await this.$store.dispatch("user/GET_COURSES_OF_USER", this.id).then((res) => {
+        this.courses = res.data.data;
+        this.paginate.perPage = res.data.per_page;
+        this.paginate.total = res.data.total;
       });
     },
   },
   created() {
     this.getCoursesOfUser();
+    this.getData()
   },
 };
 </script>

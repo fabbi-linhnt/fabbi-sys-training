@@ -22,17 +22,17 @@
                     @submit.prevent="handleSubmit(onUpdateCreateTask)"
                   >
                     <validation-provider
-                      :name="$t('task_screen.label.task_content')"
+                      :name="$t('task_screen.label.task_name')"
                       rules="required|min:3|max:20"
                       v-slot="{ errors }"
                     >
                       <div class="form-group">
                         <label>
-                          {{ $t("task_screen.label.task_content") }}
+                          {{ $t("task_screen.label.task_name") }}
                         </label>
                         <input
                           type="text"
-                          v-model="task.content"
+                          v-model="task.name"
                           class="form-control"
                         />
                       </div>
@@ -47,10 +47,27 @@
                         <label>
                           {{ $t("task_screen.label.task_description") }}
                         </label>
+                        <input
+                          type="text"
+                          v-model="task.description"
+                          class="form-control"
+                        >
+                      </div>
+                      <span class="err">{{ errors[0] }}</span>
+                    </validation-provider>
+                    <validation-provider
+                      :name="$t('task_screen.label.task_content')"
+                      rules="required|min:5|max:100  "
+                      v-slot="{ errors }"
+                    >
+                      <div class="form-group">
+                        <label>
+                          {{ $t("task_screen.label.task_content") }}
+                        </label>
                         <textarea
                           type="text"
                           rows="10"
-                          v-model="task.description"
+                          v-model="task.content"
                           class="form-control"
                         >
                         </textarea>
@@ -307,7 +324,7 @@ export default {
       await this.$store
         .dispatch("task/GET_SUBJECTS_OF_TASK", this.id)
         .then((response) => {
-          this.subjects_by_id = response.data;
+          this.subjects_by_id = response.data.data;
           for (var i = 0; i < this.subjects.length; i++) {
             for (var j = 0; j < this.subjects_by_id.length; j++) {
               if (this.subjects_by_id[j].id == this.subjects[i].id) {
@@ -342,7 +359,7 @@ export default {
             this.$i18n.t("list_subjects.label.success"),
             this.notificationSystem.options.success
           );
-        });
+        })
       } else {
         await this.$store.dispatch("task/STORE_TASK", params).then(() => {
           this.$router.push({ name: "tasks.list" });

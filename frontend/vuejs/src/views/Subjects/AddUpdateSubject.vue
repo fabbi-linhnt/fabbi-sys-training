@@ -342,7 +342,7 @@ export default {
       await this.$store
         .dispatch("subject/GET_COURSES_BY_SUBJECT_ID", this.id)
         .then((res) => {
-          this.courses_by_id = res.data;
+          this.courses_by_id = res.data.data;
           for (var i = 0; i < this.courses.length; i++) {
             for (var j = 0; j < this.courses_by_id.length; j++) {
               if (this.courses_by_id[j].id == this.courses[i].id) {

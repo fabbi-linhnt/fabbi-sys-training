@@ -57,7 +57,7 @@
               </div>
               <br />
               <div class="form-group">
-                <label>{{ $t("task_screen.label.list_tasks") }}</label>
+                <label>{{ $t("course_screen.title.list_course") }}</label>
                 <b-table
                   striped
                   hover
@@ -108,12 +108,11 @@ export default {
       subject: [],
       paginateCourse: {
         page: DEFAULT_PAGE,
-        perPage: DEFAULT_PERPAGE_USER,
+        perPage:"",
         total: "",
       },
       paginateUser: {
         page: DEFAULT_PAGE,
-        perPage: DEFAULT_PERPAGE_USER,
         total: "",
       },
       users: [],
@@ -126,7 +125,7 @@ export default {
       ],
       coursesField: [
         { key: "index", label: this.$i18n.t("common.label.index") },
-        { key: "name", label: this.$i18n.t("list_subjects.label.name") },
+        { key: "name", label: this.$i18n.t("course_screen.label.name") },
         {
           key: "description",
           label: this.$i18n.t("list_subjects.label.description"),
@@ -137,17 +136,17 @@ export default {
   props: ["id"],
   created() {
     this.getSubject();
-    this.getCourseOfSubject();
-    this.getUsersOfTask();
+    this.getCoursesOfSubject();
+    this.getUsersOfSubject();
   },
   methods: {
     changePageCourse(page) {
       this.paginateCourse.page = page;
-      this.getSubjectOfTask();
+      this.getCoursesOfSubject();
     },
     changePageUser(page) {
       this.paginateUser.page = page;
-      this.getUserOfTask();
+      this.getUsersOfSubject();
     },
     async getSubject() {
       await this.$store
@@ -156,20 +155,20 @@ export default {
           this.subject = response.data;
         });
     },
-    async getUsersOfTask() {
+    async getUsersOfSubject() {
       await this.$store
-        .dispatch("task/GET_USERS_OF_TASK", this.id)
+        .dispatch("subject/GET_USERS_OF_SUBJECT", this.id)
         .then((response) => {
-          this.users = response.data;
+          this.users = response.data.data;
           this.paginateUser.perPage = response.data.per_page;
           this.paginateUser.total = response.data.total;
         });
     },
-    async getCourseOfSubject() {
+    async getCoursesOfSubject() {
       await this.$store
         .dispatch("subject/GET_COURSES_BY_SUBJECT_ID", this.id)
         .then((response) => {
-          this.subjects = response.data;
+          this.courses = response.data.data;
           this.paginateCourse.perPage = response.data.per_page;
           this.paginateCourse.total = response.data.total;
         });

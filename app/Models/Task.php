@@ -11,7 +11,7 @@ class Task extends Model
         'description',
         'content',
         'is_active',
-        'deadline',
+        'time',
     ];
 
     protected $table = 'tasks';

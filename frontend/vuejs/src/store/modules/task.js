@@ -138,7 +138,7 @@ export const actions = {
   GET_USERS_OF_TASK({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/task/users/' + id,
+        '/api/tasks/' + id + '/users',
         '',
         response => {
           commit('setUsersOfTask', response.data);

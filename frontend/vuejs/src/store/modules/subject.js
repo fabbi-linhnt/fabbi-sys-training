@@ -141,10 +141,10 @@ export const actions = {
       );
     });
   },
-  COUNT_COURSES_TASKS_USERS({ commit }, id) {
+  GET_USERS_OF_SUBJECT ({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/subjects/count/' + id,
+        '/api/subjects/' + id + '/users',
         '',
         response => {
           commit('setCountTasksCoursesUsers', response.data);
@@ -159,7 +159,7 @@ export const actions = {
   GET_COURSES_BY_SUBJECT_ID({ commit }, id) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
-        '/api/subjects/courses/' + id,
+        '/api/subjects/' + id + '/courses',
         '',
         response => {
           commit('setCoursesByIdSubject', response.data);

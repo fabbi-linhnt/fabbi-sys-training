@@ -3,13 +3,17 @@ import apiCaller from '../../utils/api';
 export const state = {
   listUsers: null,
   storeUser: null,
-  deleteUser: ''
+  deleteUser: '',
+  coursesOfUser: null,
+  userById: null,
 };
 
 export const getters = {
   listUsers: state => state.listUsers,
   storeUser:  state => state.storeUser,
-  deleteUser: state => state.deleteUser
+  deleteUser: state => state.deleteUser,
+  coursesOfUser: state => state.courseOfUser,
+  userById: state => state.userById
 };
 
 export const mutations = {
@@ -21,6 +25,12 @@ export const mutations = {
   },
   setDeleteUser(state, deleteUser) {
     state.deleteUser = deleteUser;
+  },
+  setCoursesOfUser(state, coursesOfUser) {
+    state.coursesOfUser = coursesOfUser;
+  },
+  setUserById(state, userById) {
+    state.userById = userById;
   }
 };
 
@@ -69,5 +79,35 @@ export const actions = {
         }
       )
     });
-  }
+  },
+  GET_COURSES_OF_USER: ({ commit }, id) => {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        '/api/users/' + id + '/courses',
+        '',
+        res => {
+          commit('setCoursesOfUser', res.data);
+          resolve(res.data);
+        },
+        err => {
+          reject(err.res.data);
+        }
+      )
+    });
+  },
+  GET_USER_BY_ID: ({ commit }, id) => {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        '/api/users/' + id + '/user-info',
+        '',
+        res => {
+          commit('setUserById', res.data);
+          resolve(res.data);
+        },
+        err => {
+          reject(err.res.data);
+        }
+      )
+    });
+  },
 };

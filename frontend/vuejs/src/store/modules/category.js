@@ -4,12 +4,14 @@ export const state = {
   listCategories: null,
   deleteCategory: '',
   updateCategory: null,
+  storeCategory: null,
 };
 
 export const getters = {
   listCategories: state => state.listCategories,
   deleteCategory: state => state.deleteCategory,
   updateCategory: state => state.updateCategory,
+  storeCategory: state => state.storeCategory,
 };
 
 export const mutations = {
@@ -21,6 +23,9 @@ export const mutations = {
   },
   setUpdateCategory(state, updateCategory) {
     state.updateCategory = updateCategory;
+  },
+  setStoreCategory(state, storeCategory) {
+    state.storeCategory = storeCategory;
   }
 };
 
@@ -61,7 +66,7 @@ export const actions = {
         '/api/categories',
         params,
         response => {
-          commit('setUpdateCategory', response.data);
+          commit('setStoreCategory', response.data);
           resolve(response.data);
         },
         err => {

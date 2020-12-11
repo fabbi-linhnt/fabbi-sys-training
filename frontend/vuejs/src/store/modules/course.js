@@ -121,6 +121,21 @@ export const actions = {
       )
     });
   },
+  GET_USER_ID_COURSE({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        '/api/courses/' + id + '/users',
+        '',
+        response => {
+          commit('setCourseById', response.data)
+          resolve(response.data);
+        },
+        err => {
+          reject(err.response.data);
+        }
+      )
+    });
+  },
   GET_DATA_CATEGORIES({ commit }) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
