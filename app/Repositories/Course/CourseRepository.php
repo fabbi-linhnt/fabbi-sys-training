@@ -129,7 +129,7 @@ class CourseRepository extends BaseRepository implements CourseInterface
             $course = $this->model->findOrFail($courseId);
             $checkUserActive = DB::table('user_course')
                 ->where('user_id', $userId)
-                ->where('status', config('config.user_course.active'))
+                ->where('status', config('configcourse.status_user_activity'))
                 ->count();
             $checkCourseOfUser = DB::table('user_course')
                 ->where('user_id', $userId)
@@ -146,7 +146,7 @@ class CourseRepository extends BaseRepository implements CourseInterface
                     'message' => ResponseMessage::COURSE['FINISH_COURSE']
                 ];
             } else {
-                $course->users()->attach($userId, ['status' => config('config.user_course.active')]);
+                $course->users()->attach($userId, ['status' => config('configcourse.status_user_activity')]);
 
                 DB::commit();
             }
