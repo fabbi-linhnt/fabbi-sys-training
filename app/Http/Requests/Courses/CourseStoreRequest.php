@@ -28,6 +28,7 @@ class CourseStoreRequest extends FormRequest
             'description' => 'required|max:255',
             'is_active' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
+            'course_id' => 'required|exists:courses,id'
         ];
     }
 }

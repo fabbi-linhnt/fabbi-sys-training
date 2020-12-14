@@ -109,6 +109,8 @@ class CourseRepository extends BaseRepository implements CourseInterface
     {
         try {
             $courseByID = $this->model->findOrFail($id);
+            $courseByID->subjects()->detach();
+            $courseByID->users()->detach();
             $courseByID->delete();
 
             return [
