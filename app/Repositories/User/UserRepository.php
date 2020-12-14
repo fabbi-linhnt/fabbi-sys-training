@@ -79,6 +79,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
        try {
            $userData = $this->user->findOrFail($id);
            $name = $userData->name;
+           $email = $userData->email;
+           $phone = $userData->phone;
+           $address = $userData->address;
            $numberTask = $userData->tasks()->where('user_id', $id)->count();
            $numberSubject = $userData->subjects()->where('user_id', $id)->count();
            $courseParticipatedInfo = $userData->courses()->where('user_id', $id)->select('course_id')->get()->toArray();
@@ -91,7 +94,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 "name" => $name,
                 "numberSubject" => $numberSubject,
                 "numberTask" => $numberTask,
-                "courseParticipatedName" => $courseParticipatedName
+                "courseParticipatedName" => $courseParticipatedName,
+                "email" => $email,
+                "phone" => $phone,
+                "address" => $address
             );
 
             return [
