@@ -331,7 +331,7 @@ export default {
                   this.$i18n.t("list_subjects.label.add_success"),
                   this.$i18n.t("list_subjects.label.success"),
                   this.notificationSystem.options.success
-                ),
+                )
                   this.$router.push({ name: "subjects.list" });
               }
             });
@@ -356,4 +356,4 @@ export default {
 };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style> 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

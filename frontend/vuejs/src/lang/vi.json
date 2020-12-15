@@ -131,7 +131,8 @@
       "action": "Hành động",
       "delete_confirm": "Bạn có muốn xóa người dùng này không?",
       "delete_success": "Bạn đã xóa người dùng thành công",
-      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!"
+      "warning": "Sau khi xóa, bạn sẽ không thể khôi phục tệp này!",
+      "update_success": "Bạn đã thêm mới người dùng thành công!"
     },
     "button": {
       "submit": "Gửi"
