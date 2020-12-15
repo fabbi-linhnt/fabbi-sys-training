@@ -134,6 +134,7 @@ class CourseRepository extends BaseRepository implements CourseInterface
             $checkCourseOfUser = DB::table('user_course')
                 ->where('user_id', $userId)
                 ->where('course_id', $courseId)
+                ->where('status', config('configcourse.status_user_finished'))
                 ->count();
             if ($checkUserActive >= config('configcourse.have_active_user')) {
                 return [
@@ -146,7 +147,10 @@ class CourseRepository extends BaseRepository implements CourseInterface
                     'message' => ResponseMessage::COURSE['FINISH_COURSE']
                 ];
             } else {
-                $course->users()->attach($userId, ['status' => config('configcourse.status_user_activity')]);
+                DB::table('user_course')
+                    ->where('user_id', $userId)
+                    ->where('course_id', $courseId)
+                    ->update(['status' => config('configcourse.status_user_activity')]);
 
                 DB::commit();
             }
