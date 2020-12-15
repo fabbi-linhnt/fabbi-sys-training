@@ -80,6 +80,7 @@
               </template>
               <template v-slot:cell(actions)="row">
                 <b-icon
+                  v-b-tooltip.hover.top="$t('task_screen.label.delete')"
                   icon="trash"
                   font-scale="2"
                   variant="danger"
@@ -88,6 +89,7 @@
                 >
                 </b-icon>
                 <b-icon
+                  v-b-tooltip.hover.top="$t('task_screen.label.detail')"
                   variant="info"
                   font-scale="2"
                   icon="info-circle"
@@ -102,6 +104,7 @@
                   {{ $t("task_screen.label.task_update") }}
                 </b-icon>
                 <b-icon
+                  v-b-tooltip.hover.top="$t('task_screen.label.update')"
                   variant="dark"
                   font-scale="2"
                   icon="pencil-square"

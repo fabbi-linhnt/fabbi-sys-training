@@ -7,7 +7,8 @@ export const state = {
   updateCourse: null,
   courseById: null,
   dataCategories: null,
-  categoriesById: null
+  categoriesById: null,
+  timeCourse: null,
 };
 
 export const getters = {
@@ -17,7 +18,8 @@ export const getters = {
   updateCourse: state => state.updateCourse,
   courseById: state => state.courseById,
   dataCategories: state => state.dataCategories,
-  categoriesById: state => state.categoriesById
+  categoriesById: state => state.categoriesById,
+  timeCourse: state => state.timeCourse,
 };
 
 export const mutations = {
@@ -41,21 +43,39 @@ export const mutations = {
   },
   setCategoriesById(state, categoriesById) {
     state.categoriesById = categoriesById;
+  },
+  setTimeCourse(state, timeCourse) {
+    state.timeCourse = timeCourse;
   }
 }
 
 export const actions = {
-  GET_COURSES({ commit }, param) {
+  GET_COURSES({ commit }, params) {
     return new Promise((resolve, reject) => {
       apiCaller.getRequest(
         '/api/courses',
-        param,
+        params,
         response => {
           commit('setListCourses', response.data.data);
           resolve(response.data.data);
         },
         err => {
           reject(err.response.data.data);
+        }
+      )
+    });
+  },
+  GET_TIME_COURSE({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        '/api/courses/' + params.params.courseId + '/times',
+        params,
+        response => {
+          commit('setTimeCourse', response.data);
+          resolve(response.data);
+        },
+        err => {
+          reject(err.response.data);
         }
       )
     });

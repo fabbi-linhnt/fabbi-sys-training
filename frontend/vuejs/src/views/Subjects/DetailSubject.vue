@@ -94,7 +94,7 @@
   </div>
 </template>
 <script>
-import { DEFAULT_PERPAGE_USER, DEFAULT_PAGE } from "@/definition/constants";
+import { DEFAULT_PAGE } from "@/definition/constants";
 import ProjectsTable from "@/layout/HeaderCard";
 require("@/sass/modules/detail-subject.css");
 
@@ -113,6 +113,7 @@ export default {
       },
       paginateUser: {
         page: DEFAULT_PAGE,
+        perPage:"",
         total: "",
       },
       users: [],

@@ -257,8 +257,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                 ->paginate(config('config.perPage'));
 
             return [
-                'success' => true,
-                'result' => $listUser
+                'success' => true
             ];
         } catch (\Exception $e) {
             return [
@@ -280,6 +279,35 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                 'success' => true,
                 'result' => $listSubject
             ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function updateTimeTaskEnd($time, $id)
+    {
+        try {
+            $task = $this->model->findOrFail($id);
+            $lastTime = strtotime($time['end']);
+            $firtTime = strtotime($time['start']);
+            $difference = $lastTime - $firtTime;
+            if($difference < 0) {
+                return [
+                    'success' => false
+                ];
+            } else {
+                $years = abs(floor($difference / 31536000));
+                $days = abs(floor(($difference-($years * 31536000))/86400));
+                $task->time = (int)$days;
+                $task->update();
+
+                return [
+                    'success' => true
+                ];
+            }
         } catch (\Exception $e) {
             return [
                 'success' => false,

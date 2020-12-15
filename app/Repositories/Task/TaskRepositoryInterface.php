@@ -16,5 +16,6 @@ interface TaskRepositoryInterface
     public function assignUserToTaskById($userId, $id);
     public function getListUserByTaskId($id);
     public function getListSubjectByTaskId($id);
+    public function updateTimeTaskEnd($time, $id);
 }
 

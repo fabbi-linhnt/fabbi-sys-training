@@ -53,7 +53,10 @@
                   @change="changePage(paginate.page)"
                 ></b-pagination>
               </div>
-              <router-link class="btn btn-primary" :to="{ name: 'courses.list' }">
+              <router-link
+                class="btn btn-primary"
+                :to="{ name: 'courses.list' }"
+              >
                 <i class="fas fa-undo-alt"> </i>
                 {{ $t("task_screen.label.back_home") }}
               </router-link>
@@ -112,29 +115,29 @@ export default {
           sortable: true,
           sortDirection: "desc",
         },
-        { key: "actions", label: this.$i18n.t("task_screen.label.action") },
       ],
     };
   },
   props: ["id"],
   created() {
-    this.getData(),
-    this.getCoursesOfUser()
+    this.getData(), this.getCoursesOfUser();
   },
   methods: {
     async getData() {
       await this.$store
         .dispatch("course/GET_ID_COURSE", this.id)
         .then((res) => {
-          this.course = res.data
+          this.course = res.data;
         });
     },
     async getCoursesOfUser() {
-      await this.$store.dispatch("course/GET_USER_ID_COURSE", this.id).then((res) => {
-        this.users = res.data.data;
-        this.paginate.perPage = res.data.per_page;
-        this.paginate.total = res.data.total;
-      });
+      await this.$store
+        .dispatch("course/GET_USER_ID_COURSE", this.id)
+        .then((res) => {
+          this.users = res.data.data;
+          this.paginate.perPage = res.data.per_page;
+          this.paginate.total = res.data.total;
+        });
     },
   },
 };

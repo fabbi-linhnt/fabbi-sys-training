@@ -193,4 +193,19 @@ class TaskController extends ApiBaseController
 
         return $this->sendSuccess($data['result']);
     }
+
+    public function updateTimeTaskEnd(Request $request, $id)
+    {
+        $time = $request->only('start', 'end');
+        $task = $this->taskRepository->updateTimeTaskEnd($time, $id);
+        if (!$task['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::TASK['UPDATE_TIME_TASK_ERROR'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess(ResponseMessage::TASK['UPDATE_TIME_TASK_SUCCESS']);
+    }
 }

@@ -19,9 +19,13 @@ import { ValidationObserver, ValidationProvider  } from "vee-validate";
 import { loadVeeValidate } from './utils/custom-veevalidate';
 import Treeselect from '@riophae/vue-treeselect';
 import '@riophae/vue-treeselect/dist/vue-treeselect.css';
+import vmodal from 'vue-js-modal'
+
+
 
 
 loadVeeValidate();
+Vue.use(vmodal, { componentName: 'vmodal' })
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.use(BootstrapVue);

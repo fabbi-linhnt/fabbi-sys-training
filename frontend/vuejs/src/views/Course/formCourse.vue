@@ -187,7 +187,7 @@ export default {
         description: "",
         is_active: "",
         category_id: null,
-        img_path: "",
+        path: null,
       },
       activate: [
         {text: this.$i18n.t("course_screen.message.please_select_an_option"), value: "", disabled: true},
@@ -281,7 +281,7 @@ export default {
       const imgRef = storageRef.child(`imagesCourse/${this.imageData.name}`)
       imgRef.put(this.imageData).then(() => {
         imgRef.getDownloadURL().then(url => {
-          this.pictureUrl = url;
+          this.course.path = url;
         })
       })
     }
