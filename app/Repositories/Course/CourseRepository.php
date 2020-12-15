@@ -6,6 +6,7 @@ namespace App\Repositories\Course;
 use App\Enums\ResponseMessage;
 use App\Models\Course;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use mysql_xdevapi\Exception;
@@ -150,7 +151,7 @@ class CourseRepository extends BaseRepository implements CourseInterface
                 DB::table('user_course')
                     ->where('user_id', $userId)
                     ->where('course_id', $courseId)
-                    ->update(['status' => config('configcourse.status_user_activity')]);
+                    ->update(['status' => config('configcourse.status_user_activity'), 'updated_at' => Carbon::now()]);
 
                 DB::commit();
             }

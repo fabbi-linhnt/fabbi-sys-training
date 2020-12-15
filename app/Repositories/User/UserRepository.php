@@ -3,9 +3,13 @@
 namespace App\Repositories\User;
 
 use App\Enums\ResponseMessage;
+use App\Models\Course;
+use App\Models\Subject;
+use App\Models\Task;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -24,15 +28,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function addUser(array $data)
     {
+        $data['img_path'] = ($data['img_path']) ?? config('configuser.images_default');
         DB::beginTransaction();
-
         try {
-            if ($data['img_path'] == '') {
-                $data['img_path'] = config('configuser.images_default');
-            }
             $user = $this->user->create($data);
+            $user->courses()->attach(
+                $data['course_id'],
+                ['status' => config('configcourse.status_user_inactive')]
+            );
+            $this->storeCourseSubjectTask($data['course_id'], $user);
             $user->image()->create(['path' => $data['img_path']]);
-            $user->courses()->attach($data['course_id'], ['status' => config('configcourse.status_user_inactive')]);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -55,18 +60,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         try {
             $list = $this->model;
             $perPage = $data['perPage'];
-            if(array_key_exists('search', $data) && !empty($data['search']))
-            {
+            if (array_key_exists('search', $data) && !empty($data['search'])) {
                 $input = $data['search'];
-                $list = $list->where('name', 'LIKE', "%$input%");
+                $list->where('name', 'LIKE', "%$input%");
             }
 
             return [
                 'success' => true,
                 'listUser' => $list->paginate($perPage)
             ];
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()
@@ -76,21 +79,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function getUserInfoById($id)
     {
-       try {
-           $userData = $this->user->findOrFail($id);
-           $name = $userData->name;
-           $email = $userData->email;
-           $phone = $userData->phone;
-           $address = $userData->address;
-           $numberTask = $userData->tasks()->where('user_id', $id)->count();
-           $numberSubject = $userData->subjects()->where('user_id', $id)->count();
-           $courseParticipatedInfo = $userData->courses()->where('user_id', $id)->select('course_id')->get()->toArray();
-           $courseParticipatedName = array();
-           foreach ($courseParticipatedInfo as $value)
-           {
+        try {
+            $userData = $this->user->findOrFail($id);
+            $name = $userData->name;
+            $email = $userData->email;
+            $phone = $userData->phone;
+            $address = $userData->address;
+            $numberTask = $userData->tasks()->where('user_id', $id)->count();
+            $numberSubject = $userData->subjects()->where('user_id', $id)->count();
+            $courseParticipatedInfo = $userData->courses()->where('user_id', $id)->select('course_id')->get()->toArray();
+            $courseParticipatedName = array();
+            foreach ($courseParticipatedInfo as $value) {
                 $courseParticipatedName[] = DB::table('courses')->where('id', $value['course_id'])->value('name');
             }
-            $result = array(
+            $result = [
                 "name" => $name,
                 "numberSubject" => $numberSubject,
                 "numberTask" => $numberTask,
@@ -98,39 +100,34 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 "email" => $email,
                 "phone" => $phone,
                 "address" => $address
-            );
+            ];
 
             return [
                 'success' => true,
-                'result'  => $result
+                'result' => $result
             ];
-       }
-       catch(\Exception $e)
-       {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()
             ];
-       }
+        }
     }
 
     public function deleteUserById($id)
     {
-        try
-        {
-           $userData = $this->user->findOrFail($id);
-           $userData->subjects()->detach();
-           $userData->courses()->detach();
-           $userData->tasks()->detach();
-           $userData->delete();
+        try {
+            $userData = $this->user->findOrFail($id);
+            $userData->subjects()->detach();
+            $userData->courses()->detach();
+            $userData->tasks()->detach();
+            $userData->delete();
 
             return [
                 'success' => true,
                 'message' => ResponseMessage::USER['DELETE_SUCCESS']
             ];
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => $e->getMessage()
@@ -140,17 +137,44 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function updateUserById($data, $id)
     {
+        $data['img_path'] = ($data['img_path']) ?? config('configuser.images_default');
         DB::beginTransaction();
         try {
-            if ($data['img_path'] == '') {
-                $data['img_path'] = config('configuser.images_default');
+            $listCourseId = $data['course_id'];
+            $user = $this->user->findOrFail($id);
+            $user->update($data);
+            $courseOfUser = DB::table('user_course')
+                ->where('user_id', $id)
+                ->where('status', '=', config('configcourse.status_user_inactive'))
+                ->get();
+            foreach ($courseOfUser as $courseId) {
+                $course = Course::find($courseId->course_id);
+                foreach ($course->subjects as $subjectId) {
+                    $subject = Subject::find($subjectId->id);
+                    foreach ($subject->tasks as $taskId) {
+                        $task = Task::find($taskId->id);
+                        $task->users()->detach($id);
+                    }
+                    $subject->users()->detach($id);
+                }
+                $course->users()->detach($id);
             }
-            $userData = $this->user->findOrFail($id);
-            $userData->update($data);
-            $course_id = $data['course_id'];
-            $userData->courses()->detach();
-            $userData->courses()->attach($course_id, ['status' => 'Update']);
-            $userData->image()->create(['path' => $data['img_path']]);
+            $existsCourseActive = DB::table('user_course')
+                ->where('user_id', $id)
+                ->where('status', '=', config('configcourse.status_user_activity'))
+                ->first();
+            if ($existsCourseActive) {
+                if (in_array($existsCourseActive->course_id, $listCourseId)) {
+                    unset($listCourseId[array_search($existsCourseActive->course_id, $listCourseId)]);
+                }
+            }
+
+            $user->courses()->attach(
+                $listCourseId,
+                ['status' => config('configcourse.status_user_inactive')]
+            );
+            $this->storeCourseSubjectTask($listCourseId, $user);
+            $user->image()->create(['path' => $data['img_path']]);
 
             DB::commit();
             return [
@@ -184,6 +208,24 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 'success' => false,
                 'message' => $e->getMessage()
             ];
+        }
+    }
+
+    public function storeCourseSubjectTask($listCourseId, $user)
+    {
+        foreach ($listCourseId as $courseId) {
+            $course = Course::find($courseId);
+            foreach ($course->subjects as $subject) {
+                $user->subjects()->attach(
+                    $subject->pivot->subject_id, ['status' => config('configsubject.status_user_inactive')]
+                );
+                $subject = Subject::find($subject->pivot->subject_id);
+                foreach ($subject->tasks as $task) {
+                    $user->tasks()->attach(
+                        $task->pivot->task_id, ['status' => config('configtask.status_user_inactive')]
+                    );
+                }
+            }
         }
     }
 }

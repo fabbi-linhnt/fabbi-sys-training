@@ -23,14 +23,9 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
     public function getListSubject($request)
     {
         try {
-            $subjects = DB::table('subjects')
-                ->join('subject_task', 'subjects.id', '=', 'subject_task.subject_id')
-                ->join('tasks', 'subject_task.task_id', '=', 'tasks.id')
-                ->select('subjects.*', DB::raw('SUM(tasks.time) as sum_time'))
-                ->groupBy('subjects.id');
-
+            $subjects = $this->model;
             if (!empty($request['name'])) {
-                $subjects->where('subjects.name', 'like', '%' . $request['name'] . '%');
+                $subjects = $subjects->where('subjects.name', 'like', '%' . $request['name'] . '%');
             }
 
             return [
