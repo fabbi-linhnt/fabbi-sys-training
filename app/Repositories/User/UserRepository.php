@@ -62,7 +62,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $perPage = $data['perPage'];
             if (array_key_exists('search', $data) && !empty($data['search'])) {
                 $input = $data['search'];
-                $list->where('name', 'LIKE', "%$input%");
+                $list = $list->where('name', 'LIKE', "%$input%");
             }
 
             return [
@@ -226,6 +226,32 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     );
                 }
             }
+        }
+    }
+
+    public function statisticNumberOfUser()
+    {
+        try {
+            $dateTime = DB::table('users')->select('created_at')->get()->toArray();
+            $result = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            for ($i = 0; $i < count($dateTime); $i ++) {
+                $statistic[] = $dateTime[$i]->created_at;
+            }
+            foreach ($statistic as $value) {
+                $date = str_split($value, 10)[0];
+                $index = intval(substr($date, 5, 2))-1;
+                $result[$index]++;
+            }
+
+            return [
+                'success' => true,
+                'result' => $result
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
         }
     }
 }

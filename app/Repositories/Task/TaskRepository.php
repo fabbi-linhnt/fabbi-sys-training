@@ -6,6 +6,7 @@ use App\Enums\ResponseMessage;
 use App\Models\Task;
 use App\Repositories\BaseRepository;
 use App\Repositories\Task\TaskRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use mysql_xdevapi\Exception;
 
@@ -207,7 +208,8 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                     DB::table('user_task')
                         ->where('user_id', $userId)
                         ->where('task_id', $id)
-                        ->update(['status' => config('configtask.status_user_activity')]);
+                        ->update(['status' => config('configtask.status_user_activity')],
+                                 ['updated_at' => Carbon::now()]);
 
                     return [
                         'success' => true,
@@ -223,10 +225,11 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                             ->where('subject_id', $subject->id)
                             ->where('status', config('configtask.status_user_activity'))
                             ->count();
-                        if ($checkUserSubject >= 1) $countSubjectOfUser++;
+                        if ($checkUserSubject >= 1) $countSubjectOfUser;
                     }
                     if ($countSubjectOfUser >= 1) {
-                        $task->users()->attach($userId, ['status' => config('configtask.status_user_activity')]);
+                        $task->users()->attach($userId, ['status' => config('configtask.status_user_activity')],
+                                               ['updated_at' => Carbon::now()]);
 
                         return [
                             'success' => true,

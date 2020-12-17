@@ -6,6 +6,7 @@ use App\Enums\ResponseMessage;
 use App\Models\Subject;
 use App\Repositories\BaseRepository;
 use App\Repositories\Subject\SubjectInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -175,7 +176,8 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
                     DB::table('user_subject')
                         ->where('user_id', $userId)
                         ->where('subject_id', $id)
-                        ->update(['status' => config('configsubject.status_user_activity')]);
+                        ->update(['status' => config('configsubject.status_user_activity')],
+                                 ['updated_at' => Carbon::now()]);
 
                     return [
                         'success' => true,
@@ -194,7 +196,8 @@ class SubjectRepository extends BaseRepository implements SubjectInterface
                         if ($checkUserCourse >= 1) $count++;
                     }
                     if ($count >= 1) {
-                        $subject->users()->attach($userId, ['status' => config('configsubject.status_user_activity')]);
+                        $subject->users()->attach($userId, ['status' => config('configsubject.status_user_activity')],
+                                                  ['updated_at' => Carbon::now()]);
 
                         return [
                             'success' => true,
