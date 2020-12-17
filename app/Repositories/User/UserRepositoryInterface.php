@@ -12,5 +12,6 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
     public function deleteUserById($id);
     public function updateUserById($data,$id);
     public function getListCourseByUserId($id);
+    public function statisticNumberOfUser();
 }
 

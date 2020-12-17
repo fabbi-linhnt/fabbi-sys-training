@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {
         Route::get('/{id}/user-info', 'UserController@getUserInfo')->name('users.info');
         Route::get('/{id}/courses', 'UserController@getListCourseByUserId')->name('users.listCourse');
+        Route::get('/user/statistic', 'UserController@statisticNumberOfUser')->name('users.statisticUser');
     });
 });
 

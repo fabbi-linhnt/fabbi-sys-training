@@ -168,7 +168,7 @@ export default {
     return {
       bigLineChart: {
         allData: [
-          [0, 20, 10, 30, 15, 40, 20, 60, 60],
+          [0, 20, 10, 30, 15, 40, 20, 60, 40],
           [0, 20, 5, 25, 10, 30, 15, 40, 40],
         ],
         activeIndex: 0,
@@ -176,7 +176,7 @@ export default {
           datasets: [],
           labels: [],
         },
-        extraOptions: chartConfigs.blueChartOptions,
+        extraOptions: chartConfigs.blueCharOptions,
       },
       redBarChart: {
         chartData: {
@@ -223,7 +223,7 @@ export default {
     },
   },
   mounted() {
-    this.initBigChart(0);
+    this.initBigChart(1);
   },
 };
 </script>
