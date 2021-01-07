@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::get('/{id}/categories', 'CourseController@listCategoryByCourseId')->name('category.get');
         Route::post('/{id}/assign-user-to-course', 'CourseController@assignUserToCourse')->name('assign.users');
         Route::get('/{id}/users', 'CourseController@getListUserByCourseId')->name('courses.listUser');
+        Route::get('/{id}/times', 'CourseController@getTimeCourse')->name('course.times');
     });
     Route::group(['prefix' => 'subjects', 'as' => 'subjects'], function () {
         Route::get('/{id}/count', 'SubjectController@countTaskCourseById')->name('count.courses.tasks');
@@ -49,6 +50,7 @@ Route::group(['middleware' => 'auth:api', 'namespace' => 'Api'], function () {
         Route::post('/{id}/assign-user-to-task', 'TaskController@assignUserToTask')->name('tasks.assignUser');
         Route::get('/{id}/users', 'TaskController@getListUserByTaskId')->name('tasks.listUser');
         Route::get('/{id}/subjects', 'TaskController@getListSubjectByTaskId')->name('tasks.listSubject');
+        Route::post('/{id}/update-times-end', 'TaskController@updateTimeTaskEnd')->name('tasks.updateTimesEnd');
     });
     Route::group(['prefix' => 'reports', 'as' => 'reports'], function () {
         Route::put('/{id}/comment', 'TaskController@updateComment')->name('comment');

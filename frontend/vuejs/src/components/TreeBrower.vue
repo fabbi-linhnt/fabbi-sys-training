@@ -18,6 +18,7 @@
             </span>
             {{ node.name }}
             <b-icon
+              v-b-tooltip.hover.top="$t('categories.label.delete')"
               icon="trash"
               variant="danger"
               font-scale="1.5"
@@ -26,6 +27,7 @@
             >
             </b-icon>
             <b-icon
+              v-b-tooltip.hover.top="$t('categories.label.add')"
               icon="plus-circle"
               variant="primary"
               font-scale="1.5"

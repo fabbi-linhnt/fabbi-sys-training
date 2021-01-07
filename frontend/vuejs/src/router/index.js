@@ -93,6 +93,13 @@ export default new Router({
         props: true
       },
       {
+        path: 'calendar/courses/:courseId/users/:userId',
+        name: 'calendar',
+        component: () =>
+          import('@/views/Calendar/Calendar.vue'),
+        props: true
+      },
+      {
         path: '/tasks/detail/:id',
         name: 'task.detail',
         component: () =>

@@ -246,7 +246,7 @@ export default {
       let params = {
         user: this.user,
       }
-      await this.$store.dispatch("user/STORE_USER", params).then((res) => {
+      await this.$store.dispatch("user/STORE_USER", params).then(() => {
          {
           this.$toast.success(
             this.$i18n.t("list_subjects.label.update_success"),

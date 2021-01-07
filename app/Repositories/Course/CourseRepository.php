@@ -5,6 +5,8 @@ namespace App\Repositories\Course;
 
 use App\Enums\ResponseMessage;
 use App\Models\Course;
+use App\Models\Subject;
+use App\Models\Task;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -181,6 +183,63 @@ class CourseRepository extends BaseRepository implements CourseInterface
             return [
                 'success' => true,
                 'result' => $listUser
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function getTimeCourse($userId, $id)
+    {
+        $timeCourse = 0;
+        $result = [];
+        $itemCourse = [];
+        try {
+            $course = Course::find($id);
+            $timeUserAssignCourseStart = DB::table('user_course')
+                        ->where('user_id', $userId)
+                        ->where('course_id', $id)
+                        ->value('updated_at');
+            $subjectStart = date("Y-m-d", strtotime($timeUserAssignCourseStart));
+            foreach($course->subjects as $subject) {
+                $timeSubject = 0;
+                $subject = Subject::find($subject->pivot->subject_id);
+                $taskStart = strftime("%Y-%m-%d", date(strtotime(date("Y-m-d", strtotime($timeUserAssignCourseStart)) . " +$timeCourse day")));
+                foreach($subject->tasks as $taskId) {
+                    $task = Task::find($taskId->pivot->task_id);
+                    $timeSubject += $task->time;
+                    $timeCourse += $task->time;
+                    $itemTask = [];
+                    $itemTask['id'] = $task->id;
+                    $itemTask['title'] = $task->name;
+                    $itemTask['start'] = $taskStart;
+                    $end = date(strtotime(date("Y-m-d", strtotime($taskStart)) . " +$task->time day"));
+                    $itemTask['end'] = strftime("%Y-%m-%d", $end);
+                    $taskStart = $itemTask['end'];
+                    array_push($result, $itemTask);
+                }
+                $itemSubject = [];
+                $itemSubject['title'] = $subject->name;
+                $itemSubject['start'] = $subjectStart;
+                $end = date(strtotime(date("Y-m-d", strtotime($subjectStart)) . " +$timeSubject day"));
+                $itemSubject['end'] = strftime("%Y-%m-%d", $end);
+                $subjectStart = $itemSubject['end'];
+                $itemSubject['color'] = '#378006';
+                array_push($result, $itemSubject);
+            }
+            $itemCourse['title'] = $course->name;
+            $itemCourse['start'] = date("Y-m-d", strtotime($timeUserAssignCourseStart));
+            $end = date(strtotime(date("Y-m-d", strtotime($timeUserAssignCourseStart)) . " +$timeCourse day"));
+            $itemCourse['end'] = strftime("%Y-%m-%d", $end);
+            $itemCourse['color'] = '#ff0000';
+            array_push($result, $itemCourse);
+
+            return [
+                'success' => true,
+                'result' => $result,
             ];
         } catch (\Exception $e) {
             return [

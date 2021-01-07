@@ -43,13 +43,45 @@
 
               <br/>
               <div class="form-group">
-                <label>{{ $t("user_detail.label.course_completed") }}</label>
+                <label>{{ $t("user_detail.label.course_participated") }}</label>
                 <b-table striped hover :items="courses" :fields="Field">
                   <template #cell(index)="row">
                     {{
                       ++row.index +
                       (Number(paginate.page) - 1) * Number(paginate.perPage)
                     }}
+                  </template>
+                  <template #cell(status)="row">
+                    <div v-if="checkStatusCourse == true">
+                      <b-button
+                        v-if="row.item.status == 0"
+                        @click.prevent="assignUserToCourse(row.item.id)"
+                        disabled
+                      >
+                        {{ $t("user_detail.label.assign") }}
+                      </b-button>
+                      <b-button
+                        id="button_completed_course"
+                        v-else-if="row.item.status == 2"
+                        disabled
+                      >
+                        {{ $t("user_detail.label.completed_course") }}
+                      </b-button>
+                      <b-button id="button_completed_course" v-else disabled>
+                        {{ $t("user_detail.label.coming_course") }}
+                      </b-button>
+                    </div>
+                    <div v-else>
+                      <b-button
+                        v-if="row.item.status == 0"
+                        @click.prevent="assignUserToCourse(row.item.id)"
+                      >
+                        {{ $t("user_detail.label.assign") }}
+                      </b-button>
+                      <b-button id="button_completed_course" v-else disabled>
+                        {{ $t("user_detail.label.completed_course") }}
+                      </b-button>
+                    </div>
                   </template>
                 </b-table>
               </div>
@@ -92,6 +124,7 @@ export default {
         phone: "",
         address: "",
       },
+      checkStatusCourse: false,
       paginate: {
         page: DEFAULT_PAGE,
         perPage: DEFAULT_PERPAGE_USER,
@@ -105,28 +138,53 @@ export default {
           key: "description",
           label: this.$i18n.t("list_subjects.label.description"),
         },
+        { key: "status", label: this.$i18n.t("task_screen.label.action") },
       ],
     };
   },
   props: ["id"],
   methods: {
     async getData() {
-      await this.$store.dispatch("detailUser/GETDATA_ACTION", {
-        params: {
-          id: this.id,
-        },
+      await this.$store.dispatch("user/GET_USER_BY_ID", this.id).then((res) => {
+        this.user = res.data;
       });
     },
     async getCoursesOfUser() {
-      await this.$store.dispatch("course/GET_COURSES", {}).then((res) => {
-        this.courses = res.data;
-        this.paginate.perPage = res.per_page;
-        this.paginate.total = res.total;
+      await this.$store
+        .dispatch("user/GET_COURSES_OF_USER", this.id)
+        .then((res) => {
+          this.courses = res.data.data;
+          this.paginate.perPage = res.data.per_page;
+          this.paginate.total = res.data.total;
+          for (let i = 0; i < this.courses.length; i++) {
+            if (this.courses[i].status == 1) {
+              this.checkStatusCourse = true;
+              break;
+            }
+          }
+        });
+    },
+    async assignUserToCourse(courseId) {
+      await this.$store
+        .dispatch("user/ASSIGN_USER_TO_COURSE", {
+          id: courseId,
+          user: { userId: this.id },
+        })
+        .then(() => {
+          this.getCoursesOfUser();
+        });
+      this.$router.push({
+        name: "calendar",
+        params: {
+          courseId: courseId,
+          userId: this.id,
+        },
       });
     },
   },
   created() {
     this.getCoursesOfUser();
+    this.getData();
   },
 };
 </script>

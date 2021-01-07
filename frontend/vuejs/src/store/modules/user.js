@@ -4,8 +4,9 @@ export const state = {
   listUsers: null,
   storeUser: null,
   deleteUser: '',
-  listCourses: null,
-
+  coursesOfUser: null,
+  userById: null,
+  assignUserToCourse: null,
 };
 
 export const getters = {
@@ -13,7 +14,8 @@ export const getters = {
   storeUser:  state => state.storeUser,
   deleteUser: state => state.deleteUser,
   coursesOfUser: state => state.courseOfUser,
-  userById: state => state.userById
+  userById: state => state.userById,
+  assignUserToCourse: state => state.assignUserToCourse
 };
 
 export const mutations = {
@@ -26,8 +28,14 @@ export const mutations = {
   setDeleteUser(state, deleteUser) {
     state.deleteUser = deleteUser;
   },
-  setListCourses(state, listCourses) {
-    state.listCourses = listCourses;
+  setCoursesOfUser(state, coursesOfUser) {
+    state.coursesOfUser = coursesOfUser;
+  },
+  setUserById(state, userById) {
+    state.userById = userById;
+  },
+  setAssignUserToCourse(state, assignUserToCourse) {
+    state.assignUserToCourse = assignUserToCourse;
   }
 };
 
@@ -54,6 +62,36 @@ export const actions = {
         params,
         res => {
           commit('setListUsers', res.data);
+          resolve(res.data);
+        },
+        err => {
+          reject(err);
+        }
+      );
+    });
+  },
+  GET_COURSES_OF_USER: ({ commit } ,id) => {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        `api/users/` + id + '/courses',
+        '',
+        res => {
+          commit('setCoursesOfUser', res.data);
+          resolve(res.data);
+        },
+        err => {
+          reject(err);
+        }
+      );
+    });
+  },
+  GET_USER_BY_ID: ({ commit } ,id) => {
+    return new Promise((resolve, reject) => {
+      apiCaller.getRequest(
+        `api/users/` + id + '/user-info',
+        '',
+        res => {
+          commit('setUserById', res.data);
           resolve(res.data);
         },
         err => {
@@ -92,5 +130,19 @@ export const actions = {
         }
       )
     });
-}
+  },
+  ASSIGN_USER_TO_COURSE({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      apiCaller.postRequest(
+        '/api/courses/' + params.id + '/assign-user-to-course',
+        params.user,
+        response => {
+          commit('setAssignUserToCourse', response.data);
+          resolve(response.data);
+        },
+        err => {
+          reject(err.response.data);
+        })
+    });
+  },
 };

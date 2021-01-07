@@ -119,4 +119,19 @@ class CourseController extends ApiBaseController
 
         return $this->sendSuccess($data['result']);
     }
+
+    public function getTimeCourse(Request $request, $id)
+    {
+        $userId = $request->only('userId');
+        $data = $this->courseRepository->getTimeCourse($userId , $id);
+        if (!$data['success']) {
+            return $this->sendError(
+                ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                ResponseMessage::COURSE['GET_TIME_COURSE'],
+                ResponseStatus::STATUS_ERROR
+            );
+        }
+
+        return $this->sendSuccess($data['result']);
+    }
 }

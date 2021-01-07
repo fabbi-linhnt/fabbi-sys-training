@@ -173,24 +173,6 @@ export default {
           );
         });
     },
-    // rowClass(item, type) {
-    //   if (!item || type !== "row") return;
-    //   if (!item.date_submit) return "table-danger";
-    //   if (this.checkTime(item.date_submit, item.deadline)) {
-    //     return "table-danger";
-    //   }
-    // },
-    // checkTime(date_submit, deadline) {
-    //   let date_submitArr = date_submit.split("-");
-    //   let deadlineArr = deadline.split("-");
-    //   let length = date_submit.length;
-    //   for (let i = 0; i < length; i++) {
-    //     if (parseInt(date_submitArr[i]) > deadlineArr[i]) {
-    //       return true;
-    //     }
-    //   }
-    //   return false;
-    // },
     makeToast(message, variant) {
       this.$bvToast.toast(message, {
         variant: variant,

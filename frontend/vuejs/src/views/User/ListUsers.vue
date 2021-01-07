@@ -66,6 +66,7 @@
               </template>
               <template v-slot:cell(actions)="row">
                 <b-icon
+                  v-b-tooltip.hover.top="$t('list_users.label.delete')"
                   icon="trash"
                   variant="danger"
                   font-scale="2"
@@ -74,6 +75,7 @@
                 >
                 </b-icon>
                 <b-icon
+                  v-b-tooltip.hover.top="$t('list_users.label.detail')"
                   icon="info-circle"
                   variant="info"
                   font-scale="2"
@@ -82,6 +84,7 @@
                 >
                 </b-icon>
                 <b-icon
+                  v-b-tooltip.hover.top="$t('list_users.label.update')"
                   icon="pencil-square"
                   variant="dark"
                   font-scale="2"

@@ -8,6 +8,7 @@ export const state = {
   taskById: null,
   subjectsOfTask: null,
   usersOfTask: null,
+  updateTimeTask: null,
 };
 
 export const getters = {
@@ -17,7 +18,8 @@ export const getters = {
   deleteTask: state => state.deleteTask,
   taskById: state => state.taskById,
   subjectsOfTask: state => state.subjectsOfTask,
-  usersOfTask: state => state.usersOfTask
+  usersOfTask: state => state.usersOfTask,
+  updateTimeTask: state => state.updateTimeTask,
 };
 
 export const mutations = {
@@ -40,7 +42,10 @@ export const mutations = {
     state.setSubjectsOfTask = subjectsOfTask;
   },
   setUsersOfTask(state, usersOfTask) {
-    state.usersOfTask = usersOfTask
+    state.usersOfTask = usersOfTask;
+  },
+  setUpdateTimeTask(state, updateTimeTask) {
+    state.updateTimeTask = updateTimeTask;
   }
 }
 
@@ -146,6 +151,21 @@ export const actions = {
         },
         err => {
           reject(err.data);
+        }
+      )
+    });
+  },
+  UPDATE_TIME_TASK({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      apiCaller.postRequest(
+        '/api/tasks/' + params.id + '/update-times-end',
+        params,
+        response => {
+          commit('setUpdateTimeTask', response);
+          resolve(response);
+        },
+        err => {
+          reject(err.response.data);
         }
       )
     });

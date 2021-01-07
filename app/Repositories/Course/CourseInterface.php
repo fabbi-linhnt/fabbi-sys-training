@@ -13,4 +13,5 @@ interface CourseInterface
     public function assignUserToCourse($userId, $courseId);
     public function getCourseById($id);
     public function getListUserByCourseId($id);
+    public function getTimeCourse($userId, $id);
 }
